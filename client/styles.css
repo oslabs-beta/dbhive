@@ -2,12 +2,18 @@ body {
   text-align: center;
   padding: 100px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+  background-color: rgb(175, 174, 174);
 }
 
 h1 {
   text-shadow: 6px 6px 14px #cbc51a;
   font-size: 70px;
   color: rgb(255, 255, 255);
+}
+
+button {
+  margin: 5px;
 }
 
 .spin {
@@ -21,9 +27,31 @@ h1 {
   }
 }
 
+.width-100-perc {
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
 .postgres-logo {
   width: 150px;
   display: inline-block;
   animation: spin 10s infinite linear;
   filter: invert(0%) sepia(26%) saturate(6574%) hue-rotate(325deg) brightness(107%) contrast(99%);
+}
+
+.input-group {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0;
+}
+
+.form {
+  width: 500px;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.form input {
+  width: 75%;
 }
