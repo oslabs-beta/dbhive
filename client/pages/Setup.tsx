@@ -6,7 +6,7 @@ function Setup() {
   return (
     <div>
       <Navbar />
-      <h1>Setup Page</h1>
+      <h2>Setup Page</h2>
       <ConnectDB />
     </div>
   );

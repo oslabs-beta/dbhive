@@ -2,6 +2,8 @@ body {
   text-align: center;
   padding: 100px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+  background-color: rgb(175, 174, 174);
 }
 
 h1 {
@@ -27,6 +29,8 @@ button {
 
 .width-100-perc {
   width: 100%;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .postgres-logo {
@@ -39,9 +43,15 @@ button {
 .input-group {
   display: flex;
   justify-content: space-between;
-  margin: 5px;
+  margin: 5px 0;
 }
 
-.connect-db-form {
-  width: 300px;
+.form {
+  width: 500px;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.form input {
+  width: 75%;
 }

@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
+import Signup from './pages/Signup';
 import Setup from './pages/Setup';
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
     { path: '/', element: <Home /> },
     { path: '/setup', element: <Setup /> },
     { path: '/login', element: <Login /> },
+    { path: '/signup', element: <Signup /> },
     { path: '/dashboard', element: <Dashboard /> },
   ]);
 

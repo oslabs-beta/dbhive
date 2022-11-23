@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Input from '../components/Input';
-import { useNavigate } from 'react-router-dom';
 
-function Login() {
-  const navigate = useNavigate();
-
+function Signup() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -27,20 +24,17 @@ function Login() {
   return (
     <div>
       <Navbar />
-      <h2>Login Page</h2>
+      <h2>Sign Up Page</h2>
       <div className="form">
-        <h3>Login</h3>
+        <h3>Sign Up</h3>
         <Input inputClass={'input-group'} label={'Username: '} setInput={setUsername} />
         <Input inputClass={'input-group'} inputType="password" label={'Password: '} setInput={setPassword} />
         <button className="width-100-perc" onClick={submitHandler}>
           Submit
-        </button>
-        <button className="width-100-perc" onClick={() => navigate('/signup')}>
-          Sign Up
         </button>
       </div>
     </div>
   );
 }
 
-export default Login;
+export default Signup;
