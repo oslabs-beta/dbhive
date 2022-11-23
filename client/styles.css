@@ -1,0 +1,29 @@
+body {
+  text-align: center;
+  padding: 100px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1 {
+  text-shadow: 6px 6px 14px #cbc51a;
+  font-size: 70px;
+  color: rgb(255, 255, 255);
+}
+
+.spin {
+  display: inline-block;
+  animation: spin 5s infinite linear;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.postgres-logo {
+  width: 150px;
+  display: inline-block;
+  animation: spin 10s infinite linear;
+  filter: invert(0%) sepia(26%) saturate(6574%) hue-rotate(325deg) brightness(107%) contrast(99%);
+}

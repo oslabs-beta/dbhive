@@ -1,31 +1,29 @@
-const path = require('path');
-const express = require('express');
-const cookieParser = require('cookie-parser');
+// declare function require(moduleName: string): any;
+import dotenv from 'dotenv';
+import express from 'express';
+import path from 'path';
 
-// intialize express
+// initialize configuration
+dotenv.config();
+
+// port is now available to the Node.js runtime
+// as if it were an environment variable
+const port = 3000;
+
 const app = express();
 
-// parsing request
-app.use(express.json());
-app.use(express.urlencdoded({extended:true}))
-
-//Base App handler
-app.get('/', (req, res) => {
-    return res.status(200).sendFile(path.join(__dirname, '../view/index.html'));
+if (process.env.NODE_ENV === 'production') {
+  app.use('/build', express.static(path.join(__dirname, '../build')));
+  app.get('/*', (req, res) => {
+    return res.status(200).sendFile(path.join(__dirname, '../build/index.html'));
   });
+}
 
-app.get('/hi', (req, res) => {
-    return res.status(200).send('server is responding! :)');
+console.log('Hello from server')
+
+// start the express server
+app.listen(port, () => {
+  console.log('server started at http://localhost:3000');
 });
-  
-// catch all route handler
-app.use('*', (req, res) => {
-    res.sendStatus(404);
-  });
-  
-// start server
-app.listen(3000, () => {
-    console.log('Server listening and Working!!!!')
-})
 
 module.exports = app;
