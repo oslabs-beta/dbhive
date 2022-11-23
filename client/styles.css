@@ -10,6 +10,10 @@ h1 {
   color: rgb(255, 255, 255);
 }
 
+button {
+  margin: 5px;
+}
+
 .spin {
   display: inline-block;
   animation: spin 5s infinite linear;
@@ -21,9 +25,23 @@ h1 {
   }
 }
 
+.width-100-perc {
+  width: 100%;
+}
+
 .postgres-logo {
   width: 150px;
   display: inline-block;
   animation: spin 10s infinite linear;
   filter: invert(0%) sepia(26%) saturate(6574%) hue-rotate(325deg) brightness(107%) contrast(99%);
+}
+
+.input-group {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px;
+}
+
+.connect-db-form {
+  width: 300px;
 }

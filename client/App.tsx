@@ -1,11 +1,18 @@
 import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Home from './pages/Home';
+import Dashboard from './pages/Dashboard';
+import Login from './pages/Login';
+import Setup from './pages/Setup';
 
 function App() {
-  const greeting = <><h1><span className='spin'>🐝</span> We are dbHive <span className='spin'>🔍</span></h1><img className='postgres-logo' src='https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/1280px-Postgresql_elephant.svg.png' alt='postgres-logo'></img></>;
   const router = createBrowserRouter([
-    { path: '/', element: <>{greeting}</> },
+    { path: '/', element: <Home /> },
+    { path: '/setup', element: <Setup /> },
+    { path: '/login', element: <Login /> },
+    { path: '/dashboard', element: <Dashboard /> },
   ]);
+
   return (
     <>
       <RouterProvider router={router} />
