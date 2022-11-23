@@ -7,7 +7,7 @@ const pool = new Pool({
 })
 
 const db = {
-    query: (text, params?, callback?) => :any {
+    query: (text, params?, callback?) =>  {
         return pool.query(text, params, callback);
     }
 }
