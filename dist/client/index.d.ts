@@ -1,1 +1,1 @@
-export {};
+import './styles.css';
