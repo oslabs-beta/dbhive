@@ -8,7 +8,7 @@ const router = express.Router();
 //   res.status(200).json({log: 'router working'});
 // })
 
-// router to connectDB 
+// router to store informaton from setup page 
 router.post('/api/placeholder', userController.setup, (req, res) => {
   return res.status(200).json(res.locals);
 })

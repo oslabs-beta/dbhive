@@ -12,13 +12,6 @@ const userController: UserController = {
     console.log('username', username);
     console.log('user-password:', password);
     //localStorage.setItem('username', username);
-    // catch(error){
-    //   return next({
-    //     log: `Error caught in userController.verify ${error}`,
-    //     status: 400,
-    //     message: `Error has occured in userController.verify ERROR: ${error}`,
-    //   })
-    // }
   },
 };
 
