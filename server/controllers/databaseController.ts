@@ -7,7 +7,6 @@ interface DatabaseController {
 
 const databaseController: DatabaseController = {
   connection: async (req, res, next) => {
-    console.log('Hello');
     const queryString = 'SELECT query, mean_exec_time FROM pg_stat_statements';
     let newQuery;
     try {

@@ -11,7 +11,10 @@ function Input(props: Props) {
   return (
     <div className={props.inputClass}>
       <label>{props.label}</label>
-      <input type={props.inputType} onChange={(event) => props.setInput(event.target.value)}></input>
+      <input
+        type={props.inputType}
+        onChange={(event) => props.setInput(event.target.value)}
+      ></input>
     </div>
   );
 }
