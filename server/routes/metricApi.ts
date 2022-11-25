@@ -8,7 +8,6 @@ const router = express.Router();
 // })
 
 
-//TODO: once connected, uncomment, do you see hello in terminal?
  router.get('/querytimes', databaseController.connection, (req,res) =>{
    res.status(200).json(res.locals.result)
  })
