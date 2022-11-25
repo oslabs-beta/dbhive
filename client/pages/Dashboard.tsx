@@ -14,7 +14,7 @@ function Dashboard() {
       .then((res) => res.json())
       .then((response) => {
         console.log(response);
-        setFetchData(response);
+        setFetchData(response.times);
       });
   }
 

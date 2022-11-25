@@ -14,8 +14,8 @@ router.post('/api/placeholder', userController.setup, (req, res) => {
 })
 
 
-//TODO: once connected, uncomment, do you see hello in terminal?
-router.get('/querytimes', databaseController.connection, (req, res) => {
+
+router.get('/querytimes', databaseController.queryTimes, databaseController.numOfRows, databaseController.topCalls, databaseController.dbStats, (req, res) => {
   return res.status(200).json(res.locals.result);
 });
 

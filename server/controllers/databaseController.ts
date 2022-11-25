@@ -9,8 +9,10 @@ interface DatabaseController {
 }
 
 const databaseController: DatabaseController = {
-  connection: async (req, res, next) => {
-    const queryString = 'SELECT query, mean_exec_time FROM pg_stat_statements';
+  queryTimes: async (req, res, next) => {
+    //const queryString = 'SELECT query, mean_exec_time FROM pg_stat_statements';
+    //this query will select the query and mean exec time of all queries that used "select *"
+    const queryString = "select * from pg_stat_statements where query like '%SELECT * %'";
     let newQuery;
     try {
       newQuery = await db.query(queryString);
