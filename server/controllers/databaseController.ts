@@ -64,7 +64,7 @@ const databaseController: DatabaseController = {
       })
     }
   },
-  //this method pulls the database-wide statistics for a provided database
+  //this method pulls the database-wide statistics for a specified database
   dbStats: async (req, res, next) => {
     //postgres can be turned into a variable that will represent the requested db
     const queryString = "select * from pg_stat_database where datname = 'postgres'";
