@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 
@@ -5,7 +6,7 @@ module.exports = {
   // dictates development or production environment
   mode: process.env.NODE_ENV,
   // where Webpack starts constructing bundle.js
-  entry: './client/index.js',
+  entry: './client/index.tsx',
   // where bundle.js will be placed after compiling
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -16,6 +17,7 @@ module.exports = {
   plugins: [
     new HTMLWebpackPlugin({
       template: './client/index.html',
+      favicon: './client/assets/icons8-honeycombs-windows-11-color-32.png',
     }),
   ],
   // details for bundle transpiling
@@ -35,6 +37,12 @@ module.exports = {
         },
       },
       {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+
+      {
         // transpile scss or sass
         test: /\.s[ac]ss$/i,
         // creates style nodes from JS strings, translates CSS into Common JS, Compiles SASS to CSS (order matters)
@@ -46,11 +54,23 @@ module.exports = {
         use: ['style-loader', 'css-loader'],
       },
       {
-        // transpile png
-        test: /\.png$/i,
-        use: ['url-loader'],
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+          },
+        ],
       },
+      // {
+      //   // transpile png
+      //   test: /\.png$/i,
+      //   use: ["url-loader"],
+      // },
     ],
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js', '.jsx'],
+    modules: [path.join(__dirname, './node_modules')],
   },
   // server allows for hot module reloading (HMR) in dev mode
   devServer: {
