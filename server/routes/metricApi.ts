@@ -1,6 +1,6 @@
 import express from 'express';
 import databaseController from '../controllers/databaseController';
-import userController from '../controllers/userController'
+import setupController from '../controllers/setupController';
 
 const router = express.Router();
 
@@ -9,14 +9,19 @@ const router = express.Router();
 // })
 
 // router to store informaton from setup page
-router.post('/api/placeholder', userController.setup, (req, res) => {
+router.post('/placeholder', setupController.create, (req, res) => {
   return res.status(200).json(res.locals);
-})
-
-
-
-router.get('/querytimes', databaseController.queryTimes, databaseController.numOfRows, databaseController.topCalls, databaseController.dbStats, (req, res) => {
-  return res.status(200).json(res.locals.result);
 });
+
+router.get(
+  '/querytimes',
+  databaseController.queryTimes,
+  databaseController.numOfRows,
+  databaseController.topCalls,
+  databaseController.dbStats,
+  (req, res) => {
+    return res.status(200).json(res.locals.result);
+  }
+);
 
 export default router;
