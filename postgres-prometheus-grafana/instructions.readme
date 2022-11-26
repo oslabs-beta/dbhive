@@ -1,0 +1,7 @@
+1. cd to postgres-prometheus-grafana dir
+2. run command in terminal => docker-compose-v1 up -d
+3. for the Prometheus dash, navigate to localhost://9090
+4. for raw metrics, checkout localhost://9090/metrics and localhost://9187/metrics
+5. to access Grafana, navigate to localhost://3000, username and password are admin
+6. pull up postgres dashboard
+7. close docker-compose image => docker-compose-v1 down

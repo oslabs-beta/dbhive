@@ -51,7 +51,6 @@ function Dashboard() {
         pie['1s < time']++;
       }
     });
-    console.log(pie);
     setGraph1(<Graph1 labels={labels} data={data} />);
     setGraph2(<Graph2 labels={Object.keys(pie)} data={Object.values(pie)} />);
   }, [fetchData]);
