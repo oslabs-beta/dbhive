@@ -1,15 +1,16 @@
 // declare function require(moduleName: string): any;
 import dotenv from 'dotenv';
-import express from 'express';
 import path from 'path';
 import metricAPI from './routes/metricApi';
-import { Request, Response, NextFunction } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 
 // initialize configuration
 dotenv.config();
 
 const app = express();
+
 //Handle Parsing
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -17,8 +18,9 @@ app.use(express.urlencoded({ extended: true }));
 // as if it were an environment variable
 const port = 3000;
 
-//route handler
 app.use('/api', metricAPI);
+
+//route handler
 
 //test for server
 // app.get('/test', (req, res) => {

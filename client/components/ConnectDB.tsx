@@ -42,6 +42,20 @@ function ConnectDB() {
       };
     }
 
+    console.log('uri', JSON.stringify(uri));
+    fetch('/api/uri', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'Application/JSON',
+      },
+      body: JSON.stringify({ uri: uri }),
+    })
+      .then((res) => res.json())
+      .then((res) => console.log(res))
+      .catch((err) => {
+        console.log('Error:', err);
+      });
+
     // Encrypt
     const ciphertext = AES.encrypt(
       JSON.stringify(stateData),
@@ -94,45 +108,52 @@ function ConnectDB() {
       <Input
         inputClass={'input-group'}
         label={'Nickname: '}
+        value={nickname}
         setInput={setNickname}
       />
       <Input
         inputClass={'input-group'}
         inputType="password"
         label={'Secret: '}
+        value={secret}
         setInput={setSecret}
       />
       <hr />
       <Input
         inputClass={'input-group'}
         label={'Uri String: '}
+        value={uri}
         setInput={setUri}
       />
       <button className="width-100-perc" onClick={() => submitHandler('uri')}>
         Submit
       </button>
       <hr />
-      <Input inputClass={'input-group'} label={'Host: '} setInput={setHost} />
+      <Input inputClass={'input-group'} label={'Host: '} setInput={setHost} value={host}/>
       <Input
         inputClass={'input-group'}
         label={'Port: '}
         setInput={setPort}
+        value={port}
         defaultValue={port}
       />
       <Input
         inputClass={'input-group'}
         label={'Database: '}
+        value={database}
         setInput={setDatabase}
       />
       <Input
         inputClass={'input-group'}
         label={'Username: '}
+        value={username}
         setInput={setUsername}
       />
       <Input
         inputClass={'input-group'}
         inputType="password"
         label={'Password: '}
+        value={password}
         setInput={setPassword}
       />
       <button

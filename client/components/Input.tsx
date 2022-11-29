@@ -6,6 +6,7 @@ type Props = {
   inputClass?: string;
   inputType?: string;
   defaultValue?: string;
+  value?: string;
 };
 
 function Input(props: Props) {
@@ -13,6 +14,7 @@ function Input(props: Props) {
     <div className={props.inputClass}>
       <label>{props.label}</label>
       <input
+        value={props.value}
         defaultValue={props.defaultValue}
         type={props.inputType}
         onChange={(event) => props.setInput(event.target.value)}

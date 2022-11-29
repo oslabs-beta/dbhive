@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Router } from 'express';
 import databaseController from '../controllers/databaseController';
 import setupController from '../controllers/setupController';
 
@@ -13,8 +13,14 @@ router.post('/placeholder', setupController.create, (req, res) => {
   return res.status(200).json(res.locals);
 });
 
+router.post('/uri', databaseController.connect, databaseController.dbStats, (req, res) => {
+  console.log(res.locals)
+  return res.status(200).json(res.locals);
+});
+
 router.get(
   '/querytimes',
+  databaseController.connect,
   databaseController.queryTimes,
   databaseController.numOfRows,
   databaseController.topCalls,
