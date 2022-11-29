@@ -75,23 +75,25 @@ function ConnectDB() {
         console.log('IndexedDB get successful');
         const bytes = AES.decrypt(data, secret);
         const originalText = bytes.toString(CryptoJS.enc.Utf8);
-        console.log(originalText);
+        fetch('/api/placeholder', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'Application/JSON',
+          },
+          body: originalText,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((error) =>
+            console.log('ERROR: could not post-fetch: ' + error)
+          );
       })
       .catch((err) => {
         console.log('IndexedDB get failed', err);
       });
 
-    // console.log('Original:', stateData);
-    // console.log('Encrypted:', ciphertext);
-    // console.log('Decrypted:', JSON.parse(originalText));
-
-    // setMany([[123, 456]])
-    //   .then(() => {
-    //     console.log('It worked!');
-    //   })
-    //   .catch((err) => {
-    //     console.log('It failed!', err);
-    //   });
     setNickname('');
     setSecret('');
     setUri('');
@@ -167,23 +169,3 @@ function ConnectDB() {
 }
 
 export default ConnectDB;
-
-// fetch('/api/placeholder', {
-//   method: 'POST',
-//   headers: {
-//     'Content-Type': 'Application/JSON',
-//   },
-//   body: JSON.stringify({
-//     uri: uri,
-//     host: host,
-//     port: port,
-//     database: database,
-//     username: username,
-//     password: password,
-//   }),
-// })
-//   .then((res) => res.json())
-//   .then((data) => {
-//     console.log(data);
-//   })
-//   .catch((error) => console.log('ERROR: could not post-fetch: ' + error));
