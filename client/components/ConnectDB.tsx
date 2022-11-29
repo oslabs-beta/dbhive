@@ -40,6 +40,9 @@ function ConnectDB() {
         uri: `postgres://${username}:${password}@${host}:${port}/${database}`,
         // postgres://n00bs:testallcaps@dbhive.cxjwyi85ug6q.us-east-1.rds.amazonaws.com:5432/postgres
       };
+      console.log(
+        `postgres://${username}:${password}@${host}:${port}/${database}`
+      );
     }
 
     console.log('uri', JSON.stringify(uri));
