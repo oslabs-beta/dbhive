@@ -83,7 +83,7 @@ function ConnectDB() {
           headers: {
             'Content-Type': 'Application/JSON',
           },
-          body: originalText,
+          body: JSON.stringify({ test: uri }),
         })
           .then((res) => res.json())
           .then((data) => {

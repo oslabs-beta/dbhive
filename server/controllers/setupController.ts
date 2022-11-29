@@ -26,6 +26,7 @@ const setupController: SetupController = {
     // console.log('Original:', req.body);
     // console.log('Encrypted:', ciphertext);
     // console.log('Decrypted:', JSON.parse(originalText));
+    console.log(req.body);
     dbUri = req.body;
 
     return next();
