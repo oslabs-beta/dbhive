@@ -38,7 +38,6 @@ function ConnectDB() {
         nickname: nickname,
         secret: secret,
         uri: `postgres://${username}:${password}@${host}:${port}/${database}`,
-        // postgres://n00bs:testallcaps@dbhive.cxjwyi85ug6q.us-east-1.rds.amazonaws.com:5432/postgres
       };
     }
 
@@ -60,24 +59,27 @@ function ConnectDB() {
       .then((data) => {
         console.log('IndexedDB get successful');
         const bytes = AES.decrypt(data, secret);
-        const originalText = bytes.toString(CryptoJS.enc.Utf8);
+        const originalText = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
         console.log(originalText);
+        fetch('/api/uri', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'Application/JSON',
+          },
+          body: JSON.stringify({ uri: originalText.uri }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((error) =>
+            console.log('ERROR: could not post-fetch: ' + error)
+          );
       })
       .catch((err) => {
         console.log('IndexedDB get failed', err);
       });
 
-    // console.log('Original:', stateData);
-    // console.log('Encrypted:', ciphertext);
-    // console.log('Decrypted:', JSON.parse(originalText));
-
-    // setMany([[123, 456]])
-    //   .then(() => {
-    //     console.log('It worked!');
-    //   })
-    //   .catch((err) => {
-    //     console.log('It failed!', err);
-    //   });
     setNickname('');
     setSecret('');
     setUri('');
@@ -94,45 +96,56 @@ function ConnectDB() {
       <Input
         inputClass={'input-group'}
         label={'Nickname: '}
+        value={nickname}
         setInput={setNickname}
       />
       <Input
         inputClass={'input-group'}
         inputType="password"
         label={'Secret: '}
+        value={secret}
         setInput={setSecret}
       />
       <hr />
       <Input
         inputClass={'input-group'}
         label={'Uri String: '}
+        value={uri}
         setInput={setUri}
       />
       <button className="width-100-perc" onClick={() => submitHandler('uri')}>
         Submit
       </button>
       <hr />
-      <Input inputClass={'input-group'} label={'Host: '} setInput={setHost} />
+      <Input
+        inputClass={'input-group'}
+        label={'Host: '}
+        setInput={setHost}
+        value={host}
+      />
       <Input
         inputClass={'input-group'}
         label={'Port: '}
         setInput={setPort}
-        defaultValue={port}
+        value={port}
       />
       <Input
         inputClass={'input-group'}
         label={'Database: '}
+        value={database}
         setInput={setDatabase}
       />
       <Input
         inputClass={'input-group'}
         label={'Username: '}
+        value={username}
         setInput={setUsername}
       />
       <Input
         inputClass={'input-group'}
         inputType="password"
         label={'Password: '}
+        value={password}
         setInput={setPassword}
       />
       <button
@@ -146,23 +159,3 @@ function ConnectDB() {
 }
 
 export default ConnectDB;
-
-// fetch('/api/placeholder', {
-//   method: 'POST',
-//   headers: {
-//     'Content-Type': 'Application/JSON',
-//   },
-//   body: JSON.stringify({
-//     uri: uri,
-//     host: host,
-//     port: port,
-//     database: database,
-//     username: username,
-//     password: password,
-//   }),
-// })
-//   .then((res) => res.json())
-//   .then((data) => {
-//     console.log(data);
-//   })
-//   .catch((error) => console.log('ERROR: could not post-fetch: ' + error));

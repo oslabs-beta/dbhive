@@ -31,8 +31,19 @@ function Login() {
       <h2>Login Page</h2>
       <div className="form">
         <h3>Login</h3>
-        <Input inputClass={'input-group'} label={'Username: '} setInput={setUsername} />
-        <Input inputClass={'input-group'} inputType="password" label={'Password: '} setInput={setPassword} />
+        <Input
+          inputClass={'input-group'}
+          label={'Username: '}
+          setInput={setUsername}
+          value={username}
+        />
+        <Input
+          inputClass={'input-group'}
+          inputType="password"
+          label={'Password: '}
+          setInput={setPassword}
+          value={password}
+        />
         <button className="width-100-perc" onClick={submitHandler}>
           Submit
         </button>
