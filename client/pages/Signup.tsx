@@ -28,8 +28,19 @@ function Signup() {
       <h2>Sign Up Page</h2>
       <div className="form">
         <h3>Sign Up</h3>
-        <Input inputClass={'input-group'} label={'Username: '} setInput={setUsername} />
-        <Input inputClass={'input-group'} inputType="password" label={'Password: '} setInput={setPassword} />
+        <Input
+          inputClass={'input-group'}
+          label={'Username: '}
+          setInput={setUsername}
+          value={username}
+        />
+        <Input
+          inputClass={'input-group'}
+          inputType="password"
+          label={'Password: '}
+          setInput={setPassword}
+          value={password}
+        />
         <button className="width-100-perc" onClick={submitHandler}>
           Submit
         </button>

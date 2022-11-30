@@ -1,26 +1,24 @@
-import express, { Router } from 'express';
+import { Router } from 'express';
+import { connectController } from '../controllers/connectController';
 import databaseController from '../controllers/databaseController';
-import setupController from '../controllers/setupController';
+// import securityController from '../controllers/securityController';
 
-const router = express.Router();
+const router = Router();
 
-// router.get('/', (req, res) => {
-//   res.status(200).json({log: 'router working'});
-// })
+// test route
+router.post(
+  '/uri',
+  connectController.connectDB,
+  databaseController.dbStats,
+  (req, res) => {
+    console.log(res.locals);
+    return res.status(200).json(res.locals);
+  }
+);
 
-// router to store informaton from setup page
-router.post('/placeholder', setupController.create, (req, res) => {
-  return res.status(200).json(res.locals);
-});
-
-router.post('/uri', databaseController.connect, databaseController.dbStats, (req, res) => {
-  console.log(res.locals)
-  return res.status(200).json(res.locals);
-});
-
-router.get(
+router.post(
   '/querytimes',
-  databaseController.connect,
+  connectController.connectDB,
   databaseController.queryTimes,
   databaseController.numOfRows,
   databaseController.topCalls,

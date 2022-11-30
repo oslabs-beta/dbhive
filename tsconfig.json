@@ -11,8 +11,7 @@
     "esModuleInterop": true,
     "outDir": "./dist",
     "rootDir": ".",
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true
+    "allowJs": true
   },
   "include": ["client"]
 }
