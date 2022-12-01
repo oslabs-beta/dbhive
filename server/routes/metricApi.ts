@@ -9,6 +9,7 @@ const router = Router();
 router.post(
   '/uri',
   connectController.connectDB,
+  connectController.createExtension,
   databaseController.dbStats,
   (req, res) => {
     console.log(res.locals);
@@ -23,6 +24,12 @@ router.post(
   databaseController.numOfRows,
   databaseController.topCalls,
   databaseController.dbStats,
+  databaseController.selectQueryTime,
+  databaseController.deleteQueryTime,
+  databaseController.insertQueryTime,
+  databaseController.updateQueryTime,
+  databaseController.cacheHitRatio,
+  databaseController.averageQueryTime,
   (req, res) => {
     return res.status(200).json(res.locals.result);
   }
