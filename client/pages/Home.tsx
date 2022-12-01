@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Navbar from '../components/Navbar';
 
-import { Card, Typography } from '@mui/material';
+import { Box, Card, Typography } from '@mui/material';
 
 function Home() {
   return (
@@ -10,14 +10,14 @@ function Home() {
       <Card
         sx={{
           textAlign: 'center',
-          width: 400,
-          mx: 'auto',
-          my: '10rem',
-          p: '4rem',
+          ml: '13rem',
+          mr: '1.5rem',
+          my: '5.5rem',
+          p: '2rem',
         }}
       >
         <Typography
-          variant="h2"
+          variant="h3"
           component="div"
           sx={{
             flexGrow: 1,
@@ -27,8 +27,20 @@ function Home() {
           }}
           // color="primary"
         >
-          <span className="spin">🐝</span> We are dbHive{' '}
-          <span className="spin">🔍</span>
+          <Box
+            className="pulse-animation"
+            component="img"
+            sx={{
+              pt: 1,
+              mr: 1,
+              height: 50,
+              filter:
+                'invert(85%) sepia(25%) saturate(4135%) hue-rotate(1deg) brightness(105%) contrast(106%)',
+            }}
+            alt="dbHive icon"
+            src="https://img.icons8.com/ios-glyphs/512/bumblebee.png"
+          />{' '}
+          Welcome to dbHive{' '}
         </Typography>
       </Card>
 

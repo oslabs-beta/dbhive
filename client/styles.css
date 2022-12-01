@@ -83,3 +83,16 @@ button {
   width: 75%;
 }
 */
+
+.pulse-animation {
+  animation: createBox 1s infinite;
+}
+
+@keyframes createBox {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.25);
+  }
+}
