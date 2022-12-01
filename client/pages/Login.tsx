@@ -23,6 +23,7 @@ type Props = {
 
 function Login(props: Props) {
   const navigate = useNavigate();
+  if (props.isLoggedIn) navigate('/dashboard');
 
   const [loginError, setLoginError] = useState(false);
   const [loginErrorText, setLoginErrorText] = useState('');
@@ -37,7 +38,6 @@ function Login(props: Props) {
           if (originalText.decryption === 'isValid') {
             props.setIsLoggedIn(true);
             props.setUserData(originalText);
-            navigate('/dashboard');
           } else {
             setLoginError(true);
             setLoginErrorText('incorrect username or password');
@@ -52,14 +52,20 @@ function Login(props: Props) {
         setLoginError(true);
         setLoginErrorText('incorrect username or password');
       });
-
-    props.setUsername('');
-    props.setSecret('');
   }
 
   return (
     <div>
-      <Navbar />
+      <Navbar
+        secret={props.secret}
+        setSecret={props.setSecret}
+        username={props.username}
+        setUsername={props.setUsername}
+        isLoggedIn={props.isLoggedIn}
+        setIsLoggedIn={props.setIsLoggedIn}
+        userData={props.userData}
+        setUserData={props.setUserData}
+      />
       <Card
         sx={{
           textAlign: 'center',

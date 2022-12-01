@@ -75,7 +75,21 @@ function App() {
   }, [userData]);
 
   const router = createBrowserRouter([
-    { path: '/', element: <Home /> },
+    {
+      path: '/',
+      element: (
+        <Home
+          secret={secret}
+          setSecret={setSecret}
+          username={username}
+          setUsername={setUsername}
+          isLoggedIn={isLoggedIn}
+          setIsLoggedIn={setIsLoggedIn}
+          userData={userData}
+          setUserData={setUserData}
+        />
+      ),
+    },
     {
       path: '/setup',
       element: (
@@ -108,7 +122,18 @@ function App() {
     },
     {
       path: '/signup',
-      element: <Signup />,
+      element: (
+        <Signup
+          secret={secret}
+          setSecret={setSecret}
+          username={username}
+          setUsername={setUsername}
+          isLoggedIn={isLoggedIn}
+          setIsLoggedIn={setIsLoggedIn}
+          userData={userData}
+          setUserData={setUserData}
+        />
+      ),
     },
     {
       path: '/dashboard',
