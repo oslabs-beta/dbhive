@@ -20,6 +20,7 @@ router.post(
 router.post(
   '/querytimes',
   connectController.connectDB,
+  connectController.createExtension,
   databaseController.queryTimes,
   databaseController.numOfRows,
   databaseController.topCalls,
