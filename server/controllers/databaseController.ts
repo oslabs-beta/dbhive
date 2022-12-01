@@ -5,6 +5,11 @@ type DatabaseController = {
   numOfRows: RequestHandler;
   topCalls: RequestHandler;
   dbStats: RequestHandler;
+  insertQueryTime: RequestHandler;
+  selectQueryTime: RequestHandler;
+  updateQueryTime: RequestHandler;
+  deleteQueryTime: RequestHandler;
+  cacheHitRatio: RequestHandler;
 };
 
 const databaseController: DatabaseController = {
@@ -77,6 +82,98 @@ const databaseController: DatabaseController = {
     try {
       dbOverview = await db.query(queryString);
       res.locals.dbStats = dbOverview.rows;
+      return next();
+    } catch (error) {
+      return next({
+        log: `Error caught in databaseController.dbStats ${error}`,
+        status: 400,
+        message: `Error has occured in databaseController.dbStats. ERROR: ${error}`,
+      });
+    }
+  },
+  //this method returns the execution time for INSERT queries
+  insertQueryTime: async (req, res, next) => {
+    const db = res.locals.dbConnection;
+    const queryString =
+      "select * from pg_stat_statements where query like '%INSERT %'";
+      let queryTime;
+    try {
+      queryTime = await db.query(queryString);
+      res.locals.insertQueryTime = queryTime.rows;
+      return next();
+    } catch (error) {
+      return next({
+        log: `Error caught in databaseController.dbStats ${error}`,
+        status: 400,
+        message: `Error has occured in databaseController.dbStats. ERROR: ${error}`,
+      });
+    }
+  },
+  // this method returns the execution time for SELECT queries
+  selectQueryTime: async (req, res, next) => {
+    const db = res.locals.dbConnection;
+    const queryString =
+      "select * from pg_stat_statements where query like '%SELECT %'";
+      let queryTime;
+    try {
+      queryTime = await db.query(queryString);
+      res.locals.selectQueryTime = queryTime.rows;
+      return next();
+    } catch (error) {
+      return next({
+        log: `Error caught in databaseController.dbStats ${error}`,
+        status: 400,
+        message: `Error has occured in databaseController.dbStats. ERROR: ${error}`,
+      });
+    }
+  },
+  // this method returns the execution time for UPDATE queries
+  updateQueryTime: async (req, res, next) => {
+    const db = res.locals.dbConnection;
+    const queryString =
+      "select * from pg_stat_statements where query like '%UPDATE %'";
+      let queryTime;
+    try {
+      queryTime = await db.query(queryString);
+      res.locals.updateQueryTime = queryTime.rows;
+      return next();
+    } catch (error) {
+      return next({
+        log: `Error caught in databaseController.dbStats ${error}`,
+        status: 400,
+        message: `Error has occured in databaseController.dbStats. ERROR: ${error}`,
+      });
+    }
+  },
+  
+  //this method calculates the query time for DELETE queries
+  deleteQueryTime: async (req, res, next) => {
+    const db = res.locals.dbConnection;
+    const queryString =
+      "select * from pg_stat_statements where query like '%DELETE %'";
+      let queryTime;
+    try {
+      queryTime = await db.query(queryString);
+      res.locals.deleteQueryTime = queryTime.rows;
+      return next();
+    } catch (error) {
+      return next({
+        log: `Error caught in databaseController.dbStats ${error}`,
+        status: 400,
+        message: `Error has occured in databaseController.dbStats. ERROR: ${error}`,
+      });
+    }
+  },
+
+  //this method calculates and returns the cache hit ratio for the database
+  cacheHitRatio: async (req, res, next) => {
+    const db = res.locals.dbConnection;
+    const queryString =
+      "SELECT sum(heap_blks_read) as heap_read, sum(heap_blks_hit)  as heap_hit, sum(heap_blks_hit) / (sum(heap_blks_hit) + sum(heap_blks_read)) as ratio FROM pg_statio_user_tables";
+      let cacheHitRate;
+    try {
+      cacheHitRate = await db.query(queryString);
+      res.locals.cacheHitRatio = cacheHitRate.rows;
       return next();
     } catch (error) {
       return next({
