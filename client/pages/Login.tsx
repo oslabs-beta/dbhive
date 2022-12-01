@@ -6,6 +6,7 @@ import { get } from 'idb-keyval';
 import CryptoJS from 'crypto-js';
 import AES from 'crypto-js/aes';
 // import { isLiteralTypeNode } from 'typescript';
+import { UserData } from '../clientTypes';
 
 type Props = {
   username: string;
@@ -14,6 +15,8 @@ type Props = {
   setSecret: (eventTargetValue: string) => void;
   isLoggedIn: boolean;
   setIsLoggedIn: (eventTargetValue: boolean) => void;
+  userData: UserData;
+  setUserData: (eventTargetValue: UserData) => void;
 };
 
 function Login(props: Props) {
@@ -28,7 +31,8 @@ function Login(props: Props) {
           const parsedText = JSON.parse(originalText);
           if (parsedText.decryption === 'isValid') {
             props.setIsLoggedIn(true);
-            alert('login sucessful');
+            props.setUserData(parsedText);
+            console.log('login sucessful');
             navigate('/dashboard');
           } else {
             alert('username or password is incorrect');
@@ -41,9 +45,6 @@ function Login(props: Props) {
         console.log('IndexedDB get failed', err);
         alert('username or password is incorrect');
       });
-
-    props.setUsername('');
-    props.setSecret('');
   }
 
   return (

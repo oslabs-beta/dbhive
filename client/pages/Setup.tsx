@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import ConnectDB from '../components/ConnectDB';
+import { UserData } from '../clientTypes';
 
 type Props = {
   username: string;
@@ -11,6 +12,8 @@ type Props = {
   setSecret: (eventTargetValue: string) => void;
   isLoggedIn: boolean;
   setIsLoggedIn: (eventTargetValue: boolean) => void;
+  userData: UserData;
+  setUserData: (eventTargetValue: UserData) => void;
 };
 
 function Setup(props: Props) {
@@ -32,6 +35,8 @@ function Setup(props: Props) {
           setUsername={props.setUsername}
           isLoggedIn={props.isLoggedIn}
           setIsLoggedIn={props.setIsLoggedIn}
+          userData={props.userData}
+          setUserData={props.setUserData}
         />
       </div>
     );

@@ -4,6 +4,7 @@ import Input from './Input';
 import { set, get } from 'idb-keyval';
 import CryptoJS from 'crypto-js';
 import AES from 'crypto-js/aes';
+import { UserData } from '../clientTypes';
 
 type Props = {
   username: string;
@@ -12,6 +13,8 @@ type Props = {
   setSecret: (eventTargetValue: string) => void;
   isLoggedIn: boolean;
   setIsLoggedIn: (eventTargetValue: boolean) => void;
+  userData: UserData;
+  setUserData: (eventTargetValue: UserData) => void;
 };
 
 function ConnectDB(props: Props) {
@@ -46,6 +49,9 @@ function ConnectDB(props: Props) {
       };
     }
 
+    const copyUserData = { ...props.userData };
+    // copyUserData.dbs.push(stateData);
+    props.setUserData(copyUserData);
     get(props.username)
       .then((data) => {
         const bytes = AES.decrypt(data, props.secret);
@@ -58,13 +64,14 @@ function ConnectDB(props: Props) {
           props.secret
         ).toString();
 
-        // set(props.username, ciphertext)
-        //   .then(() => {
-        //     console.log('IndexedDB set successful');
-        //   })
-        //   .catch((err) => {
-        //     console.log('IndexedDB set failed', err);
-        //   });
+        set(props.username, ciphertext)
+          .then(() => {
+            console.log('IndexedDB set successful');
+            alert(stateData.nickname + ' has been added');
+          })
+          .catch((err) => {
+            console.log('IndexedDB set failed', err);
+          });
       })
       .catch((err) => {
         console.log('IndexedDB get failed', err);
