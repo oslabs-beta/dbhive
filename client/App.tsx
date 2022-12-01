@@ -50,6 +50,17 @@ function App() {
     decryption: 'isValid',
     dbs: [],
   };
+
+  // const initialUserData: UserData = {
+  //   decryption: 'isValid',
+  //   dbs: [
+  //     {
+  //       nickname: 'dbTest',
+  //       uri: 'postgres://dbhive:teamawesome@dbhive-test.crqqpw0ueush.us-west-2.rds.amazonaws.com:5432/postgres',
+  //     },
+  //   ],
+  // };
+
   const [username, setUsername] = useState('');
   const [secret, setSecret] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);

@@ -26,7 +26,7 @@ function Graph1(props: Props) {
       },
       title: {
         display: true,
-        text: 'Chart.js Bar Chart',
+        text: 'Chart 1',
       },
     },
     scales: {
