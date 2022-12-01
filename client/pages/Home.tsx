@@ -1,18 +1,39 @@
 import * as React from 'react';
 import Navbar from '../components/Navbar';
+import { UserData } from '../clientTypes';
 
 import { Box, Card, Typography } from '@mui/material';
 
-function Home() {
+type Props = {
+  username: string;
+  setUsername: (eventTargetValue: string) => void;
+  secret: string;
+  setSecret: (eventTargetValue: string) => void;
+  isLoggedIn: boolean;
+  setIsLoggedIn: (eventTargetValue: boolean) => void;
+  userData: UserData;
+  setUserData: (eventTargetValue: UserData) => void;
+};
+
+function Home(props: Props) {
   return (
     <>
-      <Navbar />
+      <Navbar
+        secret={props.secret}
+        setSecret={props.setSecret}
+        username={props.username}
+        setUsername={props.setUsername}
+        isLoggedIn={props.isLoggedIn}
+        setIsLoggedIn={props.setIsLoggedIn}
+        userData={props.userData}
+        setUserData={props.setUserData}
+      />
       <Card
         sx={{
           textAlign: 'center',
-          ml: '13rem',
-          mr: '1.5rem',
-          my: '5.5rem',
+          ml: '12rem',
+          mr: '1rem',
+          my: '5rem',
           p: '2rem',
         }}
       >
@@ -43,12 +64,6 @@ function Home() {
           Welcome to dbHive{' '}
         </Typography>
       </Card>
-
-      {/* <img
-        className="postgres-logo"
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/1280px-Postgresql_elephant.svg.png"
-        alt="postgres-logo"
-      ></img> */}
     </>
   );
 }

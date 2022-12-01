@@ -9,7 +9,18 @@ import { UserData } from '../clientTypes';
 
 import { Card, Button, Typography } from '@mui/material';
 
-function Signup() {
+type Props = {
+  username: string;
+  setUsername: (eventTargetValue: string) => void;
+  secret: string;
+  setSecret: (eventTargetValue: string) => void;
+  isLoggedIn: boolean;
+  setIsLoggedIn: (eventTargetValue: boolean) => void;
+  userData: UserData;
+  setUserData: (eventTargetValue: UserData) => void;
+};
+
+function Signup(props: Props) {
   const navigate = useNavigate();
 
   const [username, setUsername] = useState('');
@@ -50,7 +61,16 @@ function Signup() {
 
   return (
     <div>
-      <Navbar />
+      <Navbar
+        secret={props.secret}
+        setSecret={props.setSecret}
+        username={props.username}
+        setUsername={props.setUsername}
+        isLoggedIn={props.isLoggedIn}
+        setIsLoggedIn={props.setIsLoggedIn}
+        userData={props.userData}
+        setUserData={props.setUserData}
+      />
       <Card
         sx={{
           textAlign: 'center',

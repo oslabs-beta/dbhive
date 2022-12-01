@@ -1,5 +1,7 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { UserData } from '../clientTypes';
 
 import {
   Box,
@@ -18,38 +20,75 @@ import LoginIcon from '@mui/icons-material/Login';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import InfoIcon from '@mui/icons-material/Info';
 import TuneIcon from '@mui/icons-material/Tune';
+import LogoutIcon from '@mui/icons-material/Logout';
 import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
 
-function Navbar() {
+type Props = {
+  username: string;
+  setUsername: (eventTargetValue: string) => void;
+  secret: string;
+  setSecret: (eventTargetValue: string) => void;
+  isLoggedIn: boolean;
+  setIsLoggedIn: (eventTargetValue: boolean) => void;
+  userData: UserData;
+  setUserData: (eventTargetValue: UserData) => void;
+};
+
+function Navbar(props: Props) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  console.log(pathname);
 
-  const drawerWidth = 180;
+  const drawerWidth = '11rem';
   return (
     <nav>
       <AppBar
         position="fixed"
-        sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
+        sx={{
+          width: `calc(100% - ${drawerWidth})`,
+          ml: drawerWidth,
+          height: '4rem',
+        }}
       >
         <Toolbar>
           <Box
             component="img"
             sx={{
-              m: 1,
+              mx: '1.5rem',
               height: 30,
             }}
             alt="dbHive icon"
             src="https://cdn-icons-png.flaticon.com/512/541/541384.png"
           />
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1 }}
-            color="primary"
-          >
+          <Typography variant="h5" component="div" color="primary">
             dbHive
           </Typography>
+          {props.isLoggedIn && (
+            <>
+              <Typography
+                variant="h6"
+                component="div"
+                sx={{
+                  ml: 'auto',
+                  mr: '1rem',
+                  opacity: '70%',
+                  fontSize: '1rem',
+                }}
+              >
+                {props.username}
+              </Typography>
+              <LogoutIcon
+                onClick={() => {
+                  props.setIsLoggedIn(false);
+                  props.setUsername('');
+                  props.setSecret('');
+                  props.setUserData({
+                    decryption: 'isValid',
+                    dbs: [],
+                  });
+                }}
+              />
+            </>
+          )}
         </Toolbar>
       </AppBar>
       <Drawer
@@ -64,20 +103,33 @@ function Navbar() {
         variant="permanent"
         anchor="left"
       >
-        <Toolbar>
-          <Box
-            component="img"
-            sx={{
-              m: 1,
-              height: 30,
-              mx: 'auto',
-            }}
-            alt="PostgreSQL logo"
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/1280px-Postgresql_elephant.svg.png"
-          />
-        </Toolbar>
+        <Toolbar></Toolbar>
         <Divider />
         <List>
+          <ListItem disablePadding sx={{ justifyContent: 'center' }}>
+            <Box
+              component="img"
+              sx={{
+                height: 20,
+              }}
+              alt="dbHive icon"
+              src="https://cdn-icons-png.flaticon.com/512/541/541384.png"
+            />
+            <Typography variant="h6" component="div" sx={{ mx: '1rem' }}>
+              for
+            </Typography>
+            <Box
+              component="img"
+              sx={{
+                my: '1.5rem',
+                height: 20,
+                // mx: 'auto',
+              }}
+              alt="PostgreSQL logo"
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/1280px-Postgresql_elephant.svg.png"
+            />
+          </ListItem>
+          <Divider />
           <ListItem
             disablePadding
             selected={pathname === '/login/' || pathname === '/login'}

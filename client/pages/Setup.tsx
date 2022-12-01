@@ -19,13 +19,24 @@ type Props = {
 function Setup(props: Props) {
   const navigate = useNavigate();
 
+  if (!props.isLoggedIn) navigate('/login');
+
   useEffect(() => {
-    if (!props.isLoggedIn) navigate('/');
+    if (!props.isLoggedIn) navigate('/login');
   }, []);
 
   return (
     <div>
-      <Navbar />
+      <Navbar
+        secret={props.secret}
+        setSecret={props.setSecret}
+        username={props.username}
+        setUsername={props.setUsername}
+        isLoggedIn={props.isLoggedIn}
+        setIsLoggedIn={props.setIsLoggedIn}
+        userData={props.userData}
+        setUserData={props.setUserData}
+      />
       <ConnectDB
         secret={props.secret}
         setSecret={props.setSecret}
