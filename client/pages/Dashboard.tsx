@@ -1,36 +1,53 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-// import { get } from 'idb-keyval';
-// import CryptoJS from 'crypto-js';
-// import AES from 'crypto-js/aes';
+import { get } from 'idb-keyval';
+import CryptoJS from 'crypto-js';
+import AES from 'crypto-js/aes';
 import Navbar from '../components/Navbar';
 import Graph1 from '../components/Graph1';
 import Graph2 from '../components/Graph2';
 
-function Dashboard() {
+type Props = {
+  secret: string;
+  setSecret: (eventTargetValue: string) => void;
+};
+
+function Dashboard(props: Props) {
   const [graph1, setGraph1] = useState<JSX.Element>();
   const [graph2, setGraph2] = useState<JSX.Element>();
   const [fetchData, setFetchData] = useState([]);
 
   function getQueryTimes() {
-    fetch('/api/querytimes', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'Application/JSON',
-      },
-      body: JSON.stringify({
-        uri: 'postgres://dbhive:teamawesome@dbhive-test.crqqpw0ueush.us-west-2.rds.amazonaws.com:5432/postgres',
-      }),
-    })
-      .then((res) => res.json())
+    get('dbhive-data')
       .then((data) => {
-        console.log(data);
-        setFetchData(data.times);
+        console.log('IndexedDB get successful');
+        const bytes = AES.decrypt(data, props.secret);
+        const originalText = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+
+        // postgres://dbhive:teamawesome@dbhive-test.crqqpw0ueush.us-west-2.rds.amazonaws.com:5432/postgres
+        fetch('/api/querytimes', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'Application/JSON',
+          },
+          body: JSON.stringify({ uri: originalText.uri }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+            setFetchData(data.times);
+          })
+          .catch((error) =>
+            console.log('ERROR: could not post-fetch: ' + error)
+          );
       })
-      .catch((error) => console.log('ERROR: could not post-fetch: ' + error));
+      .catch((err) => {
+        console.log('IndexedDB get failed', err);
+      });
   }
 
   useEffect(() => {
+    console.log('ran here!!!');
     if (fetchData.length === 0) {
       getQueryTimes();
     }

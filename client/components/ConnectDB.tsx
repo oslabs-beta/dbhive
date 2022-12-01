@@ -5,88 +5,77 @@ import { set, get } from 'idb-keyval';
 import CryptoJS from 'crypto-js';
 import AES from 'crypto-js/aes';
 
-function ConnectDB() {
+type Props = {
+  username: string;
+  setUsername: (eventTargetValue: string) => void;
+  secret: string;
+  setSecret: (eventTargetValue: string) => void;
+  isLoggedIn: boolean;
+  setIsLoggedIn: (eventTargetValue: boolean) => void;
+};
+
+function ConnectDB(props: Props) {
   const [nickname, setNickname] = useState('');
-  const [secret, setSecret] = useState('');
   const [uri, setUri] = useState('');
   const [host, setHost] = useState('');
   const [port, setPort] = useState('5432');
   const [database, setDatabase] = useState('');
-  const [username, setUsername] = useState('');
+  const [dBUsername, setDBUsername] = useState('');
   const [password, setPassword] = useState('');
 
   function submitHandler(type: string) {
     let stateData: {
       nickname: string;
-      secret: string;
       uri?: string;
       host?: string;
       port?: number;
       database?: string;
-      username?: string;
+      dbUsername?: string;
       password?: string;
     };
 
     if (type === 'uri') {
       stateData = {
         nickname: nickname,
-        secret: secret,
         uri: uri,
       };
     } else if (type === 'separate') {
       stateData = {
         nickname: nickname,
-        secret: secret,
-        uri: `postgres://${username}:${password}@${host}:${port}/${database}`,
+        uri: `postgres://${dBUsername}:${password}@${host}:${port}/${database}`,
       };
     }
 
-    // Encrypt
-    const ciphertext = AES.encrypt(
-      JSON.stringify(stateData),
-      secret
-    ).toString();
-
-    set('dbhive-data', ciphertext)
-      .then(() => {
-        console.log('IndexedDB set successful');
-      })
-      .catch((err) => {
-        console.log('IndexedDB set failed', err);
-      });
-
-    get('dbhive-data')
+    get(props.username)
       .then((data) => {
-        console.log('IndexedDB get successful');
-        const bytes = AES.decrypt(data, secret);
+        const bytes = AES.decrypt(data, props.secret);
         const originalText = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+        if (originalText.dbs !== undefined) originalText.dbs.push(stateData);
+        else originalText.dbs = [stateData];
         console.log(originalText);
-        fetch('/api/uri', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'Application/JSON',
-          },
-          body: JSON.stringify({ uri: originalText.uri }),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            console.log(data);
-          })
-          .catch((error) =>
-            console.log('ERROR: could not post-fetch: ' + error)
-          );
+        const ciphertext = AES.encrypt(
+          JSON.stringify(originalText),
+          props.secret
+        ).toString();
+
+        // set(props.username, ciphertext)
+        //   .then(() => {
+        //     console.log('IndexedDB set successful');
+        //   })
+        //   .catch((err) => {
+        //     console.log('IndexedDB set failed', err);
+        //   });
       })
       .catch((err) => {
         console.log('IndexedDB get failed', err);
       });
 
     setNickname('');
-    setSecret('');
     setUri('');
     setHost('');
     setPort('5432');
     setDatabase('');
-    setUsername('');
+    setDBUsername('');
     setPassword('');
   }
 
@@ -98,13 +87,6 @@ function ConnectDB() {
         label={'Nickname: '}
         value={nickname}
         setInput={setNickname}
-      />
-      <Input
-        inputClass={'input-group'}
-        inputType="password"
-        label={'Secret: '}
-        value={secret}
-        setInput={setSecret}
       />
       <hr />
       <Input
@@ -138,8 +120,8 @@ function ConnectDB() {
       <Input
         inputClass={'input-group'}
         label={'Username: '}
-        value={username}
-        setInput={setUsername}
+        value={dBUsername}
+        setInput={setDBUsername}
       />
       <Input
         inputClass={'input-group'}

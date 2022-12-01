@@ -1,3 +1,7 @@
 /// <reference types="react" />
-declare function Dashboard(): JSX.Element;
+type Props = {
+    secret: string;
+    setSecret: (eventTargetValue: string) => void;
+};
+declare function Dashboard(props: Props): JSX.Element;
 export default Dashboard;

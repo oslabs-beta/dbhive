@@ -1,25 +1,45 @@
 import * as React from 'react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Input from '../components/Input';
+import { set, get } from 'idb-keyval';
+import AES from 'crypto-js/aes';
+// import SHA3 from 'crypto-js/sha3';
 
 function Signup() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [secret, setSecret] = useState('');
 
   function submitHandler() {
-    fetch('/api/placeholder', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'Application/JSON',
-      },
-      body: JSON.stringify({ username: username, password: password }),
-    })
-      .then((res) => res.json())
+    // Encrypt
+    const ciphertext = AES.encrypt(
+      JSON.stringify({ decryption: 'isValid' }),
+      secret
+    ).toString();
+
+    get(username)
       .then((data) => {
-        console.log(data);
+        if (data === undefined) {
+          set(username, ciphertext)
+            .then(() => {
+              alert('user added successfully');
+              navigate('/login');
+            })
+            .catch((err) => {
+              console.log('IndexedDB set failed', err);
+            });
+        } else {
+          alert('username already taken');
+        }
       })
-      .catch((error) => console.log('ERROR: could not post-fetch: ' + error));
+      .catch((err) => {
+        console.log('IndexedDB get failed', err);
+      });
+
+    setUsername('');
+    setSecret('');
   }
 
   return (
@@ -38,8 +58,8 @@ function Signup() {
           inputClass={'input-group'}
           inputType="password"
           label={'Password: '}
-          setInput={setPassword}
-          value={password}
+          setInput={setSecret}
+          value={secret}
         />
         <button className="width-100-perc" onClick={submitHandler}>
           Submit

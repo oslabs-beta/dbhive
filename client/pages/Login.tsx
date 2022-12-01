@@ -1,28 +1,49 @@
 import * as React from 'react';
-import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Input from '../components/Input';
 import { useNavigate } from 'react-router-dom';
+import { get } from 'idb-keyval';
+import CryptoJS from 'crypto-js';
+import AES from 'crypto-js/aes';
+// import { isLiteralTypeNode } from 'typescript';
 
-function Login() {
+type Props = {
+  username: string;
+  setUsername: (eventTargetValue: string) => void;
+  secret: string;
+  setSecret: (eventTargetValue: string) => void;
+  isLoggedIn: boolean;
+  setIsLoggedIn: (eventTargetValue: boolean) => void;
+};
+
+function Login(props: Props) {
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
   function submitHandler() {
-    fetch('/api/placeholder', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'Application/JSON',
-      },
-      body: JSON.stringify({ username: username, password: password }),
-    })
-      .then((res) => res.json())
+    get(props.username)
       .then((data) => {
-        console.log(data);
+        const bytes = AES.decrypt(data, props.secret);
+        const originalText = bytes.toString(CryptoJS.enc.Utf8);
+        if (originalText) {
+          const parsedText = JSON.parse(originalText);
+          if (parsedText.decryption === 'isValid') {
+            props.setIsLoggedIn(true);
+            alert('login sucessful');
+            navigate('/dashboard');
+          } else {
+            alert('username or password is incorrect');
+          }
+        } else {
+          alert('username or password is incorrect');
+        }
       })
-      .catch((error) => console.log('ERROR: could not post-fetch: ' + error));
+      .catch((err) => {
+        console.log('IndexedDB get failed', err);
+        alert('username or password is incorrect');
+      });
+
+    props.setUsername('');
+    props.setSecret('');
   }
 
   return (
@@ -34,15 +55,15 @@ function Login() {
         <Input
           inputClass={'input-group'}
           label={'Username: '}
-          setInput={setUsername}
-          value={username}
+          setInput={props.setUsername}
+          value={props.username}
         />
         <Input
           inputClass={'input-group'}
           inputType="password"
           label={'Password: '}
-          setInput={setPassword}
-          value={password}
+          setInput={props.setSecret}
+          value={props.secret}
         />
         <button className="width-100-perc" onClick={submitHandler}>
           Submit
