@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Graph1 from '../components/Graph1';
 import Graph2 from '../components/Graph2';
+import DBTab from '../components/DBTab';
 import { UserData } from '../clientTypes';
 
 import { Box, Card, Tabs, Tab, Typography, Button } from '@mui/material';
