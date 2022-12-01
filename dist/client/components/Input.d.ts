@@ -4,6 +4,7 @@ type Props = {
     setInput: (eventTargetValue: string) => void;
     inputClass?: string;
     inputType?: string;
+    value?: string;
 };
 declare function Input(props: Props): JSX.Element;
 export default Input;

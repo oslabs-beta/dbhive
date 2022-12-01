@@ -1,36 +1,78 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 // import { get } from 'idb-keyval';
 // import CryptoJS from 'crypto-js';
 // import AES from 'crypto-js/aes';
 import Navbar from '../components/Navbar';
 import Graph1 from '../components/Graph1';
 import Graph2 from '../components/Graph2';
+import { UserData } from '../clientTypes';
 
-function Dashboard() {
+type Props = {
+  username: string;
+  setUsername: (eventTargetValue: string) => void;
+  secret: string;
+  setSecret: (eventTargetValue: string) => void;
+  isLoggedIn: boolean;
+  setIsLoggedIn: (eventTargetValue: boolean) => void;
+  userData: UserData;
+  setUserData: (eventTargetValue: UserData) => void;
+};
+
+function Dashboard(props: Props) {
+  const navigate = useNavigate();
+
   const [graph1, setGraph1] = useState<JSX.Element>();
   const [graph2, setGraph2] = useState<JSX.Element>();
   const [fetchData, setFetchData] = useState([]);
 
   function getQueryTimes() {
-    fetch('/api/querytimes', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'Application/JSON',
-      },
-      body: JSON.stringify({
-        uri: 'postgres://dbhive:teamawesome@dbhive-test.crqqpw0ueush.us-west-2.rds.amazonaws.com:5432/postgres',
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setFetchData(data.times);
+    if (props.userData.dbs[0] !== undefined) {
+      fetch('/api/querytimes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'Application/JSON',
+        },
+        body: JSON.stringify({ uri: props.userData.dbs[0].uri }),
       })
-      .catch((error) => console.log('ERROR: could not post-fetch: ' + error));
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          setFetchData(data.times);
+        })
+        .catch((error) => console.log('ERROR: could not post-fetch: ' + error));
+    }
+
+    // get('dbhive-data')
+    //   .then((data) => {
+    //     const bytes = AES.decrypt(data, props.secret);
+    //     const originalText = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+
+    //     // postgres://dbhive:teamawesome@dbhive-test.crqqpw0ueush.us-west-2.rds.amazonaws.com:5432/postgres
+    //     fetch('/api/querytimes', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'Application/JSON',
+    //       },
+    //       body: JSON.stringify({ uri: originalText.uri }),
+    //     })
+    //       .then((res) => res.json())
+    //       .then((data) => {
+    //         console.log(data);
+    //         setFetchData(data.times);
+    //       })
+    //       .catch((error) =>
+    //         console.log('ERROR: could not post-fetch: ' + error)
+    //       );
+    //   })
+    //   .catch((err) => {
+    //     console.log('IndexedDB get failed', err);
+    //   });
   }
 
   useEffect(() => {
+    if (!props.isLoggedIn) navigate('/');
     if (fetchData.length === 0) {
       getQueryTimes();
     }

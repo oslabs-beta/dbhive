@@ -20,6 +20,10 @@
   },
   "homepage": "https://github.com/oslabs-beta/dbhive#readme",
   "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/icons-material": "^5.10.16",
+    "@mui/material": "^5.10.16",
     "@types/chart.js": "^2.9.37",
     "@types/crypto-js": "^4.1.1",
     "@types/eslint": "^8.4.10",

@@ -1,50 +1,98 @@
 import * as React from 'react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Input from '../components/Input';
+import { set, get } from 'idb-keyval';
+import AES from 'crypto-js/aes';
+import { UserData } from '../clientTypes';
+
+import { Card, Button, Typography } from '@mui/material';
 
 function Signup() {
+  const navigate = useNavigate();
+
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [secret, setSecret] = useState('');
+  const [signupError, setSignupError] = useState(false);
+  const [signupErrorText, setSignupErrorText] = useState('');
+
+  const initialUserData: UserData = { decryption: 'isValid', dbs: [] };
 
   function submitHandler() {
-    fetch('/api/placeholder', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'Application/JSON',
-      },
-      body: JSON.stringify({ username: username, password: password }),
-    })
-      .then((res) => res.json())
+    const ciphertext = AES.encrypt(
+      JSON.stringify(initialUserData),
+      secret
+    ).toString();
+
+    get(username)
       .then((data) => {
-        console.log(data);
+        if (data === undefined) {
+          set(username, ciphertext)
+            .then(() => {
+              navigate('/login');
+            })
+            .catch((err) => {
+              console.log('IndexedDB: set failed', err);
+            });
+        } else {
+          setSignupError(true);
+          setSignupErrorText('incorrect username or password');
+        }
       })
-      .catch((error) => console.log('ERROR: could not post-fetch: ' + error));
+      .catch((err) => {
+        console.log('IndexedDB: get failed', err);
+      });
+
+    setUsername('');
+    setSecret('');
   }
 
   return (
     <div>
       <Navbar />
-      <h2>Sign Up Page</h2>
-      <div className="form">
-        <h3>Sign Up</h3>
+      <Card
+        sx={{
+          textAlign: 'center',
+          width: 400,
+          mx: 'auto',
+          my: '10rem',
+          p: '4rem',
+        }}
+      >
+        <Typography
+          variant="h5"
+          component="div"
+          sx={{ flexGrow: 1, mb: '2rem' }}
+          // color="primary"
+        >
+          Sign Up
+        </Typography>
         <Input
           inputClass={'input-group'}
           label={'Username: '}
           setInput={setUsername}
           value={username}
+          error={signupError}
         />
         <Input
           inputClass={'input-group'}
           inputType="password"
           label={'Password: '}
-          setInput={setPassword}
-          value={password}
+          setInput={setSecret}
+          value={secret}
+          error={signupError}
+          errorText={signupErrorText}
         />
-        <button className="width-100-perc" onClick={submitHandler}>
+        <Button
+          variant="contained"
+          sx={{ mt: '1rem', mb: '3rem', width: '100%' }}
+          className="width-100-perc"
+          onClick={submitHandler}
+        >
           Submit
-        </button>
-      </div>
+        </Button>
+      </Card>
     </div>
   );
 }

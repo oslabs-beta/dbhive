@@ -3,5 +3,5 @@ type Props = {
     labels?: string[];
     data?: number[];
 };
-declare function Graph1(props: Props): JSX.Element;
-export default Graph1;
+declare function Graph2(props: Props): JSX.Element;
+export default Graph2;
