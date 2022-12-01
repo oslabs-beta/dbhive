@@ -1,9 +1,11 @@
+// postgres://dbhive:teamawesome@dbhive-test.crqqpw0ueush.us-west-2.rds.amazonaws.com:5432/postgres
+
 import * as React from 'react';
 import { useState } from 'react';
 import Input from './Input';
-import { set, get } from 'idb-keyval';
-import CryptoJS from 'crypto-js';
-import AES from 'crypto-js/aes';
+// import { set, get } from 'idb-keyval';
+// import CryptoJS from 'crypto-js';
+// import AES from 'crypto-js/aes';
 import { UserData } from '../clientTypes';
 
 type Props = {
@@ -27,55 +29,56 @@ function ConnectDB(props: Props) {
   const [password, setPassword] = useState('');
 
   function submitHandler(type: string) {
-    let stateData: {
-      nickname: string;
-      uri?: string;
-      host?: string;
-      port?: number;
-      database?: string;
-      dbUsername?: string;
-      password?: string;
-    };
+    // let stateData: {
+    //   nickname: string;
+    //   uri?: string;
+    //   host?: string;
+    //   port?: number;
+    //   database?: string;
+    //   dbUsername?: string;
+    //   password?: string;
+    // };
 
     if (type === 'uri') {
-      stateData = {
+      const copyUserData = { ...props.userData };
+      copyUserData.dbs.push({
         nickname: nickname,
         uri: uri,
-      };
+      });
+      props.setUserData(copyUserData);
     } else if (type === 'separate') {
-      stateData = {
+      const copyUserData = { ...props.userData };
+      copyUserData.dbs.push({
         nickname: nickname,
         uri: `postgres://${dBUsername}:${password}@${host}:${port}/${database}`,
-      };
+      });
+      props.setUserData(copyUserData);
     }
 
-    const copyUserData = { ...props.userData };
-    // copyUserData.dbs.push(stateData);
-    props.setUserData(copyUserData);
-    get(props.username)
-      .then((data) => {
-        const bytes = AES.decrypt(data, props.secret);
-        const originalText = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-        if (originalText.dbs !== undefined) originalText.dbs.push(stateData);
-        else originalText.dbs = [stateData];
-        console.log(originalText);
-        const ciphertext = AES.encrypt(
-          JSON.stringify(originalText),
-          props.secret
-        ).toString();
+    // get(props.username)
+    //   .then((data) => {
+    //     const bytes = AES.decrypt(data, props.secret);
+    //     const originalText = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+    //     if (originalText.dbs !== undefined) originalText.dbs.push(stateData);
+    //     else originalText.dbs = [stateData];
+    //     console.log(originalText);
+    //     const ciphertext = AES.encrypt(
+    //       JSON.stringify(originalText),
+    //       props.secret
+    //     ).toString();
 
-        set(props.username, ciphertext)
-          .then(() => {
-            console.log('IndexedDB set successful');
-            alert(stateData.nickname + ' has been added');
-          })
-          .catch((err) => {
-            console.log('IndexedDB set failed', err);
-          });
-      })
-      .catch((err) => {
-        console.log('IndexedDB get failed', err);
-      });
+    //     set(props.username, ciphertext)
+    //       .then(() => {
+    //         console.log('IndexedDB set successful');
+    //         alert(stateData.nickname + ' has been added');
+    //       })
+    //       .catch((err) => {
+    //         console.log('IndexedDB set failed', err);
+    //       });
+    //   })
+    //   .catch((err) => {
+    //     console.log('IndexedDB get failed', err);
+    //   });
 
     setNickname('');
     setUri('');

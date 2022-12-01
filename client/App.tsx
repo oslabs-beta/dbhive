@@ -12,34 +12,37 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Setup from './pages/Setup';
 import { useState, useEffect } from 'react';
-import { set, get } from 'idb-keyval';
-import CryptoJS from 'crypto-js';
+import { set } from 'idb-keyval';
 import AES from 'crypto-js/aes';
 import { UserData } from './clientTypes';
 
 function App() {
-  const initialUserData: UserData = { decryption: 'isValid', dbs: [] };
+  const initialUserData: UserData = {
+    decryption: 'isValid',
+    dbs: [],
+  };
   const [username, setUsername] = useState('');
   const [secret, setSecret] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(initialUserData);
-  // console.log('username', username);
-  // console.log('secret', secret);
+
+  const globalState = {
+    username: username,
+    secret: secret,
+    isLoggedIn: isLoggedIn,
+    userData: userData,
+  };
 
   function handleUserData() {
     const ciphertext = AES.encrypt(JSON.stringify(userData), secret).toString();
-    set(username, ciphertext)
-      .then(() => {
-        console.log('IndexedDB: userData set successful');
-      })
-      .catch((err) => {
-        console.log('IndexedDB: set failed', err);
-      });
+    set(username, ciphertext).catch((err) => {
+      console.log('IndexedDB: set failed', err);
+    });
   }
 
   useEffect(() => {
     handleUserData();
-    console.log('user data update!');
+    console.log('globalState:', globalState);
   }, [userData]);
 
   const router = createBrowserRouter([
@@ -80,7 +83,18 @@ function App() {
     },
     {
       path: '/dashboard',
-      element: <Dashboard secret={secret} setSecret={setSecret} />,
+      element: (
+        <Dashboard
+          secret={secret}
+          setSecret={setSecret}
+          username={username}
+          setUsername={setUsername}
+          isLoggedIn={isLoggedIn}
+          setIsLoggedIn={setIsLoggedIn}
+          userData={userData}
+          setUserData={setUserData}
+        />
+      ),
     },
   ]);
 

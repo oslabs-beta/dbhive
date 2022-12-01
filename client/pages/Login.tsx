@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { get } from 'idb-keyval';
 import CryptoJS from 'crypto-js';
 import AES from 'crypto-js/aes';
-// import { isLiteralTypeNode } from 'typescript';
 import { UserData } from '../clientTypes';
 
 type Props = {
@@ -26,13 +25,13 @@ function Login(props: Props) {
     get(props.username)
       .then((data) => {
         const bytes = AES.decrypt(data, props.secret);
-        const originalText = bytes.toString(CryptoJS.enc.Utf8);
-        if (originalText) {
-          const parsedText = JSON.parse(originalText);
-          if (parsedText.decryption === 'isValid') {
+        const decryptResponse = bytes.toString(CryptoJS.enc.Utf8);
+        if (decryptResponse) {
+          const originalText = JSON.parse(decryptResponse);
+          if (originalText.decryption === 'isValid') {
             props.setIsLoggedIn(true);
-            props.setUserData(parsedText);
-            console.log('login sucessful');
+            props.setUserData(originalText);
+            alert('login sucessful');
             navigate('/dashboard');
           } else {
             alert('username or password is incorrect');
@@ -50,8 +49,7 @@ function Login(props: Props) {
   return (
     <div>
       <Navbar />
-      <h2>Login Page</h2>
-      <div className="form">
+      <div className="card-main">
         <h3>Login</h3>
         <Input
           inputClass={'input-group'}

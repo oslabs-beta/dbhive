@@ -5,17 +5,19 @@ import Navbar from '../components/Navbar';
 import Input from '../components/Input';
 import { set, get } from 'idb-keyval';
 import AES from 'crypto-js/aes';
-// import SHA3 from 'crypto-js/sha3';
+import { UserData } from '../clientTypes';
 
 function Signup() {
   const navigate = useNavigate();
+
   const [username, setUsername] = useState('');
   const [secret, setSecret] = useState('');
 
+  const initialUserData: UserData = { decryption: 'isValid', dbs: [] };
+
   function submitHandler() {
-    // Encrypt
     const ciphertext = AES.encrypt(
-      JSON.stringify({ decryption: 'isValid' }),
+      JSON.stringify(initialUserData),
       secret
     ).toString();
 
@@ -28,14 +30,14 @@ function Signup() {
               navigate('/login');
             })
             .catch((err) => {
-              console.log('IndexedDB set failed', err);
+              console.log('IndexedDB: set failed', err);
             });
         } else {
           alert('username already taken');
         }
       })
       .catch((err) => {
-        console.log('IndexedDB get failed', err);
+        console.log('IndexedDB: get failed', err);
       });
 
     setUsername('');

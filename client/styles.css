@@ -1,9 +1,16 @@
+:root {
+  --color-bg-primary: rgb(45, 45, 45);
+  --color-bg-secondary: rgb(68, 68, 68);
+  --color-bg-tertiary: rgb(36, 35, 35);
+  --color-grey-md: rgb(114, 114, 114);
+}
+
 body {
   text-align: center;
   padding: 20px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  box-sizing: border-box;
-  background-color: rgb(175, 174, 174);
+  background-color: var(--color-bg-primary);
+  margin: 0 auto;
 }
 
 h1 {
@@ -37,7 +44,8 @@ button {
   width: 150px;
   display: inline-block;
   animation: spin 10s infinite linear;
-  filter: invert(0%) sepia(26%) saturate(6574%) hue-rotate(325deg) brightness(107%) contrast(99%);
+  filter: invert(0%) sepia(26%) saturate(6574%) hue-rotate(325deg)
+    brightness(107%) contrast(99%);
 }
 
 .input-group {
@@ -46,12 +54,31 @@ button {
   margin: 5px 0;
 }
 
-.form {
+.card-main {
+  color: white;
   width: 500px;
-  border: 1px solid black;
+  /* border: 1px solid black; */
+  box-shadow: 3px 3px 6px var(--color-bg-tertiary);
+  border-radius: 8px;
   padding: 10px;
+  background-color: var(--color-bg-secondary);
+  margin: 100px auto;
 }
 
-.form input {
+input {
+  background-color: var(--color-grey-md);
+  border: none;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+button {
+  background-color: var(--color-grey-md);
+  border: none;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.card-main input {
   width: 75%;
 }
