@@ -16,6 +16,35 @@ import { set } from 'idb-keyval';
 import AES from 'crypto-js/aes';
 import { UserData } from './clientTypes';
 
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#ffd900',
+    },
+    secondary: {
+      main: '#134e00',
+    },
+  },
+  typography: {
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+  },
+});
+
 function App() {
   const initialUserData: UserData = {
     decryption: 'isValid',
@@ -100,7 +129,10 @@ function App() {
 
   return (
     <>
-      <RouterProvider router={router} />
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <RouterProvider router={router} />
+      </ThemeProvider>
     </>
   );
 }

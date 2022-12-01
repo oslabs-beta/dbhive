@@ -23,26 +23,21 @@ function Setup(props: Props) {
     if (!props.isLoggedIn) navigate('/');
   }, []);
 
-  if (props.isLoggedIn) {
-    return (
-      <div>
-        <Navbar />
-        <h2>Setup Page</h2>
-        <ConnectDB
-          secret={props.secret}
-          setSecret={props.setSecret}
-          username={props.username}
-          setUsername={props.setUsername}
-          isLoggedIn={props.isLoggedIn}
-          setIsLoggedIn={props.setIsLoggedIn}
-          userData={props.userData}
-          setUserData={props.setUserData}
-        />
-      </div>
-    );
-  } else {
-    return <div></div>;
-  }
+  return (
+    <div>
+      <Navbar />
+      <ConnectDB
+        secret={props.secret}
+        setSecret={props.setSecret}
+        username={props.username}
+        setUsername={props.setUsername}
+        isLoggedIn={props.isLoggedIn}
+        setIsLoggedIn={props.setIsLoggedIn}
+        userData={props.userData}
+        setUserData={props.setUserData}
+      />
+    </div>
+  );
 }
 
 export default Setup;

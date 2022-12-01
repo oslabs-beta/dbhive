@@ -1,3 +1,4 @@
+/*
 :root {
   --color-bg-primary: rgb(45, 45, 45);
   --color-bg-secondary: rgb(68, 68, 68);
@@ -57,7 +58,6 @@ button {
 .card-main {
   color: white;
   width: 500px;
-  /* border: 1px solid black; */
   box-shadow: 3px 3px 6px var(--color-bg-tertiary);
   border-radius: 8px;
   padding: 10px;
@@ -82,3 +82,4 @@ button {
 .card-main input {
   width: 75%;
 }
+*/

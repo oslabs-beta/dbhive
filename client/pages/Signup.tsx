@@ -7,11 +7,15 @@ import { set, get } from 'idb-keyval';
 import AES from 'crypto-js/aes';
 import { UserData } from '../clientTypes';
 
+import { Card, Button, Typography } from '@mui/material';
+
 function Signup() {
   const navigate = useNavigate();
 
   const [username, setUsername] = useState('');
   const [secret, setSecret] = useState('');
+  const [signupError, setSignupError] = useState(false);
+  const [signupErrorText, setSignupErrorText] = useState('');
 
   const initialUserData: UserData = { decryption: 'isValid', dbs: [] };
 
@@ -26,14 +30,14 @@ function Signup() {
         if (data === undefined) {
           set(username, ciphertext)
             .then(() => {
-              alert('user added successfully');
               navigate('/login');
             })
             .catch((err) => {
               console.log('IndexedDB: set failed', err);
             });
         } else {
-          alert('username already taken');
+          setSignupError(true);
+          setSignupErrorText('incorrect username or password');
         }
       })
       .catch((err) => {
@@ -47,14 +51,29 @@ function Signup() {
   return (
     <div>
       <Navbar />
-      <h2>Sign Up Page</h2>
-      <div className="form">
-        <h3>Sign Up</h3>
+      <Card
+        sx={{
+          textAlign: 'center',
+          width: 400,
+          mx: 'auto',
+          my: '10rem',
+          p: '4rem',
+        }}
+      >
+        <Typography
+          variant="h5"
+          component="div"
+          sx={{ flexGrow: 1, mb: '2rem' }}
+          // color="primary"
+        >
+          Sign Up
+        </Typography>
         <Input
           inputClass={'input-group'}
           label={'Username: '}
           setInput={setUsername}
           value={username}
+          error={signupError}
         />
         <Input
           inputClass={'input-group'}
@@ -62,11 +81,18 @@ function Signup() {
           label={'Password: '}
           setInput={setSecret}
           value={secret}
+          error={signupError}
+          errorText={signupErrorText}
         />
-        <button className="width-100-perc" onClick={submitHandler}>
+        <Button
+          variant="contained"
+          sx={{ mt: '1rem', mb: '3rem', width: '100%' }}
+          className="width-100-perc"
+          onClick={submitHandler}
+        >
           Submit
-        </button>
-      </div>
+        </Button>
+      </Card>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Input from '../components/Input';
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +7,8 @@ import { get } from 'idb-keyval';
 import CryptoJS from 'crypto-js';
 import AES from 'crypto-js/aes';
 import { UserData } from '../clientTypes';
+
+import { Card, Button, Typography } from '@mui/material';
 
 type Props = {
   username: string;
@@ -21,6 +24,9 @@ type Props = {
 function Login(props: Props) {
   const navigate = useNavigate();
 
+  const [loginError, setLoginError] = useState(false);
+  const [loginErrorText, setLoginErrorText] = useState('');
+
   function submitHandler() {
     get(props.username)
       .then((data) => {
@@ -31,31 +37,52 @@ function Login(props: Props) {
           if (originalText.decryption === 'isValid') {
             props.setIsLoggedIn(true);
             props.setUserData(originalText);
-            alert('login sucessful');
             navigate('/dashboard');
           } else {
-            alert('username or password is incorrect');
+            setLoginError(true);
+            setLoginErrorText('incorrect username or password');
           }
         } else {
-          alert('username or password is incorrect');
+          setLoginError(true);
+          setLoginErrorText('incorrect username or password');
         }
       })
       .catch((err) => {
         console.log('IndexedDB get failed', err);
-        alert('username or password is incorrect');
+        setLoginError(true);
+        setLoginErrorText('incorrect username or password');
       });
+
+    props.setUsername('');
+    props.setSecret('');
   }
 
   return (
     <div>
       <Navbar />
-      <div className="card-main">
-        <h3>Login</h3>
+      <Card
+        sx={{
+          textAlign: 'center',
+          width: 400,
+          mx: 'auto',
+          my: '10rem',
+          p: '4rem',
+        }}
+      >
+        <Typography
+          variant="h5"
+          component="div"
+          sx={{ flexGrow: 1, mb: '2rem' }}
+          // color="primary"
+        >
+          Login
+        </Typography>
         <Input
           inputClass={'input-group'}
           label={'Username: '}
           setInput={props.setUsername}
           value={props.username}
+          error={loginError}
         />
         <Input
           inputClass={'input-group'}
@@ -63,14 +90,26 @@ function Login(props: Props) {
           label={'Password: '}
           setInput={props.setSecret}
           value={props.secret}
+          error={loginError}
+          errorText={loginErrorText}
         />
-        <button className="width-100-perc" onClick={submitHandler}>
+        <Button
+          variant="contained"
+          sx={{ mt: '1rem', mb: '3rem', width: '100%' }}
+          className="width-100-perc"
+          onClick={submitHandler}
+        >
           Submit
-        </button>
-        <button className="width-100-perc" onClick={() => navigate('/signup')}>
+        </Button>
+        <Button
+          variant="text"
+          sx={{ width: '100%' }}
+          className="width-100-perc"
+          onClick={() => navigate('/signup')}
+        >
           Sign Up
-        </button>
-      </div>
+        </Button>
+      </Card>
     </div>
   );
 }

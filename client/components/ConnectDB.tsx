@@ -8,6 +8,8 @@ import Input from './Input';
 // import AES from 'crypto-js/aes';
 import { UserData } from '../clientTypes';
 
+import { Card, Button, Typography, Divider } from '@mui/material';
+
 type Props = {
   username: string;
   setUsername: (eventTargetValue: string) => void;
@@ -29,16 +31,6 @@ function ConnectDB(props: Props) {
   const [password, setPassword] = useState('');
 
   function submitHandler(type: string) {
-    // let stateData: {
-    //   nickname: string;
-    //   uri?: string;
-    //   host?: string;
-    //   port?: number;
-    //   database?: string;
-    //   dbUsername?: string;
-    //   password?: string;
-    // };
-
     if (type === 'uri') {
       const copyUserData = { ...props.userData };
       copyUserData.dbs.push({
@@ -90,25 +82,43 @@ function ConnectDB(props: Props) {
   }
 
   return (
-    <div className="form">
-      <h3>Connect DB</h3>
+    <Card
+      sx={{
+        textAlign: 'center',
+        width: 400,
+        mx: 'auto',
+        my: '10rem',
+        p: '4rem',
+      }}
+    >
+      <Typography
+        variant="h5"
+        component="div"
+        sx={{ flexGrow: 1, mb: '2rem' }}
+        // color="primary"
+      >
+        Connect to new DB
+      </Typography>
       <Input
         inputClass={'input-group'}
         label={'Nickname: '}
         value={nickname}
         setInput={setNickname}
       />
-      <hr />
+      <Divider sx={{ my: '2rem' }} color="primary" />
       <Input
         inputClass={'input-group'}
         label={'Uri String: '}
         value={uri}
         setInput={setUri}
       />
-      <button className="width-100-perc" onClick={() => submitHandler('uri')}>
+      <Button
+        variant="contained"
+        sx={{ mt: '1rem', mb: '3rem', width: '100%' }}
+        onClick={() => submitHandler('uri')}
+      >
         Submit
-      </button>
-      <hr />
+      </Button>
       <Input
         inputClass={'input-group'}
         label={'Host: '}
@@ -140,13 +150,14 @@ function ConnectDB(props: Props) {
         value={password}
         setInput={setPassword}
       />
-      <button
-        className="width-100-perc"
+      <Button
+        variant="contained"
+        sx={{ mt: '1rem', mb: '3rem', width: '100%' }}
         onClick={() => submitHandler('separate')}
       >
         Submit
-      </button>
-    </div>
+      </Button>
+    </Card>
   );
 }
 
