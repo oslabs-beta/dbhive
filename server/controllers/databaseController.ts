@@ -88,7 +88,8 @@ const databaseController: DatabaseController = {
       res.locals.result.deadlocks = dbOverview.rows[0].deadlocks;
       res.locals.result.transactionsCommitted = dbOverview.rows[0].xact_commit;
       res.locals.result.rolledBackTransactions = dbOverview.rows[0].xact_rollback;
-      //res.locals.result.totalTransactions = parseInt(res.locals.transactionsCommitted) + parseInt(res.locals.totalTransactions);
+      //console.log(Number(res.locals.result.transactionsCommitted));
+      //res.locals.result.totalTransactions = (Number(res.locals.result.transactionsCommitted) + Number(res.locals.result.totalTransactions));
       return next();
     } catch (error) {
       return next({
