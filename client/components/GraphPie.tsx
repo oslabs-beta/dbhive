@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
+import GraphCard from './GraphCard';
 
 Chart.register(ArcElement, Tooltip, Legend);
 
@@ -37,7 +38,11 @@ function Graph2(props: Props) {
     ],
   };
 
-  return <Pie data={data} />;
+  return (
+    <GraphCard cardLabel="Query time interval distribution">
+      <Pie data={data} />
+    </GraphCard>
+  );
 }
 
 export default Graph2;

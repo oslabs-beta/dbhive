@@ -46,7 +46,6 @@ function Home(props: Props) {
             textShadow: '2px 2px 4px #cbc51a',
             color: 'rgb(255, 255, 255)',
           }}
-          // color="primary"
         >
           <Box
             className="pulse-animation"
@@ -63,6 +62,17 @@ function Home(props: Props) {
           />{' '}
           Welcome to dbHive{' '}
         </Typography>
+        <div>
+          <p>
+            DbHive is a database monitoring and analysis tool for PostgreSQL
+            databases.
+          </p>
+          <p>
+            DbHive is highly configurable, capable of monitoring multiple
+            databases, and is committed to sharing this product with the open
+            source community!
+          </p>
+        </div>
       </Card>
     </>
   );

@@ -9,6 +9,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import GraphCard from './GraphCard';
 
 Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -26,7 +27,7 @@ function Graph1(props: Props) {
       },
       title: {
         display: true,
-        text: 'Chart.js Bar Chart',
+        text: 'Chart 1',
       },
     },
     scales: {
@@ -51,7 +52,11 @@ function Graph1(props: Props) {
     ],
   };
 
-  return <Bar options={options} data={data} />;
+  return (
+    <GraphCard cardLabel="Execution Time for SELECT Queries">
+      <Bar options={options} data={data} />
+    </GraphCard>
+  );
 }
 
 export default Graph1;
