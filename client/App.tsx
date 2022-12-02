@@ -46,20 +46,25 @@ const darkTheme = createTheme({
 });
 
 function App() {
-  const initialUserData: UserData = {
-    decryption: 'isValid',
-    dbs: [],
-  };
-
   // const initialUserData: UserData = {
   //   decryption: 'isValid',
-  //   dbs: [
-  //     {
-  //       nickname: 'dbTest',
-  //       uri: 'postgres://dbhive:teamawesome@dbhive-test.crqqpw0ueush.us-west-2.rds.amazonaws.com:5432/postgres',
-  //     },
-  //   ],
+  //   dbs: [],
   // };
+
+  // TESTING PURPOSES
+  const initialUserData: UserData = {
+    decryption: 'isValid',
+    dbs: [
+      {
+        nickname: 'dbTest',
+        uri: 'postgres://dbhive:teamawesome@dbhive-test.crqqpw0ueush.us-west-2.rds.amazonaws.com:5432/postgres',
+      },
+      {
+        nickname: 'dbTest2',
+        uri: 'postgres://n00bs:testallcaps@dbhive.cxjwyi85ug6q.us-east-1.rds.amazonaws.com:5432/postgres',
+      },
+    ],
+  };
 
   const [username, setUsername] = useState('');
   const [secret, setSecret] = useState('');

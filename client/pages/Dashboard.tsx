@@ -2,8 +2,9 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import Graph1 from '../components/Graph1';
-import Graph2 from '../components/Graph2';
+import GraphCard from '../components/GraphCard';
+import GraphLine from '../components/GraphLine';
+import GraphPie from '../components/GraphPie';
 // import DBTab from '../components/DBTab';
 import { UserData } from '../clientTypes';
 
@@ -23,10 +24,10 @@ type Props = {
 function Dashboard(props: Props) {
   const navigate = useNavigate();
 
-  if (!props.isLoggedIn) navigate('/login');
+  // if (!props.isLoggedIn) navigate('/login');
 
   useEffect(() => {
-    if (!props.isLoggedIn) navigate('/login');
+    // if (!props.isLoggedIn) navigate('/login');
   }, []);
 
   type FetchData = {
@@ -117,8 +118,8 @@ function Dashboard(props: Props) {
         }
       }
     );
-    setGraph1(<Graph1 labels={labels} data={data} />);
-    setGraph2(<Graph2 labels={Object.keys(pie)} data={Object.values(pie)} />);
+    setGraph1(<GraphLine labels={labels} data={data} />);
+    setGraph2(<GraphPie labels={Object.keys(pie)} data={Object.values(pie)} />);
     setGraph3(fetchData.conflicts);
     setGraph4(fetchData.deadlocks);
     setGraph5(fetchData.rolledBackTransactions);
@@ -259,209 +260,12 @@ function Dashboard(props: Props) {
           </Tabs>
         </Box>
         <Box sx={{ display: 'inline-flex', flexWrap: 'wrap', pl: '11rem' }}>
-          <Card
-            sx={{
-              textAlign: 'center',
-              mx: '1rem',
-              mt: '1rem',
-              p: '1rem',
-              minWidth: '400px',
-              maxWidth: '700px',
-            }}
-          >
-            <p>Execution Time for SELECT Queries</p>
-            {graph1}
-          </Card>
-          <Card
-            sx={{
-              textAlign: 'center',
-              mx: '1rem',
-              mt: '1rem',
-              p: '1rem',
-              minWidth: '400px',
-              maxWidth: '700px',
-            }}
-          >
-            <p>Query time interval distribution</p>
-            {graph2}
-          </Card>
-          <Card
-            sx={{
-              textAlign: 'center',
-              mx: '1rem',
-              mt: '1rem',
-              p: '1rem',
-              minWidth: '400px',
-              maxWidth: '700px',
-            }}
-          >
-            <p>Conflicts</p>
-            <Typography
-              variant="h1"
-              component="div"
-              sx={{ mx: '1rem', color: 'green' }}
-            >
-              {graph3}
-            </Typography>
-          </Card>
-          <Card
-            sx={{
-              textAlign: 'center',
-              mx: '1rem',
-              mt: '1rem',
-              p: '1rem',
-              minWidth: '400px',
-              maxWidth: '700px',
-            }}
-          >
-            <p>Deadlocks</p>
-            <Typography
-              variant="h1"
-              component="div"
-              sx={{ mx: '1rem', color: 'green' }}
-            >
-              {graph4}
-            </Typography>
-          </Card>
-          <Card
-            sx={{
-              textAlign: 'center',
-              mx: '1rem',
-              mt: '1rem',
-              p: '1rem',
-              minWidth: '400px',
-              maxWidth: '700px',
-            }}
-          >
-            <p>Rolled Back Transactions</p>
-            <Typography
-              variant="h1"
-              component="div"
-              sx={{ mx: '1rem', color: 'yellow' }}
-            >
-              {graph5}
-            </Typography>
-          </Card>
-          <Card
-            sx={{
-              textAlign: 'center',
-              mx: '1rem',
-              mt: '1rem',
-              p: '1rem',
-              minWidth: '400px',
-              maxWidth: '700px',
-            }}
-          >
-            <p>Transactions Committed</p>
-            <Typography variant="h1" component="div" sx={{ mx: '1rem' }}>
-              {graph6}
-            </Typography>
-          </Card>
-          <Card
-            sx={{
-              textAlign: 'center',
-              mx: '1rem',
-              mt: '1rem',
-              p: '1rem',
-              minWidth: '400px',
-              maxWidth: '700px',
-            }}
-          >
-            <p>Query time interval distribution</p>
-            {graph2}
-          </Card>
-          <Card
-            sx={{
-              textAlign: 'center',
-              mx: '1rem',
-              mt: '1rem',
-              p: '1rem',
-              minWidth: '400px',
-              maxWidth: '700px',
-            }}
-          >
-            <p>Execution Time for SELECT Queries</p>
-            {graph1}
-          </Card>
-
-          <Card
-            sx={{
-              textAlign: 'center',
-              mx: '1rem',
-              mt: '1rem',
-              p: '1rem',
-              minWidth: '400px',
-              maxWidth: '700px',
-            }}
-          >
-            <p>Execution Time for SELECT Queries</p>
-            {graph1}
-          </Card>
-          <Card
-            sx={{
-              textAlign: 'center',
-              mx: '1rem',
-              mt: '1rem',
-              p: '1rem',
-              minWidth: '400px',
-              maxWidth: '700px',
-            }}
-          >
-            <p>Query time interval distribution</p>
-            {graph2}
-          </Card>
-          <Card
-            sx={{
-              textAlign: 'center',
-              mx: '1rem',
-              mt: '1rem',
-              p: '1rem',
-              minWidth: '400px',
-              maxWidth: '700px',
-            }}
-          >
-            <p>Execution Time for SELECT Queries</p>
-            {graph1}
-          </Card>
-          <Card
-            sx={{
-              textAlign: 'center',
-              mx: '1rem',
-              mt: '1rem',
-              p: '1rem',
-              minWidth: '400px',
-              maxWidth: '700px',
-            }}
-          >
-            <p>Query time interval distribution</p>
-            {graph2}
-          </Card>
-          <Card
-            sx={{
-              textAlign: 'center',
-              mx: '1rem',
-              mt: '1rem',
-              p: '1rem',
-              minWidth: '400px',
-              maxWidth: '700px',
-            }}
-          >
-            <p>Execution Time for SELECT Queries</p>
-            {graph1}
-          </Card>
-          <Card
-            sx={{
-              textAlign: 'center',
-              mx: '1rem',
-              mt: '1rem',
-              p: '1rem',
-              minWidth: '400px',
-              maxWidth: '700px',
-            }}
-          >
-            <p>Query time interval distribution</p>
-            {graph2}
-          </Card>
+          {graph1}
+          {graph2}
+          <GraphCard cardLabel="Conflicts">{graph3}</GraphCard>
+          <GraphCard cardLabel="Deadlocks">{graph4}</GraphCard>
+          <GraphCard cardLabel="Rolled Back Transactions">{graph5}</GraphCard>
+          <GraphCard cardLabel="Transactions Committed">{graph6}</GraphCard>
         </Box>
       </div>
     );
