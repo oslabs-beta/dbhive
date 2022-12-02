@@ -1,89 +1,38 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
 import GraphCard from '../components/GraphCard';
 import GraphLine from '../components/GraphLine';
 import GraphPie from '../components/GraphPie';
-// import DBTab from '../components/DBTab';
-import { UserData, DbData } from '../clientTypes';
 
-import { Box, Card, Tabs, Tab, Typography, Button } from '@mui/material';
+import { Box } from '@mui/material';
 
 type Props = {
-  username: string;
-  setUsername: (eventTargetValue: string) => void;
-  secret: string;
-  setSecret: (eventTargetValue: string) => void;
-  isLoggedIn: boolean;
-  setIsLoggedIn: (eventTargetValue: boolean) => void;
-  userData: UserData;
-  setUserData: (eventTargetValue: UserData) => void;
-  dbData: DbData;
-  setDbData: (eventTargetValue: DbData) => void;
+  dbUri: string;
 };
 
 function DBTab(props: Props) {
-  const navigate = useNavigate();
-
-  // if (!props.isLoggedIn) navigate('/login');
-
-  useEffect(() => {
-    // if (!props.isLoggedIn) navigate('/login');
-  }, []);
-
   type FetchData = {
-    averageQueryTime?: [];
-    cacheHitRatio?: [{ heap_read: string; heap_hit: string }];
-    conflicts?: string;
-    dbStats?: [];
-    deadlocks?: string;
-    deleteQueryTime?: [];
-    insertQueryTime?: [];
-    numOfRows?: [];
-    rolledBackTransactions?: string;
-    transactionsCommitted?: string;
-    selectQueryTime?: [];
-    times?: [];
+    [key: string]: any;
   };
 
-  const initialFetchData: FetchData = {
-    averageQueryTime: [],
-    cacheHitRatio: [{ heap_read: '', heap_hit: '' }],
-    conflicts: '',
-    dbStats: [],
-    deadlocks: '',
-    deleteQueryTime: [],
-    insertQueryTime: [],
-    numOfRows: [],
-    rolledBackTransactions: '',
-    transactionsCommitted: '',
-    selectQueryTime: [],
-    times: [],
-  };
+  const initialFetchData: FetchData = {};
 
+  const [fetchData, setFetchData] = useState(initialFetchData);
   const [graph1, setGraph1] = useState<JSX.Element>();
   const [graph2, setGraph2] = useState<JSX.Element>();
-  const [graph3, setGraph3] = useState<string>();
-  const [graph4, setGraph4] = useState<string>();
-  const [graph5, setGraph5] = useState<string>();
-  const [graph6, setGraph6] = useState<string>();
-  const [fetchData, setFetchData] = useState(initialFetchData);
-  const [activeTab, setActiveTab] = useState(0);
 
-  function getQueryTimes() {
+  function getMetrics(uri: string) {
     fetch('/api/querytimes', {
       method: 'POST',
       headers: {
         'Content-Type': 'Application/JSON',
       },
-      body: JSON.stringify({ uri: props.userData.dbs[0].uri }),
+      body: JSON.stringify({ uri: uri }),
     })
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
         setFetchData(data);
-        parseData(data);
       })
       .catch((error) => console.log('ERROR: could not post-fetch: ' + error));
   }
@@ -91,6 +40,7 @@ function DBTab(props: Props) {
   function parseData(fetchData: FetchData) {
     const labels: string[] = [];
     const data: number[] = [];
+
     const pie: {
       'time < .1s'?: number;
       '.1s > time < .5s'?: number;
@@ -102,6 +52,7 @@ function DBTab(props: Props) {
       '.5s > time < 1s': 0,
       '1s < time': 0,
     };
+
     fetchData.selectQueryTime.forEach(
       (element: { query: string; mean_exec_time: number }) => {
         labels.push(element.query);
@@ -120,154 +71,71 @@ function DBTab(props: Props) {
         }
       }
     );
+
     setGraph1(<GraphLine labels={labels} data={data} />);
     setGraph2(<GraphPie labels={Object.keys(pie)} data={Object.values(pie)} />);
-    setGraph3(fetchData.conflicts);
-    setGraph4(fetchData.deadlocks);
-    setGraph5(fetchData.rolledBackTransactions);
-    setGraph6(fetchData.transactionsCommitted);
   }
 
-  if (props.userData.dbs[0] === undefined) {
+  useEffect(() => {
+    getMetrics(props.dbUri);
+  }, []);
+
+  useEffect(() => {
+    if (Object.keys(fetchData).length !== 0) {
+      parseData(fetchData);
+    }
+  }, [fetchData]);
+
+  if (Object.keys(fetchData).length === 0) {
     return (
       <div>
-        <Navbar
-          secret={props.secret}
-          setSecret={props.setSecret}
-          username={props.username}
-          setUsername={props.setUsername}
-          isLoggedIn={props.isLoggedIn}
-          setIsLoggedIn={props.setIsLoggedIn}
-          userData={props.userData}
-          setUserData={props.setUserData}
-        />
         <Box
-          sx={{
-            borderBottom: 1,
-            borderColor: 'divider',
-            mt: '4rem',
-            ml: '11rem',
-            backgroundColor: 'grey',
-          }}
-        >
-          <Tabs value={0} aria-label="db tabs"></Tabs>
-        </Box>
-        <Card
-          sx={{
-            textAlign: 'center',
-            ml: '12rem',
-            mr: '1rem',
-            my: '1rem',
-            p: '2rem',
-          }}
-        >
-          <Typography variant="h6" component="div" sx={{ mx: '1rem' }}>
-            Please connect a database
-          </Typography>
-          <Button
-            variant="contained"
-            sx={{ my: '1rem', width: '30%' }}
-            onClick={() => navigate('/setup')}
-          >
-            Setup
-          </Button>
-        </Card>
+          sx={{ display: 'inline-flex', flexWrap: 'wrap', pl: '11rem' }}
+        ></Box>
       </div>
     );
   } else {
-    useEffect(() => {
-      getQueryTimes();
-    }, []);
-
-    // useEffect(() => {
-    //   const labels: string[] = [];
-    //   const data: number[] = [];
-    //   const pie: {
-    //     'time < .1s'?: number;
-    //     '.1s > time < .5s'?: number;
-    //     '.5s > time < 1s'?: number;
-    //     '1s < time'?: number;
-    //   } = {
-    //     'time < .1s': 0,
-    //     '.1s > time < .5s': 0,
-    //     '.5s > time < 1s': 0,
-    //     '1s < time': 0,
-    //   };
-    //   if (fetchData.times) {
-    //     fetchData.times.forEach(
-    //       (element: { query: string; mean_exec_time: number }) => {
-    //         labels.push(element.query);
-    //         data.push(element.mean_exec_time);
-    //         if (element.mean_exec_time < 0.1) {
-    //           pie['time < .1s']++;
-    //         } else if (
-    //           element.mean_exec_time > 0.1 &&
-    //           element.mean_exec_time < 0.5
-    //         ) {
-    //           pie['.1s > time < .5s']++;
-    //         } else if (
-    //           element.mean_exec_time > 0.5 &&
-    //           element.mean_exec_time < 1
-    //         ) {
-    //           pie['.5s > time < 1s']++;
-    //         } else if (element.mean_exec_time > 1) {
-    //           pie['1s < time']++;
-    //         }
-    //       }
-    //     );
-    //     setGraph1(<Graph1 labels={labels} data={data} />);
-    //     setGraph2(
-    //       <Graph2 labels={Object.keys(pie)} data={Object.values(pie)} />
-    //     );
-    //   }
-    // }, [fetchData]);
-
-    type TabList = JSX.Element[];
-    const tabList: TabList = [];
-    if (props.userData.dbs[0] !== undefined) {
-      props.userData.dbs.forEach((db, index) => {
-        tabList.push(
-          <Tab
-            key={db.nickname}
-            label={db.nickname}
-            onClick={() => setActiveTab(index)}
-          />
-        );
-      });
-    }
-
     return (
       <div>
-        <Navbar
-          secret={props.secret}
-          setSecret={props.setSecret}
-          username={props.username}
-          setUsername={props.setUsername}
-          isLoggedIn={props.isLoggedIn}
-          setIsLoggedIn={props.setIsLoggedIn}
-          userData={props.userData}
-          setUserData={props.setUserData}
-        />
-        <Box
-          sx={{
-            borderBottom: 1,
-            borderColor: 'divider',
-            mt: '4rem',
-            ml: '11rem',
-            backgroundColor: 'grey',
-          }}
-        >
-          <Tabs value={activeTab} aria-label="db tabs">
-            {tabList}
-          </Tabs>
-        </Box>
         <Box sx={{ display: 'inline-flex', flexWrap: 'wrap', pl: '11rem' }}>
+          <GraphCard cardLabel="Database Name">
+            <>
+              name: {fetchData.dbStats[0].datname}
+              <br />
+              id: {fetchData.dbStats[0].datid}
+            </>
+          </GraphCard>
           {graph1}
           {graph2}
-          <GraphCard cardLabel="Conflicts">{graph3}</GraphCard>
-          <GraphCard cardLabel="Deadlocks">{graph4}</GraphCard>
-          <GraphCard cardLabel="Rolled Back Transactions">{graph5}</GraphCard>
-          <GraphCard cardLabel="Transactions Committed">{graph6}</GraphCard>
+          <GraphCard cardLabel="Conflicts">{fetchData.conflicts}</GraphCard>
+          <GraphCard cardLabel="Deadlocks">{fetchData.deadlocks}</GraphCard>
+          <GraphCard cardLabel="Rolled Back Transactions">
+            {fetchData.rolledBackTransactions}
+          </GraphCard>
+          <GraphCard cardLabel="Transactions Committed">
+            {fetchData.transactionsCommitted}
+          </GraphCard>
+          <GraphCard cardLabel="Cache Hit Ratio">
+            {Number(fetchData.cacheHitRatio[0].ratio).toFixed(4)}
+          </GraphCard>
+          <GraphCard cardLabel="Bulk Read Time">
+            {fetchData.dbStats[0].blk_read_time}
+          </GraphCard>
+          <GraphCard cardLabel="Bulk Write Time">
+            {fetchData.dbStats[0].blk_write_time}
+          </GraphCard>
+          <GraphCard cardLabel="Bulk Hits">
+            {fetchData.dbStats[0].blks_hit}
+          </GraphCard>
+          <GraphCard cardLabel="Bulk Reads">
+            {fetchData.dbStats[0].blks_read}
+          </GraphCard>
+          <GraphCard cardLabel="Checksum Failures">
+            {fetchData.dbStats[0].checksum_failures}
+          </GraphCard>
+          <GraphCard cardLabel="Bulk Read Time">
+            {fetchData.dbStats[0].blk_read_time}
+          </GraphCard>
         </Box>
       </div>
     );

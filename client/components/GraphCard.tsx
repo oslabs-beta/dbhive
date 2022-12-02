@@ -21,7 +21,7 @@ function GraphCard(props: Props) {
     >
       <p>{props.cardLabel}</p>
       <Typography
-        variant="h1"
+        variant="h3"
         component="div"
         sx={{ mx: '1rem', color: 'green' }}
       >
