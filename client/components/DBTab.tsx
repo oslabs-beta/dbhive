@@ -13,11 +13,12 @@ type Props = {
 function DBTab(props: Props) {
   type FetchData = {
     [key: string]: any;
-  };
+  } | null;
 
-  const initialFetchData: FetchData = {};
+  const initialFetchData: FetchData = null;
 
   const [fetchData, setFetchData] = useState(initialFetchData);
+  const [connectStatus, setConnectStatus] = useState('connecting...');
   const [graph1, setGraph1] = useState<JSX.Element>();
   const [graph2, setGraph2] = useState<JSX.Element>();
 
@@ -29,15 +30,17 @@ function DBTab(props: Props) {
       },
       body: JSON.stringify({ uri: uri }),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        return res.json();
+      })
       .then((data) => {
-        console.log(data);
-        setFetchData(data);
+        if (typeof data === 'object') setFetchData(data);
+        else setConnectStatus('connection failed...');
       })
       .catch((error) => console.log('ERROR: could not post-fetch: ' + error));
   }
 
-  function parseData(fetchData: FetchData) {
+  function formatData(fetchData: FetchData) {
     const labels: string[] = [];
     const data: number[] = [];
 
@@ -81,20 +84,12 @@ function DBTab(props: Props) {
   }, []);
 
   useEffect(() => {
-    if (Object.keys(fetchData).length !== 0) {
-      parseData(fetchData);
+    if (fetchData) {
+      formatData(fetchData);
     }
   }, [fetchData]);
 
-  if (Object.keys(fetchData).length === 0) {
-    return (
-      <div>
-        <Box
-          sx={{ display: 'inline-flex', flexWrap: 'wrap', pl: '11rem' }}
-        ></Box>
-      </div>
-    );
-  } else {
+  if (fetchData) {
     return (
       <div>
         <Box sx={{ display: 'inline-flex', flexWrap: 'wrap', pl: '11rem' }}>
@@ -136,6 +131,14 @@ function DBTab(props: Props) {
           <GraphCard cardLabel="Bulk Read Time">
             {fetchData.dbStats[0].blk_read_time}
           </GraphCard>
+        </Box>
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <Box sx={{ display: 'inline-flex', flexWrap: 'wrap', pl: '11rem' }}>
+          {connectStatus}
         </Box>
       </div>
     );

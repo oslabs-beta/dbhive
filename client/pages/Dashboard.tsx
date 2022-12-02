@@ -21,10 +21,10 @@ type Props = {
 function Dashboard(props: Props) {
   const navigate = useNavigate();
 
-  // if (!props.isLoggedIn) navigate('/login');
+  if (!props.isLoggedIn) navigate('/login');
 
   useEffect(() => {
-    // if (!props.isLoggedIn) navigate('/login');
+    if (!props.isLoggedIn) navigate('/login');
   }, []);
 
   const [activeTab, setActiveTab] = useState(0);
@@ -81,13 +81,13 @@ function Dashboard(props: Props) {
     const tabPanel: TabList = [];
     props.userData.dbs.forEach((db, index) => {
       tabPanel.push(
-        <div key={db.nickname} hidden={activeTab !== index}>
+        <div key={db.nickname + index} hidden={activeTab !== index}>
           <DBTab dbUri={db.uri}></DBTab>
         </div>
       );
       tabList.push(
         <Tab
-          key={db.nickname}
+          key={db.nickname + index}
           label={db.nickname}
           onClick={() => {
             setActiveTab(index);
