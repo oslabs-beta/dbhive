@@ -70,24 +70,29 @@ function DBTab(props: Props) {
       '1s < time': 0,
     };
 
-    fetchData.selectQueryTime.forEach(
-      (element: { query: string; mean_exec_time: number }) => {
-        labels.push(element.query);
-        data.push(element.mean_exec_time);
-        if (element.mean_exec_time < 0.1) {
-          pie['time < .1s']++;
-        } else if (
-          element.mean_exec_time > 0.1 &&
-          element.mean_exec_time < 0.5
-        ) {
-          pie['.1s > time < .5s']++;
-        } else if (element.mean_exec_time > 0.5 && element.mean_exec_time < 1) {
-          pie['.5s > time < 1s']++;
-        } else if (element.mean_exec_time > 1) {
-          pie['1s < time']++;
+    if (fetchData.selectQueryTime) {
+      fetchData.selectQueryTime.forEach(
+        (element: { query: string; mean_exec_time: number }) => {
+          labels.push(element.query);
+          data.push(element.mean_exec_time);
+          if (element.mean_exec_time < 0.1) {
+            pie['time < .1s']++;
+          } else if (
+            element.mean_exec_time > 0.1 &&
+            element.mean_exec_time < 0.5
+          ) {
+            pie['.1s > time < .5s']++;
+          } else if (
+            element.mean_exec_time > 0.5 &&
+            element.mean_exec_time < 1
+          ) {
+            pie['.5s > time < 1s']++;
+          } else if (element.mean_exec_time > 1) {
+            pie['1s < time']++;
+          }
         }
-      }
-    );
+      );
+    }
 
     setGraph1(<GraphLine labels={labels} data={data} />);
     setGraph2(<GraphPie labels={Object.keys(pie)} data={Object.values(pie)} />);
