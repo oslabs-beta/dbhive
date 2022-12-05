@@ -25,15 +25,15 @@ router.post(
   databaseController.numOfRows,
   databaseController.topCalls,
   databaseController.dbStats,
-  databaseController.selectQueryTime,
-  databaseController.deleteQueryTime,
-  databaseController.insertQueryTime,
-  databaseController.updateQueryTime,
   databaseController.cacheHitRatio,
-  databaseController.averageQueryTime,
   (req, res) => {
     return res.status(200).json(res.locals.result);
   }
 );
+
+//this should reflect any method that would need to update based on user input
+router.put('/querytimes', databaseController.numOfRows, databaseController.topCalls, (req,res)=>{
+  return res.status(200).json(res.locals.result)
+})
 
 export default router;
