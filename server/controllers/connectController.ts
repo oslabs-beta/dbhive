@@ -3,7 +3,7 @@ import { Pool } from 'pg';
 
 type ConnectController = {
   connectDB: RequestHandler;
-  createExtension:RequestHandler;
+  createExtension: RequestHandler;
 };
 
 export const connectController: ConnectController = {
@@ -28,9 +28,8 @@ export const connectController: ConnectController = {
     console.log('DB:', req.body);
     const db = res.locals.dbConnection;
     const queryString = 'CREATE EXTENSION IF NOT EXISTS pg_stat_statements';
-    let testQuery;
     try {
-      testQuery = await db.query(queryString);
+      const testQuery = await db.query(queryString);
       res.locals.result.validURI = true;
       return next();
     } catch (error) {
@@ -42,5 +41,4 @@ export const connectController: ConnectController = {
       });
     }
   },
-
 };

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import GraphCard from '../components/GraphCard';
-import GraphLine from '../components/GraphLine';
-import GraphPie from '../components/GraphPie';
-
-import { Box } from '@mui/material';
+import GraphCard from './GraphCard';
+import GraphLine from './GraphLine';
+import GraphPie from './GraphPie';
+import { Box, Popover } from '@mui/material';
+import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 
 type Props = {
   dbUri: string;
@@ -19,8 +19,21 @@ function DBTab(props: Props) {
 
   const [fetchData, setFetchData] = useState(initialFetchData);
   const [connectStatus, setConnectStatus] = useState('connecting to db...');
+  const [popup, setPopup] = useState<JSX.Element>();
   const [graph1, setGraph1] = useState<JSX.Element>();
   const [graph2, setGraph2] = useState<JSX.Element>();
+  const [datName, setDatName] = useState<string>();
+  const [datID, setDatID] = useState<string>();
+  const [chr, setChr] = useState<string | number>();
+  const [conflicts, setConflicts] = useState<string>();
+  const [deadlocks, setDeadlocks] = useState<string>();
+  const [rbt, setRbt] = useState<string>();
+  const [tc, setTc] = useState<string>();
+  const [brt, setBrt] = useState<string>();
+  const [bwt, setBwt] = useState<string>();
+  const [bh, setBh] = useState<string>();
+  const [br, setBr] = useState<string>();
+  const [cf, setCf] = useState<string>();
 
   function getMetrics(uri: string) {
     fetch('/api/querytimes', {
@@ -57,27 +70,93 @@ function DBTab(props: Props) {
       '1s < time': 0,
     };
 
-    fetchData.selectQueryTime.forEach(
-      (element: { query: string; mean_exec_time: number }) => {
-        labels.push(element.query);
-        data.push(element.mean_exec_time);
-        if (element.mean_exec_time < 0.1) {
-          pie['time < .1s']++;
-        } else if (
-          element.mean_exec_time > 0.1 &&
-          element.mean_exec_time < 0.5
-        ) {
-          pie['.1s > time < .5s']++;
-        } else if (element.mean_exec_time > 0.5 && element.mean_exec_time < 1) {
-          pie['.5s > time < 1s']++;
-        } else if (element.mean_exec_time > 1) {
-          pie['1s < time']++;
+    if (fetchData.selectQueryTime) {
+      fetchData.selectQueryTime.forEach(
+        (element: { query: string; mean_exec_time: number }) => {
+          labels.push(element.query);
+          data.push(element.mean_exec_time);
+          if (element.mean_exec_time < 0.1) {
+            pie['time < .1s']++;
+          } else if (
+            element.mean_exec_time > 0.1 &&
+            element.mean_exec_time < 0.5
+          ) {
+            pie['.1s > time < .5s']++;
+          } else if (
+            element.mean_exec_time > 0.5 &&
+            element.mean_exec_time < 1
+          ) {
+            pie['.5s > time < 1s']++;
+          } else if (element.mean_exec_time > 1) {
+            pie['1s < time']++;
+          }
         }
-      }
-    );
+      );
+    }
 
     setGraph1(<GraphLine labels={labels} data={data} />);
     setGraph2(<GraphPie labels={Object.keys(pie)} data={Object.values(pie)} />);
+
+    try {
+      setDatName(fetchData.dbStats[0].datname);
+    } catch {
+      setDatName('unavailable');
+    }
+    try {
+      setDatID(fetchData.dbStats[0].datid);
+    } catch {
+      setDatID('unavailable');
+    }
+    try {
+      setChr(Number(fetchData.cacheHitRatio[0].ratio).toFixed(4));
+    } catch {
+      setChr('unavailable');
+    }
+    try {
+      setConflicts(fetchData.conflicts);
+    } catch {
+      setConflicts('unavailable');
+    }
+    try {
+      setDeadlocks(fetchData.deadlocks);
+    } catch {
+      setDeadlocks('unavailable');
+    }
+    try {
+      setRbt(fetchData.rolledBackTransactions);
+    } catch {
+      setRbt('unavailable');
+    }
+    try {
+      setTc(fetchData.transactionsCommitted);
+    } catch {
+      setTc('unavailable');
+    }
+    try {
+      setBrt(fetchData.dbStats[0].blk_read_time);
+    } catch {
+      setBrt('unavailable');
+    }
+    try {
+      setBwt(fetchData.dbStats[0].blk_write_time);
+    } catch {
+      setBwt('unavailable');
+    }
+    try {
+      setBh(fetchData.dbStats[0].blks_hit);
+    } catch {
+      setBh('unavailable');
+    }
+    try {
+      setBr(fetchData.dbStats[0].blks_read);
+    } catch {
+      setBr('unavailable');
+    }
+    try {
+      setCf(fetchData.dbStats[0].checksum_failures);
+    } catch {
+      setCf('unavailable');
+    }
   }
 
   useEffect(() => {
@@ -94,44 +173,26 @@ function DBTab(props: Props) {
     return (
       <div>
         <Box sx={{ display: 'inline-flex', flexWrap: 'wrap', pl: '11rem' }}>
-          <GraphCard cardLabel="Database Name">
-            <>
-              name: {fetchData.dbStats[0].datname}
-              <br />
-              id: {fetchData.dbStats[0].datid}
-            </>
-          </GraphCard>
+          {popup}
           {graph1}
           {graph2}
-          <GraphCard cardLabel="Conflicts">{fetchData.conflicts}</GraphCard>
-          <GraphCard cardLabel="Deadlocks">{fetchData.deadlocks}</GraphCard>
-          <GraphCard cardLabel="Rolled Back Transactions">
-            {fetchData.rolledBackTransactions}
+          <GraphCard cardLabel="Database Name">
+            <>
+              name: {datName}
+              <br />
+              id: {datID}
+            </>
           </GraphCard>
-          <GraphCard cardLabel="Transactions Committed">
-            {fetchData.transactionsCommitted}
-          </GraphCard>
-          <GraphCard cardLabel="Cache Hit Ratio">
-            {Number(fetchData.cacheHitRatio[0].ratio).toFixed(4)}
-          </GraphCard>
-          <GraphCard cardLabel="Block Read Time">
-            {fetchData.dbStats[0].blk_read_time}
-          </GraphCard>
-          <GraphCard cardLabel="Block Write Time">
-            {fetchData.dbStats[0].blk_write_time}
-          </GraphCard>
-          <GraphCard cardLabel="Block Hits">
-            {fetchData.dbStats[0].blks_hit}
-          </GraphCard>
-          <GraphCard cardLabel="Block Reads">
-            {fetchData.dbStats[0].blks_read}
-          </GraphCard>
-          <GraphCard cardLabel="Checksum Failures">
-            {fetchData.dbStats[0].checksum_failures}
-          </GraphCard>
-          <GraphCard cardLabel="Block Read Time">
-            {fetchData.dbStats[0].blk_read_time}
-          </GraphCard>
+          <GraphCard cardLabel="Conflicts">{conflicts}</GraphCard>
+          <GraphCard cardLabel="Deadlocks">{deadlocks}</GraphCard>
+          <GraphCard cardLabel="Rolled Back Transactions">{rbt}</GraphCard>
+          <GraphCard cardLabel="Transactions Committed">{tc}</GraphCard>
+          <GraphCard cardLabel="Cache Hit Ratio">{chr}</GraphCard>
+          <GraphCard cardLabel="Block Read Time">{brt}</GraphCard>
+          <GraphCard cardLabel="Block Write Time">{bwt}</GraphCard>
+          <GraphCard cardLabel="Block Hits">{bh}</GraphCard>
+          <GraphCard cardLabel="Block Reads">{br}</GraphCard>
+          <GraphCard cardLabel="Checksum Failures">{cf}</GraphCard>
         </Box>
       </div>
     );

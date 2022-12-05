@@ -43,6 +43,7 @@
     "express": "^4.18.2",
     "fs": "^0.0.1-security",
     "idb-keyval": "^6.2.0",
+    "material-ui-popup-state": "^4.1.0",
     "node": "^19.1.0",
     "path": "^0.12.7",
     "pg": "^8.8.0",

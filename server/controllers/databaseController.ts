@@ -9,71 +9,107 @@ type DatabaseController = {
   cacheHitRatio: RequestHandler;
 };
 type queryData = {
-  all: any[],
-  mean: number,
-  median: number,
-  slowestQueries: any[],
+  all: any[];
+  mean: number;
+  median: number;
+  slowestQueries: any[];
 } | null;
 
 const databaseController: DatabaseController = {
-  
   queryTimes: async (req, res, next) => {
     const db = res.locals.dbConnection;
     const userNumberOfQueries: number = req.body.slowQueries;
-    const slowQueryNumber: number = userNumberOfQueries || 10;
-     
+    const slowQueryNumber = userNumberOfQueries || 10;
+
     try {
       const allQueries: queryData = {
         all: await db.query('select * from pg_stat_statements'),
-        median: await db.query("SELECT PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY mean_exec_time) AS median from pg_stat_statements"),
-        mean: await db.query("select avg(mean_exec_time) AS averageQueryTime from pg_stat_statements"),
-        slowestQueries: await db.query(`select query, mean_exec_time from pg_stat_statements order by mean_exec_time desc limit ${slowQueryNumber}`)
-      }
+        median: await db.query(
+          'SELECT PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY mean_exec_time) AS median from pg_stat_statements'
+        ),
+        mean: await db.query(
+          'select avg(mean_exec_time) AS averageQueryTime from pg_stat_statements'
+        ),
+        slowestQueries: await db.query(
+          `select query, mean_exec_time from pg_stat_statements order by mean_exec_time desc limit ${slowQueryNumber}`
+        ),
+      };
       res.locals.result.allTimes = allQueries;
-      
+
       const selectQueries: queryData = {
-        all: await db.query("select * from pg_stat_statements where query like '%SELECT %'"),
-        median: await db.query("SELECT PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY mean_exec_time) AS median from pg_stat_statements where query like '%SELECT %'"),
-        mean: await db.query("select avg(mean_exec_time) AS averageQueryTime from pg_stat_statements where query like '%SELECT %'"),
-        slowestQueries: await db.query(`select query, mean_exec_time from pg_stat_statements order by mean_exec_time desc limit ${slowQueryNumber}where query like '%SELECT %'`)
-      }
+        all: await db.query(
+          "select * from pg_stat_statements where query like '%SELECT%'"
+        ),
+        median: await db.query(
+          "SELECT PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY mean_exec_time) AS median from pg_stat_statements where query like '%SELECT%'"
+        ),
+        mean: await db.query(
+          "select avg(mean_exec_time) AS averageQueryTime from pg_stat_statements where query like '%SELECT%'"
+        ),
+        slowestQueries: await db.query(
+          `select query, mean_exec_time from pg_stat_statements where query like '%SELECT%' order by mean_exec_time desc limit ${slowQueryNumber}`
+        ),
+      };
       res.locals.result.selectTimes = selectQueries;
-      
+
       const insertQueries: queryData = {
-        all: await db.query("select * from pg_stat_statements where query like '%INSERT %'"),
-        median: await db.query("SELECT PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY mean_exec_time) AS median from pg_stat_statements where query like '%INSERT %'"),
-        mean: await db.query("select avg(mean_exec_time) AS averageQueryTime from pg_stat_statements where query like '%INSERT %'"),
-        slowestQueries: await db.query(`select query, mean_exec_time from pg_stat_statements order by mean_exec_time desc limit ${slowQueryNumber}where query like '%INSERT%'`)
-      }
+        all: await db.query(
+          "select * from pg_stat_statements where query like '%INSERT%'"
+        ),
+        median: await db.query(
+          "SELECT PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY mean_exec_time) AS median from pg_stat_statements where query like '%INSERT%'"
+        ),
+        mean: await db.query(
+          "select avg(mean_exec_time) AS averageQueryTime from pg_stat_statements where query like '%INSERT%'"
+        ),
+        slowestQueries: await db.query(
+          `select query, mean_exec_time from pg_stat_statements where query like '%INSERT%' order by mean_exec_time desc limit ${slowQueryNumber}`
+        ),
+      };
 
       res.locals.result.insertTimes = insertQueries;
-      
+
       const updateQueries: queryData = {
-        all: await db.query("select * from pg_stat_statements where query like '%UPDATE %'"),
-        median: await db.query("SELECT PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY mean_exec_time) AS median from pg_stat_statements where query like '%UPDATE %'"),
-        mean: await db.query("select avg(mean_exec_time) AS averageQueryTime from pg_stat_statements where query like '%UPDATE %'"),
-        slowestQueries: await db.query(`select query, mean_exec_time from pg_stat_statements order by mean_exec_time desc limit ${slowQueryNumber}where query like '%UPDATE %'`)
-      }
-      
+        all: await db.query(
+          "select * from pg_stat_statements where query like '%UPDATE%'"
+        ),
+        median: await db.query(
+          "SELECT PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY mean_exec_time) AS median from pg_stat_statements where query like '%UPDATE%'"
+        ),
+        mean: await db.query(
+          "select avg(mean_exec_time) AS averageQueryTime from pg_stat_statements where query like '%UPDATE%'"
+        ),
+        slowestQueries: await db.query(
+          `select query, mean_exec_time from pg_stat_statements where query like '%UPDATE%' order by mean_exec_time desc limit ${slowQueryNumber}`
+        ),
+      };
+
       res.locals.result.updateTimes = updateQueries;
-      
+
       const deleteQueries: queryData = {
-        all: await db.query("select * from pg_stat_statements where query like '%DELETE %'"),
-        median: await db.query("SELECT PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY mean_exec_time) AS median from pg_stat_statements where query like '%DELETE %'"),
-        mean: await db.query("select avg(mean_exec_time) AS averageQueryTime from pg_stat_statements where query like '%DELETE %'"),
-        slowestQueries: await db.query(`select query, mean_exec_time from pg_stat_statements order by mean_exec_time desc limit ${slowQueryNumber}where query like '%DELETE %'`)
-      }
+        all: await db.query(
+          "select * from pg_stat_statements where query like '%DELETE%'"
+        ),
+        median: await db.query(
+          "SELECT PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY mean_exec_time) AS median from pg_stat_statements where query like '%DELETE%'"
+        ),
+        mean: await db.query(
+          "select avg(mean_exec_time) AS averageQueryTime from pg_stat_statements where query like '%DELETE%'"
+        ),
+        slowestQueries: await db.query(
+          `select query, mean_exec_time from pg_stat_statements  where query like '%DELETE%' order by mean_exec_time desc limit ${slowQueryNumber}`
+        ),
+      };
       res.locals.result.deleteTimes = deleteQueries;
-      
+
       return next();
     } catch (error) {
-      console.log(error);
+      console.log('Error in databaseController.queryTimes: ', error);
       res.locals.resutl.allTimes = null;
       res.locals.resutl.selectTimes = null;
       res.locals.resutl.insertTimes = null;
       res.locals.resutl.updateTimes = null;
       res.locals.resutl.deleteTimes = null;
-
       return next();
     }
   },
@@ -82,10 +118,9 @@ const databaseController: DatabaseController = {
   numOfRows: async (req, res, next) => {
     const db = res.locals.dbConnection;
     //req.body.numOfRowsNumber will need to be updated to FE key
-    const userProvided = req.body.numOfRowsNumber
-    const rowsNumber = userProvided || 10
-    const queryString =
-      `select query, rows from pg_stat_statements where rows > ${rowsNumber}`;
+    const userProvided = req.body.numOfRowsNumber;
+    const rowsNumber = userProvided || 10;
+    const queryString = `select query, rows from pg_stat_statements where rows > ${rowsNumber}`;
     let quantOfRows;
     try {
       quantOfRows = await db.query(queryString);
@@ -93,7 +128,7 @@ const databaseController: DatabaseController = {
       res.locals.result.numOfRows = quantOfRows.rows;
       return next();
     } catch (error) {
-      console.log(error);
+      console.log('Error in databaseController.numOfRows: ', error);
       res.locals.result.numOfRows = null;
       return next();
     }
@@ -103,10 +138,10 @@ const databaseController: DatabaseController = {
   // Mean Execution Time of the 5 Queries with Highest Number of Calls, also divided into query type
   topCalls: async (req, res, next) => {
     const db = res.locals.dbConnection;
-    //the req.body.topCallsNumber should be updated based on the FE key 
-    const userProvided = req.body.topCallsNumber
+    //the req.body.topCallsNumber should be updated based on the FE key
+    const userProvided = req.body.topCallsNumber;
     //either the callsNumber will be the user selection, if undefined, will default to 5
-    const callsNumber = userProvided || 5
+    const callsNumber = userProvided || 5;
     try {
       // retrieve the top five calls
       const topAllCalls = await db.query(
@@ -126,7 +161,7 @@ const databaseController: DatabaseController = {
       );
       // find the query time of each of these calls
       // store them in an object to return
-      console.log('this is topSelect', topSelectCalls);
+      console.log('this is topSelect', topSelectCalls.rows);
       res.locals.result.avgTimeTopAllCalls = topAllCalls.rows;
       res.locals.result.avgTimeTopSelectCalls = topSelectCalls.rows;
       res.locals.result.avgTimeTopInsertCalls = topInsertCalls.rows;
@@ -134,25 +169,25 @@ const databaseController: DatabaseController = {
       res.locals.result.avgTimeTopUpdateCalls = topUpdateCalls.rows;
       return next();
     } catch (error) {
-      console.log(error);
+      console.log('Error in databaseController.topCalls: ', error);
       res.locals.result.averageQueryTime = null;
       res.locals.result.avgTimeTopSelectCalls = null;
       res.locals.result.avgTimeTopInsertCalls = null;
       res.locals.result.avgTimeTopDeleteCalls = null;
       res.locals.result.avgTimeTopUpdateCalls = null;
       return next();
-      }
-    },
-  
+    }
+  },
+
   //this method pulls the database-wide statistics for a specified database
   dbStats: async (req, res, next) => {
     const db = res.locals.dbConnection;
     //postgres can be turned into a variable that will represent the requested db
-    const data = req.body.uri
-     // Database assignment contigent upon db setup via uri  ||   manual input
-     const dataBase =
-     data.split('.com/')[1] ||
-     data.split('5432/').pop().split('/')[0].replace(/\s/g, '');
+    const data = req.body.uri;
+    // Database assignment contigent upon db setup via uri  ||   manual input
+    const dataBase =
+      data.split('.com/')[1] ||
+      data.split('5432/').pop().split('/')[0].replace(/\s/g, '');
     try {
       const dbOverview = await db.query(
         `select * from pg_stat_database where datname = '${dataBase}'`
@@ -167,16 +202,15 @@ const databaseController: DatabaseController = {
       //res.locals.result.totalTransactions = (Number(res.locals.result.transactionsCommitted) + Number(res.locals.result.totalTransactions));
       return next();
     } catch (error) {
-      console.log(error);
+      console.log('Error in databaseController.dbStats: ', error);
       res.locals.result.dbStats = null;
       res.locals.result.conflicts = null;
       res.locals.result.deadlocks = null;
       res.locals.result.transactionsCommitted = null;
       res.locals.result.rolledBackTransactions = null;
-     return next();
+      return next();
     }
   },
-  
 
   //this method calculates and returns the cache hit ratio for the database
   cacheHitRatio: async (req, res, next) => {
@@ -189,11 +223,11 @@ const databaseController: DatabaseController = {
       res.locals.result.cacheHitRatio = cacheHitRate.rows;
       return next();
     } catch (error) {
-      console.log(error);
+      console.log('Error in databaseController.cacheHitRatio: ', error);
       res.locals.result.cacheHitRatio = null;
+      return next();
     }
   },
-
 };
 
 //TO DO: add controller to sum

@@ -4,7 +4,7 @@ import { Card, Typography } from '@mui/material';
 
 type Props = {
   cardLabel: string;
-  children: JSX.Element | string;
+  children: JSX.Element | string | number;
 };
 
 function GraphCard(props: Props) {

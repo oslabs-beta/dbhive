@@ -64,6 +64,10 @@ function App() {
         nickname: 'dbTest2',
         uri: 'postgres://n00bs:testallcaps@dbhive.cxjwyi85ug6q.us-east-1.rds.amazonaws.com:5432/postgres',
       },
+      {
+        nickname: 'subify',
+        uri: 'postgres://avpneekp:5fsMVQDkJ7HCwrlILZCF7UhKklrdJ1OI@heffalump.db.elephantsql.com/avpneekp',
+      },
     ],
   };
 
