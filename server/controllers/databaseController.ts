@@ -78,7 +78,7 @@ const databaseController: DatabaseController = {
       );
       // find the query time of each of these calls
       // store them in an object to return
-      console.log('this is topSelect', topSelectCalls);
+      console.log('this is topSelect', topSelectCalls.rows);
       res.locals.result.avgTimeTopAllCalls = topAllCalls.rows;
       res.locals.result.avgTimeTopSelectCalls = topSelectCalls.rows;
       res.locals.result.avgTimeTopInsertCalls = topInsertCalls.rows;
@@ -203,11 +203,13 @@ const databaseController: DatabaseController = {
       res.locals.result.cacheHitRatio = cacheHitRate.rows;
       return next();
     } catch (error) {
-      return next({
-        log: `Error caught in databaseController.cacheHitRatio ${error}`,
-        status: 400,
-        message: `Error has occured in databaseController.cacheHitRatio. ERROR: ${error}`,
-      });
+      // return next({
+      //   log: `Error caught in databaseController.cacheHitRatio ${error}`,
+      //   status: 400,
+      //   message: `Error has occured in databaseController.cacheHitRatio. ERROR: ${error}`,
+      // });
+      res.locals.result.cacheHitRatio = null;
+      return next();
     }
   },
   //   averageQueryTime: async (req, res, next) => {
