@@ -21,11 +21,12 @@ type Props = {
 function Dashboard(props: Props) {
   const navigate = useNavigate();
 
-  if (!props.isLoggedIn) navigate('/login');
+  // ---COMMENT OUT FOR DASHBOARD TESTING---
+  // if (!props.isLoggedIn) navigate('/login');
 
-  useEffect(() => {
-    if (!props.isLoggedIn) navigate('/login');
-  }, []);
+  // useEffect(() => {
+  //   if (!props.isLoggedIn) navigate('/login');
+  // }, []);
 
   const [activeTab, setActiveTab] = useState(0);
 

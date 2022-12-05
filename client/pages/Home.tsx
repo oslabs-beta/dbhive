@@ -34,7 +34,7 @@ function Home(props: Props) {
           ml: '12rem',
           mr: '1rem',
           my: '5rem',
-          p: '2rem',
+          p: '4rem',
         }}
       >
         <Typography
@@ -59,20 +59,56 @@ function Home(props: Props) {
             }}
             alt="dbHive icon"
             src="https://img.icons8.com/ios-glyphs/512/bumblebee.png"
-          />{' '}
-          Welcome to dbHive{' '}
+          />
+          Welcome to dbHive
         </Typography>
-        <div>
+        <Box>
           <p>
             DbHive is a database monitoring and analysis tool for PostgreSQL
             databases.
           </p>
           <p>
             DbHive is highly configurable, capable of monitoring multiple
-            databases, and is committed to sharing this product with the open
-            source community!
+            databases, and is committed to the open source community!
           </p>
-        </div>
+        </Box>
+        {/* <Typography
+          variant="h4"
+          component="div"
+          sx={{
+            flexGrow: 1,
+            mt: '4rem',
+            mb: '2rem',
+          }}
+        >
+          DOCS
+        </Typography>
+        <Box sx={{ textAlign: 'left' }}>
+          <p>DbHive currently only supports PostgreSQL databases.</p>
+          <p>Click to Get Started!</p>
+        </Box>
+        <Typography
+          variant="h4"
+          component="div"
+          sx={{
+            flexGrow: 1,
+            mt: '4rem',
+            mb: '2rem',
+          }}
+        >
+          GET STARTED
+        </Typography>
+        <Typography
+          variant="h4"
+          component="div"
+          sx={{
+            flexGrow: 1,
+            mt: '4rem',
+            mb: '2rem',
+          }}
+        >
+          FAQ
+        </Typography> */}
       </Card>
     </>
   );

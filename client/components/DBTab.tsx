@@ -18,7 +18,7 @@ function DBTab(props: Props) {
   const initialFetchData: FetchData = null;
 
   const [fetchData, setFetchData] = useState(initialFetchData);
-  const [connectStatus, setConnectStatus] = useState('connecting...');
+  const [connectStatus, setConnectStatus] = useState('connecting to db...');
   const [graph1, setGraph1] = useState<JSX.Element>();
   const [graph2, setGraph2] = useState<JSX.Element>();
 
@@ -34,8 +34,9 @@ function DBTab(props: Props) {
         return res.json();
       })
       .then((data) => {
+        console.log('fetched data', data);
         if (typeof data === 'object') setFetchData(data);
-        else setConnectStatus('connection failed...');
+        else setConnectStatus('db connection failed...');
       })
       .catch((error) => console.log('ERROR: could not post-fetch: ' + error));
   }
@@ -113,22 +114,22 @@ function DBTab(props: Props) {
           <GraphCard cardLabel="Cache Hit Ratio">
             {Number(fetchData.cacheHitRatio[0].ratio).toFixed(4)}
           </GraphCard>
-          <GraphCard cardLabel="Bulk Read Time">
+          <GraphCard cardLabel="Block Read Time">
             {fetchData.dbStats[0].blk_read_time}
           </GraphCard>
-          <GraphCard cardLabel="Bulk Write Time">
+          <GraphCard cardLabel="Block Write Time">
             {fetchData.dbStats[0].blk_write_time}
           </GraphCard>
-          <GraphCard cardLabel="Bulk Hits">
+          <GraphCard cardLabel="Block Hits">
             {fetchData.dbStats[0].blks_hit}
           </GraphCard>
-          <GraphCard cardLabel="Bulk Reads">
+          <GraphCard cardLabel="Block Reads">
             {fetchData.dbStats[0].blks_read}
           </GraphCard>
           <GraphCard cardLabel="Checksum Failures">
             {fetchData.dbStats[0].checksum_failures}
           </GraphCard>
-          <GraphCard cardLabel="Bulk Read Time">
+          <GraphCard cardLabel="Block Read Time">
             {fetchData.dbStats[0].blk_read_time}
           </GraphCard>
         </Box>
@@ -137,8 +138,15 @@ function DBTab(props: Props) {
   } else {
     return (
       <div>
-        <Box sx={{ display: 'inline-flex', flexWrap: 'wrap', pl: '11rem' }}>
-          {connectStatus}
+        <Box
+          sx={{
+            display: 'inline-flex',
+            flexWrap: 'wrap',
+            pl: '12rem',
+            pt: '1rem',
+          }}
+        >
+          status: {connectStatus}
         </Box>
       </div>
     );
