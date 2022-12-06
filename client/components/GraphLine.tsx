@@ -7,15 +7,25 @@ import {
   Title,
   Tooltip,
   Legend,
+  LogarithmicScale,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import GraphCard from './GraphCard';
 
-Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+Chart.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  LogarithmicScale
+);
 
 type Props = {
-  labels?: string[];
-  data?: number[];
+  title?: string;
+  label?: string;
+  data?: { labels: string[]; data: number[] };
 };
 
 function Graph1(props: Props) {
@@ -25,35 +35,48 @@ function Graph1(props: Props) {
       legend: {
         position: 'top' as const,
       },
-      title: {
-        display: true,
-        text: 'Chart 1',
-      },
     },
     scales: {
       y: {
         min: 0,
-        max: 2,
+        max: 20,
+        display: true,
+        // type: 'logarithmic',
+        title: {
+          display: true,
+          text: 'query times [seconds]',
+        },
       },
       x: {
         display: false,
       },
     },
+    annotation: {
+      annotations: {
+        line1: {
+          type: 'line',
+          yMin: 10,
+          yMax: 10,
+          borderColor: 'rgb(255, 99, 132)',
+          borderWidth: 2,
+        },
+      },
+    },
   };
 
   const data = {
-    labels: props.labels,
+    labels: props.data.labels,
     datasets: [
       {
-        label: 'Dataset 1',
-        data: props.data,
+        label: props.label,
+        data: props.data.data,
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },
     ],
   };
 
   return (
-    <GraphCard cardLabel="Execution Time for SELECT Queries">
+    <GraphCard cardLabel={props.title}>
       <Bar options={options} data={data} />
     </GraphCard>
   );

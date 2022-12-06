@@ -3,12 +3,20 @@ import { useState, useEffect } from 'react';
 import GraphCard from './GraphCard';
 import GraphLine from './GraphLine';
 import GraphPie from './GraphPie';
-import { Box, Popover } from '@mui/material';
-import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
+import { Box } from '@mui/material';
 
 type Props = {
   dbUri: string;
 };
+
+type Pie = {
+  'time < .1s'?: number;
+  '.1s > time < .5s'?: number;
+  '.5s > time < 1s'?: number;
+  '1s < time'?: number;
+};
+
+type Line = { labels: string[]; data: number[] };
 
 function DBTab(props: Props) {
   type FetchData = {
@@ -19,9 +27,16 @@ function DBTab(props: Props) {
 
   const [fetchData, setFetchData] = useState(initialFetchData);
   const [connectStatus, setConnectStatus] = useState('connecting to db...');
-  const [popup, setPopup] = useState<JSX.Element>();
-  const [graph1, setGraph1] = useState<JSX.Element>();
-  const [graph2, setGraph2] = useState<JSX.Element>();
+  const [lineGraph1, setLineGraph1] = useState({ labels: [''], data: [0] });
+  const [lineGraph2, setLineGraph2] = useState({ labels: [''], data: [0] });
+  const [pieGraph1, setPieGraph1] = useState<Pie>({
+    'time < .1s': 0,
+    '.1s > time < .5s': 0,
+    '.5s > time < 1s': 0,
+    '1s < time': 0,
+  });
+  // const [graph1, setGraph1] = useState<JSX.Element>();
+  // const [graph2, setGraph2] = useState<JSX.Element>();
   const [datName, setDatName] = useState<string>();
   const [datID, setDatID] = useState<string>();
   const [chr, setChr] = useState<string | number>();
@@ -55,26 +70,20 @@ function DBTab(props: Props) {
   }
 
   function formatData(fetchData: FetchData) {
-    const labels: string[] = [];
-    const data: number[] = [];
-
-    const pie: {
-      'time < .1s'?: number;
-      '.1s > time < .5s'?: number;
-      '.5s > time < 1s'?: number;
-      '1s < time'?: number;
-    } = {
+    const line1: Line = { labels: [], data: [] };
+    const line2: Line = { labels: [], data: [] };
+    const pie: Pie = {
       'time < .1s': 0,
       '.1s > time < .5s': 0,
       '.5s > time < 1s': 0,
       '1s < time': 0,
     };
 
-    if (fetchData.selectQueryTime) {
-      fetchData.selectQueryTime.forEach(
+    try {
+      fetchData.allTimes.all.rows.forEach(
         (element: { query: string; mean_exec_time: number }) => {
-          labels.push(element.query);
-          data.push(element.mean_exec_time);
+          line1.labels.push(element.query);
+          line1.data.push(element.mean_exec_time);
           if (element.mean_exec_time < 0.1) {
             pie['time < .1s']++;
           } else if (
@@ -92,10 +101,23 @@ function DBTab(props: Props) {
           }
         }
       );
+      setLineGraph1(line1);
+      setPieGraph1(pie);
+    } catch {
+      console.log('fetchData.allTimes unavailable');
     }
 
-    setGraph1(<GraphLine labels={labels} data={data} />);
-    setGraph2(<GraphPie labels={Object.keys(pie)} data={Object.values(pie)} />);
+    try {
+      fetchData.avgTimeTopAllCalls.forEach(
+        (element: { query: string; mean_exec_time: number }) => {
+          line2.labels.push(element.query);
+          line2.data.push(element.mean_exec_time);
+        }
+      );
+      setLineGraph2(line2);
+    } catch {
+      console.log('fetchData.avgTimeTopAllCalls unavailable');
+    }
 
     try {
       setDatName(fetchData.dbStats[0].datname);
@@ -163,19 +185,34 @@ function DBTab(props: Props) {
     getMetrics(props.dbUri);
   }, []);
 
+  setInterval(() => {
+    formatData(fetchData);
+  }, 20000);
+
   useEffect(() => {
     if (fetchData) {
       formatData(fetchData);
     }
-  }, [fetchData]);
+  }, []);
 
   if (fetchData) {
     return (
       <div>
         <Box sx={{ display: 'inline-flex', flexWrap: 'wrap', pl: '11rem' }}>
-          {popup}
-          {graph1}
-          {graph2}
+          <GraphLine
+            title="Query Times - All Queries"
+            label="All Queries"
+            data={lineGraph1}
+          />
+          <GraphLine
+            title="Query Times - Top 5 Queries"
+            label="Top 5 Queries"
+            data={lineGraph2}
+          />
+          <GraphPie
+            labels={Object.keys(pieGraph1)}
+            data={Object.values(pieGraph1)}
+          />
           <GraphCard cardLabel="Database Name">
             <>
               name: {datName}

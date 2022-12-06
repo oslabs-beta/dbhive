@@ -1,6 +1,9 @@
 import * as React from 'react';
+import { useState } from 'react';
 
-import { Card, Typography } from '@mui/material';
+import { Card, Typography, Box } from '@mui/material';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 
 type Props = {
   cardLabel: string;
@@ -8,6 +11,9 @@ type Props = {
 };
 
 function GraphCard(props: Props) {
+  const initialWidth = '400px';
+  const [width, setWidth] = useState(initialWidth);
+  const [buttonIcon, setButtonIcon] = useState<JSX.Element>(<FullscreenIcon />);
   return (
     <Card
       sx={{
@@ -15,10 +21,29 @@ function GraphCard(props: Props) {
         ml: '1rem',
         mt: '1rem',
         p: '1rem',
-        minWidth: '400px',
-        maxWidth: '700px',
+        width: width,
+        position: 'relative',
       }}
     >
+      <Box
+        sx={{
+          color: 'white',
+          position: 'absolute',
+          right: '5px',
+          top: '5px',
+        }}
+        onClick={() => {
+          if (width === initialWidth) {
+            setWidth('calc(100% - 2rem)');
+            setButtonIcon(<FullscreenExitIcon />);
+          } else {
+            setWidth(initialWidth);
+            setButtonIcon(<FullscreenIcon />);
+          }
+        }}
+      >
+        {buttonIcon}
+      </Box>
       <p>{props.cardLabel}</p>
       <Typography
         variant="h3"
