@@ -7,7 +7,7 @@ import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 
 type Props = {
   cardLabel: string;
-  children: JSX.Element | string | number;
+  children?: JSX.Element | string | number;
 };
 
 function GraphCard(props: Props) {

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState, useEffect } from 'react';
 import {
   Chart,
   CategoryScale,
@@ -10,7 +11,6 @@ import {
   LogarithmicScale,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import GraphCard from './GraphCard';
 
 Chart.register(
   CategoryScale,
@@ -24,11 +24,27 @@ Chart.register(
 
 type Props = {
   title?: string;
-  label?: string;
-  data?: { labels: string[]; data: number[] };
+  data?: any;
 };
 
-function Graph1(props: Props) {
+type Line = { labels: string[]; data: number[] };
+
+function LineGraph2(props: Props) {
+  const [dataProc, setDataProc] = useState<Line>({ labels: [], data: [] });
+
+  useEffect(() => {
+    if (props.data) {
+      const line: Line = { labels: [], data: [] };
+      props.data.forEach(
+        (element: { query: string; mean_exec_time: number }) => {
+          line.labels.push(element.query);
+          line.data.push(element.mean_exec_time);
+        }
+      );
+      setDataProc(line);
+    }
+  }, [props.data]);
+
   const options = {
     responsive: true,
     plugins: {
@@ -65,21 +81,21 @@ function Graph1(props: Props) {
   };
 
   const data = {
-    labels: props.data.labels,
+    labels: dataProc.labels,
     datasets: [
       {
-        label: props.label,
-        data: props.data.data,
+        label: 'All Queries',
+        data: dataProc.data,
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },
     ],
   };
 
   return (
-    <GraphCard cardLabel={props.title}>
+    <>
       <Bar options={options} data={data} />
-    </GraphCard>
+    </>
   );
 }
 
-export default Graph1;
+export default LineGraph2;
