@@ -25,7 +25,14 @@ const pool = new pg.Pool({
 //   })
 // })
 
-describe('Database connection functionality', () => {
+describe('Connecting a database', () => {
+  describe('connecting a valid URI key', () => {
+    it('responds with ')
+  })
+})
+
+
+describe('Database data retrieval', () => {
   describe('connecting a valid URI key', () => {
     //a valid response would be an object containing lots of data to be rendered
     it('responds with a valid response', () => {
@@ -56,4 +63,6 @@ describe('Database connection functionality', () => {
     })
   })
 });
+
+
 
