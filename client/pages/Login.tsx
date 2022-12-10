@@ -79,7 +79,6 @@ function Login(props: Props) {
           variant="h5"
           component="div"
           sx={{ flexGrow: 1, mb: '2rem' }}
-          // color="primary"
         >
           Login
         </Typography>
@@ -102,7 +101,6 @@ function Login(props: Props) {
         <Button
           variant="contained"
           sx={{ mt: '1rem', mb: '3rem', width: '100%' }}
-          className="width-100-perc"
           onClick={submitHandler}
         >
           Submit
@@ -110,7 +108,6 @@ function Login(props: Props) {
         <Button
           variant="text"
           sx={{ width: '100%' }}
-          className="width-100-perc"
           onClick={() => navigate('/signup')}
         >
           Sign Up

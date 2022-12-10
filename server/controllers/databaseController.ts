@@ -23,7 +23,9 @@ const databaseController: DatabaseController = {
 
     try {
       const allQueries: queryData = {
-        all: await db.query('select * from pg_stat_statements'),
+        all: await db.query(
+          'select * from pg_stat_statements order by mean_exec_time'
+        ),
         median: await db.query(
           'SELECT PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY mean_exec_time) AS median from pg_stat_statements'
         ),
@@ -105,11 +107,11 @@ const databaseController: DatabaseController = {
       return next();
     } catch (error) {
       console.log('Error in databaseController.queryTimes: ', error);
-      res.locals.resutl.allTimes = null;
-      res.locals.resutl.selectTimes = null;
-      res.locals.resutl.insertTimes = null;
-      res.locals.resutl.updateTimes = null;
-      res.locals.resutl.deleteTimes = null;
+      res.locals.result.allTimes = null;
+      res.locals.result.selectTimes = null;
+      res.locals.result.insertTimes = null;
+      res.locals.result.updateTimes = null;
+      res.locals.result.deleteTimes = null;
       return next();
     }
   },
