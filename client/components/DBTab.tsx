@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import GraphCard from './GraphCard';
-import GraphLine from './GraphLine';
-import GraphPie from './GraphPie';
-import { Box, Popover } from '@mui/material';
-import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
+import LineGraph1 from './LineGraph1';
+import LineGraph2 from './LineGraph2';
+import GraphPie1 from './GraphPie1';
+import { Box } from '@mui/material';
 
 type Props = {
   dbUri: string;
@@ -19,9 +19,9 @@ function DBTab(props: Props) {
 
   const [fetchData, setFetchData] = useState(initialFetchData);
   const [connectStatus, setConnectStatus] = useState('connecting to db...');
-  const [popup, setPopup] = useState<JSX.Element>();
-  const [graph1, setGraph1] = useState<JSX.Element>();
-  const [graph2, setGraph2] = useState<JSX.Element>();
+  const [lineGraph1, setLineGraph1] = useState();
+  const [lineGraph2, setLineGraph2] = useState();
+  const [pieGraph1, setPieGraph1] = useState();
   const [datName, setDatName] = useState<string>();
   const [datID, setDatID] = useState<string>();
   const [chr, setChr] = useState<string | number>();
@@ -55,103 +55,85 @@ function DBTab(props: Props) {
   }
 
   function formatData(fetchData: FetchData) {
-    const labels: string[] = [];
-    const data: number[] = [];
-
-    const pie: {
-      'time < .1s'?: number;
-      '.1s > time < .5s'?: number;
-      '.5s > time < 1s'?: number;
-      '1s < time'?: number;
-    } = {
-      'time < .1s': 0,
-      '.1s > time < .5s': 0,
-      '.5s > time < 1s': 0,
-      '1s < time': 0,
-    };
-
-    if (fetchData.selectQueryTime) {
-      fetchData.selectQueryTime.forEach(
-        (element: { query: string; mean_exec_time: number }) => {
-          labels.push(element.query);
-          data.push(element.mean_exec_time);
-          if (element.mean_exec_time < 0.1) {
-            pie['time < .1s']++;
-          } else if (
-            element.mean_exec_time > 0.1 &&
-            element.mean_exec_time < 0.5
-          ) {
-            pie['.1s > time < .5s']++;
-          } else if (
-            element.mean_exec_time > 0.5 &&
-            element.mean_exec_time < 1
-          ) {
-            pie['.5s > time < 1s']++;
-          } else if (element.mean_exec_time > 1) {
-            pie['1s < time']++;
-          }
-        }
-      );
+    try {
+      setLineGraph1(fetchData.allTimes);
+      setPieGraph1(fetchData.allTimes.all.rows);
+    } catch {
+      console.log('fetchData.allTimes unavailable');
     }
 
-    setGraph1(<GraphLine labels={labels} data={data} />);
-    setGraph2(<GraphPie labels={Object.keys(pie)} data={Object.values(pie)} />);
+    try {
+      setLineGraph2(fetchData.avgTimeTopAllCalls);
+    } catch {
+      console.log('fetchData.avgTimeTopAllCalls unavailable');
+    }
 
     try {
       setDatName(fetchData.dbStats[0].datname);
     } catch {
       setDatName('unavailable');
     }
+
     try {
       setDatID(fetchData.dbStats[0].datid);
     } catch {
       setDatID('unavailable');
     }
+
     try {
       setChr(Number(fetchData.cacheHitRatio[0].ratio).toFixed(4));
     } catch {
       setChr('unavailable');
     }
+
     try {
       setConflicts(fetchData.conflicts);
     } catch {
       setConflicts('unavailable');
     }
+
     try {
       setDeadlocks(fetchData.deadlocks);
     } catch {
       setDeadlocks('unavailable');
     }
+
     try {
       setRbt(fetchData.rolledBackTransactions);
     } catch {
       setRbt('unavailable');
     }
+
     try {
       setTc(fetchData.transactionsCommitted);
     } catch {
       setTc('unavailable');
     }
+
     try {
       setBrt(fetchData.dbStats[0].blk_read_time);
     } catch {
       setBrt('unavailable');
     }
+
     try {
       setBwt(fetchData.dbStats[0].blk_write_time);
     } catch {
       setBwt('unavailable');
     }
+
     try {
       setBh(fetchData.dbStats[0].blks_hit);
     } catch {
       setBh('unavailable');
     }
+
     try {
       setBr(fetchData.dbStats[0].blks_read);
     } catch {
       setBr('unavailable');
     }
+
     try {
       setCf(fetchData.dbStats[0].checksum_failures);
     } catch {
@@ -161,6 +143,15 @@ function DBTab(props: Props) {
 
   useEffect(() => {
     getMetrics(props.dbUri);
+
+    // Turn off Interval
+    // const fetchInterval = setInterval(() => {
+    //   getMetrics(props.dbUri);
+    // }, 20000);
+
+    // return () => {
+    //   clearInterval(fetchInterval);
+    // };
   }, []);
 
   useEffect(() => {
@@ -172,10 +163,24 @@ function DBTab(props: Props) {
   if (fetchData) {
     return (
       <div>
-        <Box sx={{ display: 'inline-flex', flexWrap: 'wrap', pl: '11rem' }}>
-          {popup}
-          {graph1}
-          {graph2}
+        <Box
+          sx={{
+            display: 'inline-flex',
+            flexWrap: 'wrap',
+            pl: '11rem',
+            float: 'right',
+          }}
+        >
+          <GraphCard cardLabel={'Query Times - All Queries'}>
+            <LineGraph1 data={lineGraph1} />
+          </GraphCard>
+          <GraphCard cardLabel={'Query Times - Top 5 Queries'}>
+            <LineGraph2 data={lineGraph2} />
+          </GraphCard>
+          <GraphCard cardLabel={'Query Times - Intervals'}>
+            <GraphPie1 data={pieGraph1} />
+          </GraphCard>
+
           <GraphCard cardLabel="Database Name">
             <>
               name: {datName}

@@ -47,31 +47,6 @@ function ConnectDB(props: Props) {
       props.setUserData(copyUserData);
     }
 
-    // get(props.username)
-    //   .then((data) => {
-    //     const bytes = AES.decrypt(data, props.secret);
-    //     const originalText = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-    //     if (originalText.dbs !== undefined) originalText.dbs.push(stateData);
-    //     else originalText.dbs = [stateData];
-    //     console.log(originalText);
-    //     const ciphertext = AES.encrypt(
-    //       JSON.stringify(originalText),
-    //       props.secret
-    //     ).toString();
-
-    //     set(props.username, ciphertext)
-    //       .then(() => {
-    //         console.log('IndexedDB set successful');
-    //         alert(stateData.nickname + ' has been added');
-    //       })
-    //       .catch((err) => {
-    //         console.log('IndexedDB set failed', err);
-    //       });
-    //   })
-    //   .catch((err) => {
-    //     console.log('IndexedDB get failed', err);
-    //   });
-
     setNickname('');
     setUri('');
     setHost('');
