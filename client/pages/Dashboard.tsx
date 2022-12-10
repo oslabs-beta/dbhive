@@ -22,13 +22,9 @@ type Props = {
 function Dashboard(props: Props) {
   const navigate = useNavigate();
 
-  if (toggleDashboardAuth) {
-    if (!props.isLoggedIn) navigate('/login');
-
-    useEffect(() => {
-      if (!props.isLoggedIn) navigate('/login');
-    }, []);
-  }
+  useEffect(() => {
+    if (!props.isLoggedIn && toggleDashboardAuth) navigate('/login');
+  }, []);
 
   const [activeTab, setActiveTab] = useState(0);
 

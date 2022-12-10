@@ -19,8 +19,6 @@ type Props = {
 function Setup(props: Props) {
   const navigate = useNavigate();
 
-  if (!props.isLoggedIn) navigate('/login');
-
   useEffect(() => {
     if (!props.isLoggedIn) navigate('/login');
   }, []);

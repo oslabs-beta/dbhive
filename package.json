@@ -50,6 +50,7 @@
     "react": "^18.2.0",
     "react-chartjs-2": "4.3.1",
     "react-dom": "^18.2.0",
+    "react-query": "^3.39.2",
     "react-router": "^6.4.3",
     "react-router-dom": "^6.4.3",
     "ts-dotenv": "^0.9.0",

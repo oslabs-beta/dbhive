@@ -20,6 +20,8 @@ import { seedDBs } from './clientMode';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
+import { QueryClientProvider, QueryClient } from 'react-query';
+
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
@@ -47,6 +49,8 @@ const darkTheme = createTheme({
 });
 
 function App() {
+  const queryClient = new QueryClient();
+
   const initialUserData: UserData = {
     decryption: 'isValid',
     dbs: [],
@@ -162,7 +166,9 @@ function App() {
     <>
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
-        <RouterProvider router={router} />
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>
       </ThemeProvider>
     </>
   );

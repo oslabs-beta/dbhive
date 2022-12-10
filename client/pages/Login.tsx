@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Navbar from '../components/Navbar';
 import Input from '../components/Input';
 import { useNavigate } from 'react-router-dom';
@@ -23,10 +23,18 @@ type Props = {
 
 function Login(props: Props) {
   const navigate = useNavigate();
-  if (props.isLoggedIn) navigate('/dashboard');
+
+  useEffect(() => {
+    if (!didMount.current) {
+      didMount.current = true;
+    } else {
+      if (props.isLoggedIn) navigate('/dashboard');
+    }
+  }, [props.isLoggedIn]);
 
   const [loginError, setLoginError] = useState(false);
   const [loginErrorText, setLoginErrorText] = useState('');
+  const didMount = useRef(false);
 
   function submitHandler() {
     get(props.username)
