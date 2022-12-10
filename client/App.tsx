@@ -15,6 +15,7 @@ import { useState, useEffect } from 'react';
 import { set } from 'idb-keyval';
 import AES from 'crypto-js/aes';
 import { UserData } from './clientTypes';
+import { seedDBs } from './clientMode';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -46,30 +47,14 @@ const darkTheme = createTheme({
 });
 
 function App() {
-  // ---COMMENT OUT FOR DASHBOARD TESTING---
   const initialUserData: UserData = {
     decryption: 'isValid',
     dbs: [],
   };
 
-  // ---UNCOMMENT FOR DASHBOARD TESTING---
-  // const initialUserData: UserData = {
-  //   decryption: 'isValid',
-  //   dbs: [
-  //     {
-  //       nickname: 'dbTest',
-  //       uri: 'postgres://dbhive:teamawesome@dbhive-test.crqqpw0ueush.us-west-2.rds.amazonaws.com:5432/postgres',
-  //     },
-  //     {
-  //       nickname: 'dbTest2',
-  //       uri: 'postgres://n00bs:testallcaps@dbhive.cxjwyi85ug6q.us-east-1.rds.amazonaws.com:5432/postgres',
-  //     },
-  //     {
-  //       nickname: 'subify',
-  //       uri: 'postgres://avpneekp:5fsMVQDkJ7HCwrlILZCF7UhKklrdJ1OI@heffalump.db.elephantsql.com/avpneekp',
-  //     },
-  //   ],
-  // };
+  if (seedDBs) {
+    initialUserData.dbs.push(...seedDBs);
+  }
 
   const [username, setUsername] = useState('');
   const [secret, setSecret] = useState('');

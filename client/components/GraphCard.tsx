@@ -34,7 +34,7 @@ function GraphCard(props: Props) {
         }}
         onClick={() => {
           if (width === initialWidth) {
-            setWidth('calc(100% - 2rem)');
+            setWidth(`calc(${window.innerWidth}px - 13.8rem)`);
             setButtonIcon(<FullscreenExitIcon />);
           } else {
             setWidth(initialWidth);

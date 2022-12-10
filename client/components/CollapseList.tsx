@@ -19,7 +19,7 @@ export default function CollapseList(props: Props) {
   };
 
   return (
-    <List>
+    <List sx={{ maxWidth: '100%' }}>
       <ListItemButton onClick={handleClick} sx={{ color: 'white' }}>
         <ListItemText primary={props.label} />
         {open ? <ExpandLess /> : <ExpandMore />}
