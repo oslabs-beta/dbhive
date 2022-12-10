@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import DBTab from '../components/DBTab';
 import { UserData } from '../clientTypes';
+import { toggleDashboardAuth } from '../clientMode';
 
 import { Box, Card, Tabs, Tab, Typography, Button } from '@mui/material';
 
@@ -21,12 +22,13 @@ type Props = {
 function Dashboard(props: Props) {
   const navigate = useNavigate();
 
-  // ---COMMENT OUT FOR DASHBOARD TESTING---
-  // if (!props.isLoggedIn) navigate('/login');
+  if (toggleDashboardAuth) {
+    if (!props.isLoggedIn) navigate('/login');
 
-  // useEffect(() => {
-  //   if (!props.isLoggedIn) navigate('/login');
-  // }, []);
+    useEffect(() => {
+      if (!props.isLoggedIn) navigate('/login');
+    }, []);
+  }
 
   const [activeTab, setActiveTab] = useState(0);
 
