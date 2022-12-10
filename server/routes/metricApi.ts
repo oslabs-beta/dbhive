@@ -6,16 +6,16 @@ import databaseController from '../controllers/databaseController';
 const router = Router();
 
 // test route
-// router.post(
-//   '/uri',
-//   connectController.connectDB,
-//   connectController.createExtension,
-//   databaseController.dbStats,
-//   (req, res) => {
-//     console.log(res.locals);
-//     return res.status(200).json(res.locals);
-//   }
-// );
+router.post(
+  '/uri',
+  connectController.connectDB,
+  connectController.createExtension,
+  databaseController.dbStats,
+  (req, res) => {
+    console.log(res.locals);
+    return res.status(200).json(res.locals);
+  }
+);
 
 router.post(
   '/querytimes',
