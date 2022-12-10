@@ -11,6 +11,8 @@ import {
   LogarithmicScale,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import CollapseList from './CollapseList';
+import { Box, ListItemText, Typography, Divider } from '@mui/material';
 
 Chart.register(
   CategoryScale,
@@ -25,22 +27,56 @@ Chart.register(
 type Props = {
   title?: string;
   data?: any;
+  xMax?: number;
 };
 
 type Line = { labels: string[]; data: number[] };
 
-function LineGraph2(props: Props) {
+function LineGraphType2(props: Props) {
   const [dataProc, setDataProc] = useState<Line>({ labels: [], data: [] });
+  const [detailsProc, setDetailsProc] = useState<JSX.Element>();
 
   useEffect(() => {
+    const details: any[] = [];
+
     if (props.data) {
       const line: Line = { labels: [], data: [] };
       props.data.forEach(
-        (element: { query: string; mean_exec_time: number }) => {
+        (element: { query: string; mean_exec_time: number }, index: number) => {
           line.labels.push(element.query);
           line.data.push(element.mean_exec_time);
+          details.push(
+            <Box
+              sx={{
+                overflowX: 'scroll',
+                whiteSpace: 'nowrap',
+                my: '.7rem',
+              }}
+              key={index}
+            >
+              <Typography sx={{ flexGrow: 1, fontSize: '.8rem' }}>
+                query {index}: {element.query}
+              </Typography>
+              <Typography sx={{ flexGrow: 1, fontSize: '.8rem' }}>
+                time: {element.mean_exec_time.toFixed(4)} sec
+              </Typography>
+            </Box>
+          );
         }
       );
+      setDetailsProc(
+        <ListItemText
+          sx={{
+            bgcolor: 'RGB(255, 255, 255, .05)',
+            my: '.2rem',
+            px: '.5rem',
+          }}
+          key="mean"
+        >
+          {details}
+        </ListItemText>
+      );
+
       setDataProc(line);
     }
   }, [props.data]);
@@ -55,7 +91,7 @@ function LineGraph2(props: Props) {
     scales: {
       y: {
         min: 0,
-        max: 20,
+        max: 5,
         display: true,
         // type: 'logarithmic',
         title: {
@@ -67,24 +103,13 @@ function LineGraph2(props: Props) {
         display: false,
       },
     },
-    annotation: {
-      annotations: {
-        line1: {
-          type: 'line',
-          yMin: 10,
-          yMax: 10,
-          borderColor: 'rgb(255, 99, 132)',
-          borderWidth: 2,
-        },
-      },
-    },
   };
 
   const data = {
     labels: dataProc.labels,
     datasets: [
       {
-        label: 'All Queries',
+        label: 'queries',
         data: dataProc.data,
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },
@@ -94,8 +119,9 @@ function LineGraph2(props: Props) {
   return (
     <>
       <Bar options={options} data={data} />
+      <CollapseList label="more details..." content={detailsProc} />
     </>
   );
 }
 
-export default LineGraph2;
+export default LineGraphType2;

@@ -31,7 +31,7 @@ type Props = {
 
 type Line = { labels: string[]; data: number[] };
 
-function LineGraph1(props: Props) {
+function LineGraphType1(props: Props) {
   const [dataProc, setDataProc] = useState<Line>({ labels: [], data: [] });
   const [detailsProc, setDetailsProc] = useState<JSX.Element[]>();
 
@@ -101,7 +101,7 @@ function LineGraph1(props: Props) {
               key={'sq' + index}
             >
               <Typography sx={{ flexGrow: 1, fontSize: '.8rem' }}>
-                query {index}: {element.query} sec
+                query {index}: {element.query}
               </Typography>
               <Typography sx={{ flexGrow: 1, fontSize: '.8rem' }}>
                 time: {element.mean_exec_time.toFixed(4)} sec
@@ -148,24 +148,13 @@ function LineGraph1(props: Props) {
         display: false,
       },
     },
-    annotation: {
-      annotations: {
-        line1: {
-          type: 'line',
-          yMin: 10,
-          yMax: 10,
-          borderColor: 'rgb(255, 99, 132)',
-          borderWidth: 2,
-        },
-      },
-    },
   };
 
   const data = {
     labels: dataProc.labels,
     datasets: [
       {
-        label: 'All Queries',
+        label: 'queries',
         data: dataProc.data,
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },
@@ -175,22 +164,9 @@ function LineGraph1(props: Props) {
   return (
     <>
       <Bar options={options} data={data} />{' '}
-      <CollapseList
-        label="more details..."
-        content={
-          <Box
-            sx={{
-              fontSize: '.8rem',
-              color: 'white',
-              textAlign: 'left',
-            }}
-          >
-            {detailsProc}
-          </Box>
-        }
-      />
+      <CollapseList label="more details..." content={detailsProc} />
     </>
   );
 }
 
-export default LineGraph1;
+export default LineGraphType1;

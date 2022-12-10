@@ -24,10 +24,13 @@ export default function CollapseList(props: Props) {
         <ListItemText primary={props.label} />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        {/* <List component="div" disablePadding> */}
+      <Collapse
+        in={open}
+        timeout="auto"
+        unmountOnExit
+        sx={{ color: 'white', textAlign: 'left' }}
+      >
         {props.content}
-        {/* </List> */}
       </Collapse>
     </List>
   );

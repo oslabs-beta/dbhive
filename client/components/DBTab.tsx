@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import GraphCard from './GraphCard';
-import LineGraph1 from './LineGraph1';
-import LineGraph2 from './LineGraph2';
+import LineGraphType1 from './LineGraphType1';
+import LineGraphType2 from './LineGraphType2';
 import GraphPie1 from './GraphPie1';
 import { Box } from '@mui/material';
 
@@ -21,6 +21,11 @@ function DBTab(props: Props) {
   const [connectStatus, setConnectStatus] = useState('connecting to db...');
   const [lineGraph1, setLineGraph1] = useState();
   const [lineGraph2, setLineGraph2] = useState();
+  const [lineGraph3, setLineGraph3] = useState();
+  const [lineGraph4, setLineGraph4] = useState();
+  const [lineGraph5, setLineGraph5] = useState();
+  const [lineGraph6, setLineGraph6] = useState();
+
   const [pieGraph1, setPieGraph1] = useState();
   const [datName, setDatName] = useState<string>();
   const [datID, setDatID] = useState<string>();
@@ -64,8 +69,12 @@ function DBTab(props: Props) {
 
     try {
       setLineGraph2(fetchData.avgTimeTopAllCalls);
+      setLineGraph3(fetchData.avgTimeTopDeleteCalls);
+      setLineGraph4(fetchData.avgTimeTopInsertCalls);
+      setLineGraph5(fetchData.avgTimeTopSelectCalls);
+      setLineGraph6(fetchData.avgTimeTopUpdateCalls);
     } catch {
-      console.log('fetchData.avgTimeTopAllCalls unavailable');
+      console.log('fetchData.avgTime properties unavailable');
     }
 
     try {
@@ -172,13 +181,25 @@ function DBTab(props: Props) {
           }}
         >
           <GraphCard cardLabel={'Query Times - All Queries'}>
-            <LineGraph1 data={lineGraph1} />
+            <LineGraphType1 data={lineGraph1} />
+          </GraphCard>
+          <GraphCard cardLabel={'Query Times - All Queries Time Intervals'}>
+            <GraphPie1 data={pieGraph1} />
           </GraphCard>
           <GraphCard cardLabel={'Query Times - Top 5 Queries'}>
-            <LineGraph2 data={lineGraph2} />
+            <LineGraphType2 data={lineGraph2} />
           </GraphCard>
-          <GraphCard cardLabel={'Query Times - Intervals'}>
-            <GraphPie1 data={pieGraph1} />
+          <GraphCard cardLabel={'Query Times - Top Delete Queries'}>
+            <LineGraphType2 data={lineGraph3} />
+          </GraphCard>
+          <GraphCard cardLabel={'Query Times - Top Insert Queries'}>
+            <LineGraphType2 data={lineGraph4} />
+          </GraphCard>
+          <GraphCard cardLabel={'Query Times - Top Select Queries'}>
+            <LineGraphType2 data={lineGraph5} />
+          </GraphCard>
+          <GraphCard cardLabel={'Query Times - Top Update Queries'}>
+            <LineGraphType2 data={lineGraph6} />
           </GraphCard>
 
           <GraphCard cardLabel="Database Name">
