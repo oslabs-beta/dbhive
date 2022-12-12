@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import { connectController } from '../controllers/connectController';
 import databaseController from '../controllers/databaseController';
-// import securityController from '../controllers/securityController';
 
 const router = Router();
 
@@ -18,7 +17,7 @@ router.post(
 );
 
 router.post(
-  '/querytimes',
+  '/queryMetrics',
   connectController.connectDB,
   connectController.createExtension,
   databaseController.queryTimes,
@@ -32,8 +31,13 @@ router.post(
 );
 
 //this should reflect any method that would need to update based on user input
-router.put('/querytimes', databaseController.numOfRows, databaseController.topCalls, (req,res)=>{
-  return res.status(200).json(res.locals.result)
-})
+router.put(
+  '/querytimes',
+  databaseController.numOfRows,
+  databaseController.topCalls,
+  (req, res) => {
+    return res.status(200).json(res.locals.result);
+  }
+);
 
 export default router;

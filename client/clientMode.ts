@@ -35,23 +35,6 @@ ex.
     ]
 */
 
-const seedDBs: UserData['dbs'] = [
-  {
-    nickname: 'dbTest',
-    uri: 'postgres://dbhive:teamawesome@dbhive-test.crqqpw0ueush.us-west-2.rds.amazonaws.com:5432/postgres',
-  },
-  {
-    nickname: 'dbTest2',
-    uri: 'postgres://n00bs:testallcaps@dbhive.cxjwyi85ug6q.us-east-1.rds.amazonaws.com:5432/postgres',
-  },
-  {
-    nickname: 'subify',
-    uri: 'postgres://avpneekp:5fsMVQDkJ7HCwrlILZCF7UhKklrdJ1OI@heffalump.db.elephantsql.com/avpneekp',
-  },
-  {
-    nickname: 'bad',
-    uri: 'asfasfasp',
-  },
-];
+const seedDBs: UserData['dbs'] = [];
 
 export { toggleDashboardAuth, seedDBs };

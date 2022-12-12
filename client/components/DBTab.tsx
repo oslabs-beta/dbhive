@@ -1,29 +1,34 @@
 import * as React from 'react';
+import { useState } from 'react';
 import MetricCard from './MetricCard';
 import LineGraphType1 from './LineGraphType1';
 import LineGraphType2 from './LineGraphType2';
 import PieGraphType1 from './PieGraphType1';
-import { Box } from '@mui/material';
-import { useQuery } from 'react-query';
+import {
+  Box,
+  InputLabel,
+  Select,
+  SelectChangeEvent,
+  MenuItem,
+} from '@mui/material';
+import { useQueryMetrics } from '../store/rqHooks';
 
 type Props = {
   dbUri: string;
 };
 
 function DBTab(props: Props) {
-  const { isLoading, isError, data } = useQuery(props.dbUri, async () => {
-    const res = await fetch('/api/querytimes', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'Application/JSON',
-      },
-      body: JSON.stringify({ uri: props.dbUri }),
-    });
-    if (!res.ok) {
-      throw new Error('Network response was not ok');
-    }
-    return res.json();
-  });
+  const [refetchInterval, setRefetchInterval] = useState(15000);
+
+  const { isLoading, isError, data } = useQueryMetrics(
+    ['dbMetrics', props.dbUri],
+    props.dbUri,
+    refetchInterval
+  );
+
+  const handleChangeInterval = (event: SelectChangeEvent) => {
+    setRefetchInterval(Number(event.target.value));
+  };
 
   if (isError) {
     return (
@@ -58,6 +63,29 @@ function DBTab(props: Props) {
   } else {
     return (
       <div>
+        <Box
+          sx={{
+            zIndex: 'tooltip',
+            position: 'fixed',
+            left: '1.2rem',
+            top: '30rem',
+          }}
+        >
+          <InputLabel id="demo-simple-select-label">Fetch Interval</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={refetchInterval.toString()}
+            onChange={handleChangeInterval}
+          >
+            <MenuItem value={10000}>10 Seconds</MenuItem>
+            <MenuItem value={15000}>15 Seconds</MenuItem>
+            <MenuItem value={20000}>20 Seconds</MenuItem>
+            <MenuItem value={30000}>30 Seconds</MenuItem>
+            <MenuItem value={60000}>1 Minute</MenuItem>
+            <MenuItem value={300000}>5 Minutes</MenuItem>
+          </Select>
+        </Box>
         <Box
           sx={{
             display: 'inline-flex',
