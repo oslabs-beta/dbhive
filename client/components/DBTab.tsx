@@ -66,7 +66,7 @@ function DBTab(props: Props) {
         <Box
           sx={{
             zIndex: 'tooltip',
-            position: 'absolute',
+            position: 'fixed',
             left: '1.2rem',
             top: '30rem',
           }}

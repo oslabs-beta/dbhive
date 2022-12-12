@@ -60,7 +60,7 @@ function ConnectDB() {
         sx={{
           left: '30rem',
           top: '.5rem',
-          position: 'absolute',
+          position: 'fixed',
           zIndex: 'tooltip',
         }}
       >
