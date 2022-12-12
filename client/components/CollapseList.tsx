@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
@@ -12,7 +13,7 @@ type Props = {
 };
 
 export default function CollapseList(props: Props) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleClick = () => {
     setOpen(!open);
