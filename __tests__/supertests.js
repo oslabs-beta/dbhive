@@ -26,7 +26,7 @@ xdescribe('my test', () => {
   })
 })
 
-describe('Connecting a database', () => {
+xdescribe('Connecting a database', () => {
   describe('connecting a URI key', () => {
     it('responds with a true valid URI key value', () =>{
       const body = {
@@ -53,7 +53,7 @@ describe('Database data retrieval', () => {
         uri: dbtest_url
     };
     return supertest(server)
-      .post('/api/querytimes')
+      .post('/api/queryMetrics')
       .send(body)
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -67,7 +67,7 @@ describe('Database data retrieval', () => {
         uri: dbtest_url
       };
       return supertest(server)
-        .post('/api/querytimes')
+        .post('/api/queryMetrics')
         .send(body)
         .expect((res) => {
           expect(res.body.allTimes).toBeTruthy()
@@ -97,7 +97,7 @@ describe('Database data retrieval', () => {
         uri: 'postgres://xxxx:xxxxx@xxxxx.crqqpw0ueush.us-west-2.rds.amazonaws.com:5432/postgres'
       };
       return supertest(server)
-        .post('/api/querytimes')
+        .post('/api/queryMetrics')
         .send(body)
         .expect(400)
     })
