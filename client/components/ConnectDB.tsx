@@ -1,11 +1,6 @@
-// postgres://dbhive:teamawesome@dbhive-test.crqqpw0ueush.us-west-2.rds.amazonaws.com:5432/postgres
-
 import * as React from 'react';
 import { useState } from 'react';
 import Input from './Input';
-// import { set, get } from 'idb-keyval';
-// import CryptoJS from 'crypto-js';
-// import AES from 'crypto-js/aes';
 import { UserData } from '../clientTypes';
 
 import { Card, Button, Typography, Divider } from '@mui/material';
@@ -66,12 +61,7 @@ function ConnectDB(props: Props) {
         p: '4rem',
       }}
     >
-      <Typography
-        variant="h5"
-        component="div"
-        sx={{ flexGrow: 1, mb: '2rem' }}
-        // color="primary"
-      >
+      <Typography variant="h5" component="div" sx={{ flexGrow: 1, mb: '2rem' }}>
         Connect to new DB
       </Typography>
       <Input

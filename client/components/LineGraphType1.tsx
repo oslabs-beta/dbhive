@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
 import {
   Chart,
   CategoryScale,
@@ -32,99 +31,93 @@ type Props = {
 type Line = { labels: string[]; data: number[] };
 
 function LineGraphType1(props: Props) {
-  const [dataProc, setDataProc] = useState<Line>({ labels: [], data: [] });
-  const [detailsProc, setDetailsProc] = useState<JSX.Element[]>();
+  const dataProc: Line = { labels: [], data: [] };
+  const detailsProc: JSX.Element[] = [];
 
-  useEffect(() => {
-    if (props.data) {
-      const line: Line = { labels: [], data: [] };
-      props.data.all.rows.forEach(
-        (element: { query: string; mean_exec_time: number }) => {
-          line.labels.push(element.query);
-          line.data.push(element.mean_exec_time);
-        }
-      );
-      setDataProc(line);
+  if (props.data) {
+    props.data.all.rows.forEach(
+      (element: { query: string; mean_exec_time: number }) => {
+        dataProc.labels.push(element.query);
+        dataProc.data.push(element.mean_exec_time);
+      }
+    );
 
-      const details: any[] = [];
-      details.push(
-        <ListItemText
-          sx={{ bgcolor: 'RGB(255, 255, 255, .05)', my: '.2rem', px: '.5rem' }}
-          key="mean"
-        >
-          <Typography sx={{ flexGrow: 1, my: '.5rem', fontSize: '1.2rem' }}>
-            mean
-          </Typography>
-          <Divider />
-          <Typography sx={{ flexGrow: 1, my: '.5rem', fontSize: '.8rem' }}>
-            {props.data.mean.rows[0].averagequerytime.toFixed(4)} sec
-          </Typography>
-        </ListItemText>
-      );
-      details.push(
-        <ListItemText
-          sx={{
-            bgcolor: 'RGB(255, 255, 255, .05)',
-            my: '.2rem',
-            px: '.5rem',
-          }}
-          key="median"
-        >
-          <Typography sx={{ flexGrow: 1, my: '.5rem', fontSize: '1.2rem' }}>
-            median
-          </Typography>
-          <Divider />
-          <Typography sx={{ flexGrow: 1, my: '.5rem', fontSize: '.8rem' }}>
-            {props.data.median.rows[0].median.toFixed(4)} sec
-          </Typography>
-        </ListItemText>
-      );
+    detailsProc.push(
+      <ListItemText
+        sx={{ bgcolor: 'RGB(255, 255, 255, .05)', my: '.2rem', px: '.5rem' }}
+        key="mean"
+      >
+        <Typography sx={{ flexGrow: 1, my: '.5rem', fontSize: '1.2rem' }}>
+          mean
+        </Typography>
+        <Divider />
+        <Typography sx={{ flexGrow: 1, my: '.5rem', fontSize: '.8rem' }}>
+          {props.data.mean.rows[0].averagequerytime.toFixed(4)} sec
+        </Typography>
+      </ListItemText>
+    );
+    detailsProc.push(
+      <ListItemText
+        sx={{
+          bgcolor: 'RGB(255, 255, 255, .05)',
+          my: '.2rem',
+          px: '.5rem',
+        }}
+        key="median"
+      >
+        <Typography sx={{ flexGrow: 1, my: '.5rem', fontSize: '1.2rem' }}>
+          median
+        </Typography>
+        <Divider />
+        <Typography sx={{ flexGrow: 1, my: '.5rem', fontSize: '.8rem' }}>
+          {props.data.median.rows[0].median.toFixed(4)} sec
+        </Typography>
+      </ListItemText>
+    );
 
-      const slowQueries: JSX.Element[] = [];
-      slowQueries.push(
-        <Box key="sqHeading">
-          <Typography sx={{ flexGrow: 1, my: '.5rem', fontSize: '1.2rem' }}>
-            slowest queries
-          </Typography>
-          <Divider />
-        </Box>
-      );
-      props.data.slowestQueries.rows.forEach(
-        (element: { query: string; mean_exec_time: number }, index: number) => {
-          slowQueries.push(
-            <Box
-              sx={{
-                overflowX: 'scroll',
-                whiteSpace: 'nowrap',
-                my: '.7rem',
-              }}
-              key={'sq' + index}
-            >
-              <Typography sx={{ flexGrow: 1, fontSize: '.8rem' }}>
-                query {index}: {element.query}
-              </Typography>
-              <Typography sx={{ flexGrow: 1, fontSize: '.8rem' }}>
-                time: {element.mean_exec_time.toFixed(4)} sec
-              </Typography>
-            </Box>
-          );
-        }
-      );
-      details.push(
-        <ListItemText
-          sx={{
-            bgcolor: 'RGB(255, 255, 255, .05)',
-            my: '0',
-            px: '.5rem',
-          }}
-          key="slowQ"
-        >
-          {slowQueries}
-        </ListItemText>
-      );
-      setDetailsProc(details);
-    }
-  }, [props.data]);
+    const slowQueries: JSX.Element[] = [];
+    slowQueries.push(
+      <Box key="sqHeading">
+        <Typography sx={{ flexGrow: 1, my: '.5rem', fontSize: '1.2rem' }}>
+          slowest queries
+        </Typography>
+        <Divider />
+      </Box>
+    );
+    props.data.slowestQueries.rows.forEach(
+      (element: { query: string; mean_exec_time: number }, index: number) => {
+        slowQueries.push(
+          <Box
+            sx={{
+              overflowX: 'scroll',
+              whiteSpace: 'nowrap',
+              my: '.7rem',
+            }}
+            key={'sq' + index}
+          >
+            <Typography sx={{ flexGrow: 1, fontSize: '.8rem' }}>
+              query {index}: {element.query}
+            </Typography>
+            <Typography sx={{ flexGrow: 1, fontSize: '.8rem' }}>
+              time: {element.mean_exec_time.toFixed(4)} sec
+            </Typography>
+          </Box>
+        );
+      }
+    );
+    detailsProc.push(
+      <ListItemText
+        sx={{
+          bgcolor: 'RGB(255, 255, 255, .05)',
+          my: '0',
+          px: '.5rem',
+        }}
+        key="slowQ"
+      >
+        {slowQueries}
+      </ListItemText>
+    );
+  }
 
   const options = {
     responsive: true,

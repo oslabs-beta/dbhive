@@ -15,12 +15,6 @@ function Input(props: Props) {
   return (
     <div className={props.inputClass}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        {/* <label>{props.label}</label>
-        <input
-          value={props.value}
-          type={props.inputType}
-          onChange={(event) => props.setInput(event.target.value)}
-        ></input> */}
         <TextField
           error={props.error}
           helperText={props.errorText}

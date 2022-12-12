@@ -1,236 +1,129 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
-import GraphCard from './GraphCard';
+import MetricCard from './MetricCard';
 import LineGraphType1 from './LineGraphType1';
 import LineGraphType2 from './LineGraphType2';
-import GraphPie1 from './GraphPie1';
+import PieGraphType1 from './PieGraphType1';
 import { Box } from '@mui/material';
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from 'react-query';
+import { useQuery } from 'react-query';
 
 type Props = {
   dbUri: string;
 };
 
-type FetchData = {
-  [key: string]: any;
-} | null;
-
 function DBTab(props: Props) {
-  const queryClient = useQueryClient();
-
-  const initialFetchData: FetchData = null;
-
-  const [fetchData, setFetchData] = useState(initialFetchData);
-  const [connectStatus, setConnectStatus] = useState('connecting to db...');
-  const [lineGraph1, setLineGraph1] = useState();
-  const [lineGraph2, setLineGraph2] = useState();
-  const [lineGraph3, setLineGraph3] = useState();
-  const [lineGraph4, setLineGraph4] = useState();
-  const [lineGraph5, setLineGraph5] = useState();
-  const [lineGraph6, setLineGraph6] = useState();
-
-  const [pieGraph1, setPieGraph1] = useState();
-  const [datName, setDatName] = useState<string>();
-  const [datID, setDatID] = useState<string>();
-  const [chr, setChr] = useState<string | number>();
-  const [conflicts, setConflicts] = useState<string>();
-  const [deadlocks, setDeadlocks] = useState<string>();
-  const [rbt, setRbt] = useState<string>();
-  const [tc, setTc] = useState<string>();
-  const [brt, setBrt] = useState<string>();
-  const [bwt, setBwt] = useState<string>();
-  const [bh, setBh] = useState<string>();
-  const [br, setBr] = useState<string>();
-  const [cf, setCf] = useState<string>();
-
-  // function getMetrics(uri: string) {
-  //   const query = useQuery(uri, () => {
-  //     fetch('/api/querytimes', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'Application/JSON',
-  //       },
-  //       body: JSON.stringify({ uri: uri }),
-  //     })
-  //       .then((res) => {
-  //         return res.json();
-  //       })
-  //       .then((data) => {
-  //         console.log('fetched data', data);
-  //         if (typeof data === 'object') setFetchData(data);
-  //         else setConnectStatus('db connection failed...');
-  //       })
-  //       .catch((error) => console.log('ERROR: could not post-fetch: ' + error));
-  //   });
-  // }
-
-  const { isLoading, isError, data, error } = useQuery(
-    props.dbUri,
-    async () => {
-      console.log('fetched!!!');
-      const res = await fetch('/api/querytimes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'Application/JSON',
-        },
-        body: JSON.stringify({ uri: props.dbUri }),
-      });
-      return res.json();
+  const { isLoading, isError, data } = useQuery(props.dbUri, async () => {
+    const res = await fetch('/api/querytimes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'Application/JSON',
+      },
+      body: JSON.stringify({ uri: props.dbUri }),
+    });
+    if (!res.ok) {
+      throw new Error('Network response was not ok');
     }
-  );
+    return res.json();
+  });
 
-  function formatData(fetchData: FetchData) {
-    try {
-      setLineGraph1(fetchData.allTimes);
-      setPieGraph1(fetchData.allTimes.all.rows);
-    } catch {
-      console.log('fetchData.allTimes unavailable');
-    }
-
-    try {
-      setLineGraph2(fetchData.avgTimeTopAllCalls);
-      setLineGraph3(fetchData.avgTimeTopDeleteCalls);
-      setLineGraph4(fetchData.avgTimeTopInsertCalls);
-      setLineGraph5(fetchData.avgTimeTopSelectCalls);
-      setLineGraph6(fetchData.avgTimeTopUpdateCalls);
-    } catch {
-      console.log('fetchData.avgTime properties unavailable');
-    }
-
-    try {
-      setDatName(fetchData.dbStats[0].datname);
-    } catch {
-      setDatName('unavailable');
-    }
-
-    try {
-      setDatID(fetchData.dbStats[0].datid);
-    } catch {
-      setDatID('unavailable');
-    }
-
-    try {
-      setChr(Number(fetchData.cacheHitRatio[0].ratio).toFixed(4));
-    } catch {
-      setChr('unavailable');
-    }
-
-    try {
-      setConflicts(fetchData.conflicts);
-    } catch {
-      setConflicts('unavailable');
-    }
-
-    try {
-      setDeadlocks(fetchData.deadlocks);
-    } catch {
-      setDeadlocks('unavailable');
-    }
-
-    try {
-      setRbt(fetchData.rolledBackTransactions);
-    } catch {
-      setRbt('unavailable');
-    }
-
-    try {
-      setTc(fetchData.transactionsCommitted);
-    } catch {
-      setTc('unavailable');
-    }
-
-    try {
-      setBrt(fetchData.dbStats[0].blk_read_time);
-    } catch {
-      setBrt('unavailable');
-    }
-
-    try {
-      setBwt(fetchData.dbStats[0].blk_write_time);
-    } catch {
-      setBwt('unavailable');
-    }
-
-    try {
-      setBh(fetchData.dbStats[0].blks_hit);
-    } catch {
-      setBh('unavailable');
-    }
-
-    try {
-      setBr(fetchData.dbStats[0].blks_read);
-    } catch {
-      setBr('unavailable');
-    }
-
-    try {
-      setCf(fetchData.dbStats[0].checksum_failures);
-    } catch {
-      setCf('unavailable');
-    }
+  if (isError) {
+    return (
+      <div>
+        <Box
+          sx={{
+            display: 'inline-flex',
+            flexWrap: 'wrap',
+            pl: '12rem',
+            pt: '1rem',
+          }}
+        >
+          status: request failed!
+        </Box>
+      </div>
+    );
+  } else if (isLoading) {
+    return (
+      <div>
+        <Box
+          sx={{
+            display: 'inline-flex',
+            flexWrap: 'wrap',
+            pl: '12rem',
+            pt: '1rem',
+          }}
+        >
+          status: connecting to db...
+        </Box>
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <Box
+          sx={{
+            display: 'inline-flex',
+            flexWrap: 'wrap',
+            pl: '11rem',
+            float: 'right',
+          }}
+        >
+          <MetricCard cardLabel={'Query Times - All Queries'}>
+            <LineGraphType1 data={data.allTimes} />
+          </MetricCard>
+          <MetricCard cardLabel={'Query Times - All Queries Time Intervals'}>
+            <PieGraphType1 data={data.allTimes?.all.rows} />
+          </MetricCard>
+          <MetricCard cardLabel={'Query Times - Top 5 Queries'}>
+            <LineGraphType2 data={data.avgTimeTopAllCalls} />
+          </MetricCard>
+          <MetricCard cardLabel={'Query Times - Top Delete Queries'}>
+            <LineGraphType2 data={data.avgTimeTopDeleteCalls} />
+          </MetricCard>
+          <MetricCard cardLabel={'Query Times - Top Insert Queries'}>
+            <LineGraphType2 data={data.avgTimeTopInsertCalls} />
+          </MetricCard>
+          <MetricCard cardLabel={'Query Times - Top Select Queries'}>
+            <LineGraphType2 data={data.avgTimeTopSelectCalls} />
+          </MetricCard>
+          <MetricCard cardLabel={'Query Times - Top Update Queries'}>
+            <LineGraphType2 data={data.avgTimeTopUpdateCalls} />
+          </MetricCard>
+          <MetricCard cardLabel="Database Name">
+            <>
+              name: {data.dbStats?.[0].datname}
+              <br />
+              id: {data.dbStats?.[0].datid}
+            </>
+          </MetricCard>
+          <MetricCard cardLabel="Conflicts">{data.conflicts}</MetricCard>
+          <MetricCard cardLabel="Deadlocks">{data.deadlocks}</MetricCard>
+          <MetricCard cardLabel="Rolled Back Transactions">
+            {data.rolledBackTransactions}
+          </MetricCard>
+          <MetricCard cardLabel="Transactions Committed">
+            {data.transactionsCommitted}
+          </MetricCard>
+          <MetricCard cardLabel="Cache Hit Ratio">
+            {Number(data.cacheHitRatio?.[0].ratio).toFixed(4)}
+          </MetricCard>
+          <MetricCard cardLabel="Block Read Time">
+            {data.dbStats?.[0].blk_read_time}
+          </MetricCard>
+          <MetricCard cardLabel="Block Write Time">
+            {data.dbStats?.[0].blk_write_time}
+          </MetricCard>
+          <MetricCard cardLabel="Block Hits">
+            {data.dbStats?.[0].blks_hit}
+          </MetricCard>
+          <MetricCard cardLabel="Block Reads">
+            {data.dbStats?.[0].blks_read}
+          </MetricCard>
+          <MetricCard cardLabel="Checksum Failures">
+            {data.dbStats?.[0].checksum_failures}
+          </MetricCard>
+        </Box>
+      </div>
+    );
   }
-
-  if (isError) return <div>Request Failed</div>;
-  if (isLoading) return <div>Loading...</div>;
-
-  return (
-    <div>
-      <Box
-        sx={{
-          display: 'inline-flex',
-          flexWrap: 'wrap',
-          pl: '11rem',
-          float: 'right',
-        }}
-      >
-        <GraphCard cardLabel={'Query Times - All Queries'}>
-          <LineGraphType1 data={lineGraph1} />
-        </GraphCard>
-        <GraphCard cardLabel={'Query Times - All Queries Time Intervals'}>
-          <GraphPie1 data={pieGraph1} />
-        </GraphCard>
-        <GraphCard cardLabel={'Query Times - Top 5 Queries'}>
-          <LineGraphType2 data={lineGraph2} />
-        </GraphCard>
-        <GraphCard cardLabel={'Query Times - Top Delete Queries'}>
-          <LineGraphType2 data={lineGraph3} />
-        </GraphCard>
-        <GraphCard cardLabel={'Query Times - Top Insert Queries'}>
-          <LineGraphType2 data={lineGraph4} />
-        </GraphCard>
-        <GraphCard cardLabel={'Query Times - Top Select Queries'}>
-          <LineGraphType2 data={lineGraph5} />
-        </GraphCard>
-        <GraphCard cardLabel={'Query Times - Top Update Queries'}>
-          <LineGraphType2 data={lineGraph6} />
-        </GraphCard>
-
-        <GraphCard cardLabel="Database Name">
-          <>
-            name: {datName}
-            <br />
-            id: {datID}
-          </>
-        </GraphCard>
-        <GraphCard cardLabel="Conflicts">{conflicts}</GraphCard>
-        <GraphCard cardLabel="Deadlocks">{deadlocks}</GraphCard>
-        <GraphCard cardLabel="Rolled Back Transactions">{rbt}</GraphCard>
-        <GraphCard cardLabel="Transactions Committed">{tc}</GraphCard>
-        <GraphCard cardLabel="Cache Hit Ratio">{chr}</GraphCard>
-        <GraphCard cardLabel="Block Read Time">{brt}</GraphCard>
-        <GraphCard cardLabel="Block Write Time">{bwt}</GraphCard>
-        <GraphCard cardLabel="Block Hits">{bh}</GraphCard>
-        <GraphCard cardLabel="Block Reads">{br}</GraphCard>
-        <GraphCard cardLabel="Checksum Failures">{cf}</GraphCard>
-      </Box>
-    </div>
-  );
 }
 
 export default DBTab;
