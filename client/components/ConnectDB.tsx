@@ -58,7 +58,7 @@ function ConnectDB() {
         textAlign: 'center',
         width: 400,
         mx: 'auto',
-        my: '10rem',
+        mt: '10rem',
         p: '4rem',
       }}
     >

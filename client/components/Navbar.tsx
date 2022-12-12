@@ -147,7 +147,7 @@ function Navbar() {
               <ListItemIcon>
                 <InfoIcon />
               </ListItemIcon>
-              <ListItemText primary="Home" />
+              <ListItemText primary="Docs" />
             </ListItemButton>
           </ListItem>
           <ListItem
@@ -172,6 +172,7 @@ function Navbar() {
               <ListItemText primary="Dashboard" />
             </ListItemButton>
           </ListItem>
+          <Divider />
         </List>
       </Drawer>
     </nav>
