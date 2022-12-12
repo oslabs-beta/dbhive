@@ -126,7 +126,6 @@ const databaseController: DatabaseController = {
     let quantOfRows;
     try {
       quantOfRows = await db.query(queryString);
-      //console.log(quantOfRows);
       res.locals.result.numOfRows = quantOfRows.rows;
       return next();
     } catch (error) {
@@ -163,7 +162,7 @@ const databaseController: DatabaseController = {
       );
       // find the query time of each of these calls
       // store them in an object to return
-      console.log('this is topSelect', topSelectCalls.rows);
+      // console.log('this is topSelect', topSelectCalls.rows);
       res.locals.result.avgTimeTopAllCalls = topAllCalls.rows;
       res.locals.result.avgTimeTopSelectCalls = topSelectCalls.rows;
       res.locals.result.avgTimeTopInsertCalls = topInsertCalls.rows;

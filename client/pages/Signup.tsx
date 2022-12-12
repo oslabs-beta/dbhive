@@ -7,39 +7,27 @@ import { set, get } from 'idb-keyval';
 import AES from 'crypto-js/aes';
 import { UserData } from '../clientTypes';
 
-import { Card, Button, Typography } from '@mui/material';
+import { Card, Button, Typography, Box } from '@mui/material';
 
-type Props = {
-  username: string;
-  setUsername: (eventTargetValue: string) => void;
-  secret: string;
-  setSecret: (eventTargetValue: string) => void;
-  isLoggedIn: boolean;
-  setIsLoggedIn: (eventTargetValue: boolean) => void;
-  userData: UserData;
-  setUserData: (eventTargetValue: UserData) => void;
-};
-
-function Signup(props: Props) {
+function Signup() {
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState('');
-  const [secret, setSecret] = useState('');
-  const [signupError, setSignupError] = useState(false);
-  const [signupErrorText, setSignupErrorText] = useState('');
+  const [usernameInput, setUsernameInput] = useState('');
+  const [secretInput, setSecretInput] = useState('');
+  const [signupErrorText, setSignupErrorText] = useState<null | string>(null);
 
   const initialUserData: UserData = { decryption: 'isValid', dbs: [] };
 
   function submitHandler() {
     const ciphertext = AES.encrypt(
       JSON.stringify(initialUserData),
-      secret
+      secretInput
     ).toString();
 
-    get(username)
+    get(usernameInput)
       .then((data) => {
         if (data === undefined) {
-          set(username, ciphertext)
+          set(usernameInput, ciphertext)
             .then(() => {
               navigate('/login');
             })
@@ -47,7 +35,6 @@ function Signup(props: Props) {
               console.log('IndexedDB: set failed', err);
             });
         } else {
-          setSignupError(true);
           setSignupErrorText('incorrect username or password');
         }
       })
@@ -55,62 +42,60 @@ function Signup(props: Props) {
         console.log('IndexedDB: get failed', err);
       });
 
-    setUsername('');
-    setSecret('');
+    setUsernameInput('');
+    setSecretInput('');
+    setSignupErrorText(null);
   }
 
   return (
     <div>
-      <Navbar
-        secret={props.secret}
-        setSecret={props.setSecret}
-        username={props.username}
-        setUsername={props.setUsername}
-        isLoggedIn={props.isLoggedIn}
-        setIsLoggedIn={props.setIsLoggedIn}
-        userData={props.userData}
-        setUserData={props.setUserData}
-      />
-      <Card
+      <Navbar />
+      <Box
         sx={{
-          textAlign: 'center',
-          width: 400,
-          mx: 'auto',
-          my: '10rem',
-          p: '4rem',
+          pl: '11rem',
         }}
       >
-        <Typography
-          variant="h5"
-          component="div"
-          sx={{ flexGrow: 1, mb: '2rem' }}
+        <Card
+          sx={{
+            textAlign: 'center',
+            width: 400,
+            mx: 'auto',
+            my: '10rem',
+            p: '4rem',
+          }}
         >
-          Sign Up
-        </Typography>
-        <Input
-          inputClass={'input-group'}
-          label={'Username: '}
-          setInput={setUsername}
-          value={username}
-          error={signupError}
-        />
-        <Input
-          inputClass={'input-group'}
-          inputType="password"
-          label={'Password: '}
-          setInput={setSecret}
-          value={secret}
-          error={signupError}
-          errorText={signupErrorText}
-        />
-        <Button
-          variant="contained"
-          sx={{ mt: '1rem', mb: '3rem', width: '100%' }}
-          onClick={submitHandler}
-        >
-          Submit
-        </Button>
-      </Card>
+          <Typography
+            variant="h5"
+            component="div"
+            sx={{ flexGrow: 1, mb: '2rem' }}
+          >
+            Sign Up
+          </Typography>
+          <Input
+            inputClass={'input-group'}
+            label={'Username: '}
+            setInput={setUsernameInput}
+            value={usernameInput}
+            error={signupErrorText !== null}
+          />
+          <Input
+            inputClass={'input-group'}
+            inputType="password"
+            label={'Password: '}
+            setInput={setSecretInput}
+            value={secretInput}
+            error={signupErrorText !== null}
+            errorText={signupErrorText}
+          />
+          <Button
+            variant="contained"
+            sx={{ mt: '1rem', mb: '3rem', width: '100%' }}
+            onClick={submitHandler}
+          >
+            Submit
+          </Button>
+        </Card>
+      </Box>
     </div>
   );
 }

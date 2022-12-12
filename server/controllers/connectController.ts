@@ -25,11 +25,10 @@ export const connectController: ConnectController = {
     return next();
   },
   createExtension: async (req, res, next) => {
-    console.log('DB:', req.body);
     const db = res.locals.dbConnection;
     const queryString = 'CREATE EXTENSION IF NOT EXISTS pg_stat_statements';
     try {
-      const testQuery = await db.query(queryString);
+      await db.query(queryString);
       res.locals.result.validURI = true;
       return next();
     } catch (error) {
