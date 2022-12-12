@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 
@@ -16,45 +15,27 @@ type Pie = {
   '1s < time'?: number;
 };
 
-function GraphPie1(props: Props) {
-  const [dataProc, setDataProc] = useState<Pie>({
-    'time < .1s': 0,
-    '.1s > time < .5s': 0,
-    '.5s > time < 1s': 0,
-    '1s < time': 0,
-  });
-
-  const pie = {
+function PieGraphType1(props: Props) {
+  const dataProc: Pie = {
     'time < .1s': 0,
     '.1s > time < .5s': 0,
     '.5s > time < 1s': 0,
     '1s < time': 0,
   };
 
-  useEffect(() => {
-    if (props.data) {
-      props.data.forEach(
-        (element: { query: string; mean_exec_time: number }) => {
-          if (element.mean_exec_time < 0.1) {
-            pie['time < .1s']++;
-          } else if (
-            element.mean_exec_time > 0.1 &&
-            element.mean_exec_time < 0.5
-          ) {
-            pie['.1s > time < .5s']++;
-          } else if (
-            element.mean_exec_time > 0.5 &&
-            element.mean_exec_time < 1
-          ) {
-            pie['.5s > time < 1s']++;
-          } else if (element.mean_exec_time > 1) {
-            pie['1s < time']++;
-          }
-        }
-      );
-      setDataProc(pie);
-    }
-  }, [props.data]);
+  if (props.data) {
+    props.data.forEach((element: { query: string; mean_exec_time: number }) => {
+      if (element.mean_exec_time < 0.1) {
+        dataProc['time < .1s']++;
+      } else if (element.mean_exec_time > 0.1 && element.mean_exec_time < 0.5) {
+        dataProc['.1s > time < .5s']++;
+      } else if (element.mean_exec_time > 0.5 && element.mean_exec_time < 1) {
+        dataProc['.5s > time < 1s']++;
+      } else if (element.mean_exec_time > 1) {
+        dataProc['1s < time']++;
+      }
+    });
+  }
 
   const data = {
     labels: Object.keys(dataProc),
@@ -86,4 +67,4 @@ function GraphPie1(props: Props) {
   return <Pie data={data} />;
 }
 
-export default GraphPie1;
+export default PieGraphType1;

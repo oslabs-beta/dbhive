@@ -1,33 +1,12 @@
 import * as React from 'react';
 import Navbar from '../components/Navbar';
-import { UserData } from '../clientTypes';
 
 import { Box, Card, Typography } from '@mui/material';
 
-type Props = {
-  username: string;
-  setUsername: (eventTargetValue: string) => void;
-  secret: string;
-  setSecret: (eventTargetValue: string) => void;
-  isLoggedIn: boolean;
-  setIsLoggedIn: (eventTargetValue: boolean) => void;
-  userData: UserData;
-  setUserData: (eventTargetValue: UserData) => void;
-};
-
-function Home(props: Props) {
+function Home() {
   return (
     <>
-      <Navbar
-        secret={props.secret}
-        setSecret={props.setSecret}
-        username={props.username}
-        setUsername={props.setUsername}
-        isLoggedIn={props.isLoggedIn}
-        setIsLoggedIn={props.setIsLoggedIn}
-        userData={props.userData}
-        setUserData={props.setUserData}
-      />
+      <Navbar />
       <Card
         sx={{
           textAlign: 'center',

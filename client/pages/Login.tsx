@@ -6,113 +6,96 @@ import { useNavigate } from 'react-router-dom';
 import { get } from 'idb-keyval';
 import CryptoJS from 'crypto-js';
 import AES from 'crypto-js/aes';
-import { UserData } from '../clientTypes';
 
-import { Card, Button, Typography } from '@mui/material';
+import { Card, Button, Typography, Box } from '@mui/material';
+import useAppStore from '../store/appStore';
 
-type Props = {
-  username: string;
-  setUsername: (eventTargetValue: string) => void;
-  secret: string;
-  setSecret: (eventTargetValue: string) => void;
-  isLoggedIn: boolean;
-  setIsLoggedIn: (eventTargetValue: boolean) => void;
-  userData: UserData;
-  setUserData: (eventTargetValue: UserData) => void;
-};
+function Login() {
+  const logInUser = useAppStore((state) => state.logInUser);
 
-function Login(props: Props) {
+  const [usernameInput, setUsernameInput] = useState('');
+  const [secretInput, setSecretInput] = useState('');
+  const [loginErrorText, setLoginErrorText] = useState<null | string>(null);
+
   const navigate = useNavigate();
-  if (props.isLoggedIn) navigate('/dashboard');
-
-  const [loginError, setLoginError] = useState(false);
-  const [loginErrorText, setLoginErrorText] = useState('');
 
   function submitHandler() {
-    get(props.username)
+    get(usernameInput)
       .then((data) => {
-        const bytes = AES.decrypt(data, props.secret);
+        const bytes = AES.decrypt(data, secretInput);
         const decryptResponse = bytes.toString(CryptoJS.enc.Utf8);
-        if (decryptResponse) {
-          const originalText = JSON.parse(decryptResponse);
-          if (originalText.decryption === 'isValid') {
-            props.setIsLoggedIn(true);
-            props.setUserData(originalText);
-          } else {
-            setLoginError(true);
-            setLoginErrorText('incorrect username or password');
-          }
+        const originalText = JSON.parse(decryptResponse);
+        if (originalText.decryption === 'isValid') {
+          logInUser(usernameInput, secretInput, originalText);
+          setUsernameInput('');
+          setSecretInput('');
+          setLoginErrorText(null);
+          navigate('/dashboard');
         } else {
-          setLoginError(true);
           setLoginErrorText('incorrect username or password');
         }
       })
-      .catch((err) => {
-        console.log('IndexedDB get failed', err);
-        setLoginError(true);
+      .catch(() => {
         setLoginErrorText('incorrect username or password');
       });
   }
 
   return (
     <div>
-      <Navbar
-        secret={props.secret}
-        setSecret={props.setSecret}
-        username={props.username}
-        setUsername={props.setUsername}
-        isLoggedIn={props.isLoggedIn}
-        setIsLoggedIn={props.setIsLoggedIn}
-        userData={props.userData}
-        setUserData={props.setUserData}
-      />
-      <Card
+      <Navbar />
+      <Box
         sx={{
-          textAlign: 'center',
-          width: 400,
-          mx: 'auto',
-          my: '10rem',
-          p: '4rem',
+          pl: '11rem',
         }}
       >
-        <Typography
-          variant="h5"
-          component="div"
-          sx={{ flexGrow: 1, mb: '2rem' }}
+        <Card
+          sx={{
+            textAlign: 'center',
+            width: 400,
+            mx: 'auto',
+            my: '10rem',
+            p: '4rem',
+          }}
         >
-          Login
-        </Typography>
-        <Input
-          inputClass={'input-group'}
-          label={'Username: '}
-          setInput={props.setUsername}
-          value={props.username}
-          error={loginError}
-        />
-        <Input
-          inputClass={'input-group'}
-          inputType="password"
-          label={'Password: '}
-          setInput={props.setSecret}
-          value={props.secret}
-          error={loginError}
-          errorText={loginErrorText}
-        />
-        <Button
-          variant="contained"
-          sx={{ mt: '1rem', mb: '3rem', width: '100%' }}
-          onClick={submitHandler}
-        >
-          Submit
-        </Button>
-        <Button
-          variant="text"
-          sx={{ width: '100%' }}
-          onClick={() => navigate('/signup')}
-        >
-          Sign Up
-        </Button>
-      </Card>
+          <Typography
+            variant="h5"
+            component="div"
+            sx={{ flexGrow: 1, mb: '2rem' }}
+          >
+            Login
+          </Typography>
+          <Input
+            inputClass={'input-group'}
+            label={'Username: '}
+            setInput={setUsernameInput}
+            value={usernameInput}
+            error={loginErrorText !== null}
+          />
+          <Input
+            inputClass={'input-group'}
+            inputType="password"
+            label={'Password: '}
+            setInput={setSecretInput}
+            value={secretInput}
+            error={loginErrorText !== null}
+            errorText={loginErrorText}
+          />
+          <Button
+            variant="contained"
+            sx={{ mt: '1rem', mb: '3rem', width: '100%' }}
+            onClick={submitHandler}
+          >
+            Submit
+          </Button>
+          <Button
+            variant="text"
+            sx={{ width: '100%' }}
+            onClick={() => navigate('/signup')}
+          >
+            Sign Up
+          </Button>
+        </Card>
+      </Box>
     </div>
   );
 }

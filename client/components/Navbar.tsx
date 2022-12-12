@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { UserData } from '../clientTypes';
 
 import {
   Box,
@@ -22,20 +21,15 @@ import TuneIcon from '@mui/icons-material/Tune';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
 
-type Props = {
-  username: string;
-  setUsername: (eventTargetValue: string) => void;
-  secret: string;
-  setSecret: (eventTargetValue: string) => void;
-  isLoggedIn: boolean;
-  setIsLoggedIn: (eventTargetValue: boolean) => void;
-  userData: UserData;
-  setUserData: (eventTargetValue: UserData) => void;
-};
+import useAppStore from '../store/appStore';
 
-function Navbar(props: Props) {
+function Navbar() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
+  const isLoggedIn = useAppStore((state) => state.isLoggedIn);
+  const username = useAppStore((state) => state.username);
+  const logOutUser = useAppStore((state) => state.logOutUser);
 
   const drawerWidth = '11rem';
   return (
@@ -61,7 +55,7 @@ function Navbar(props: Props) {
           <Typography variant="h5" component="div" color="primary">
             dbHive
           </Typography>
-          {props.isLoggedIn && (
+          {isLoggedIn && (
             <>
               <Typography
                 variant="h6"
@@ -73,17 +67,12 @@ function Navbar(props: Props) {
                   fontSize: '1rem',
                 }}
               >
-                {props.username}
+                {username}
               </Typography>
               <LogoutIcon
                 onClick={() => {
-                  props.setIsLoggedIn(false);
-                  props.setUsername('');
-                  props.setSecret('');
-                  props.setUserData({
-                    decryption: 'isValid',
-                    dbs: [],
-                  });
+                  logOutUser();
+                  navigate('/login');
                 }}
               />
             </>
@@ -122,7 +111,6 @@ function Navbar(props: Props) {
               sx={{
                 my: '1.5rem',
                 height: 20,
-                // mx: 'auto',
               }}
               alt="PostgreSQL logo"
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/1280px-Postgresql_elephant.svg.png"
@@ -186,10 +174,6 @@ function Navbar(props: Props) {
           </ListItem>
         </List>
       </Drawer>
-      {/* <button onClick={() => navigate('/')}>Home</button>
-      <button onClick={() => navigate('/login')}>Login</button>
-      <button onClick={() => navigate('/setup')}>Setup</button>
-      <button onClick={() => navigate('/dashboard')}>Dashboard</button> */}
     </nav>
   );
 }

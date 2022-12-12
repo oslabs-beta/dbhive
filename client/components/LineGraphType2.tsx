@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
 import {
   Chart,
   CategoryScale,
@@ -12,7 +11,7 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import CollapseList from './CollapseList';
-import { Box, ListItemText, Typography, Divider } from '@mui/material';
+import { Box, ListItemText, Typography } from '@mui/material';
 
 Chart.register(
   CategoryScale,
@@ -33,53 +32,47 @@ type Props = {
 type Line = { labels: string[]; data: number[] };
 
 function LineGraphType2(props: Props) {
-  const [dataProc, setDataProc] = useState<Line>({ labels: [], data: [] });
-  const [detailsProc, setDetailsProc] = useState<JSX.Element>();
+  const dataProc: Line = { labels: [], data: [] };
+  const detailsProc: JSX.Element[] = [];
 
-  useEffect(() => {
-    const details: any[] = [];
-
-    if (props.data) {
-      const line: Line = { labels: [], data: [] };
-      props.data.forEach(
-        (element: { query: string; mean_exec_time: number }, index: number) => {
-          line.labels.push(element.query);
-          line.data.push(element.mean_exec_time);
-          details.push(
-            <Box
-              sx={{
-                overflowX: 'scroll',
-                whiteSpace: 'nowrap',
-                my: '.7rem',
-              }}
-              key={index}
-            >
-              <Typography sx={{ flexGrow: 1, fontSize: '.8rem' }}>
-                query {index}: {element.query}
-              </Typography>
-              <Typography sx={{ flexGrow: 1, fontSize: '.8rem' }}>
-                time: {element.mean_exec_time.toFixed(4)} sec
-              </Typography>
-            </Box>
-          );
-        }
-      );
-      setDetailsProc(
-        <ListItemText
-          sx={{
-            bgcolor: 'RGB(255, 255, 255, .05)',
-            my: '.2rem',
-            px: '.5rem',
-          }}
-          key="mean"
-        >
-          {details}
-        </ListItemText>
-      );
-
-      setDataProc(line);
-    }
-  }, [props.data]);
+  if (props.data) {
+    const details: JSX.Element[] = [];
+    props.data.forEach(
+      (element: { query: string; mean_exec_time: number }, index: number) => {
+        dataProc.labels.push(element.query);
+        dataProc.data.push(element.mean_exec_time);
+        details.push(
+          <Box
+            sx={{
+              overflowX: 'scroll',
+              whiteSpace: 'nowrap',
+              my: '.7rem',
+            }}
+            key={index}
+          >
+            <Typography sx={{ flexGrow: 1, fontSize: '.8rem' }}>
+              query {index}: {element.query}
+            </Typography>
+            <Typography sx={{ flexGrow: 1, fontSize: '.8rem' }}>
+              time: {element.mean_exec_time.toFixed(4)} sec
+            </Typography>
+          </Box>
+        );
+      }
+    );
+    detailsProc.push(
+      <ListItemText
+        sx={{
+          bgcolor: 'RGB(255, 255, 255, .05)',
+          my: '.2rem',
+          px: '.5rem',
+        }}
+        key="mean"
+      >
+        {details}
+      </ListItemText>
+    );
+  }
 
   const options = {
     responsive: true,
