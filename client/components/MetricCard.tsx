@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useState } from 'react';
-
 import { Card, Typography, Box } from '@mui/material';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
@@ -10,7 +9,7 @@ type Props = {
   children?: JSX.Element | string | number;
 };
 
-function GraphCard(props: Props) {
+function MetricCard(props: Props) {
   const initialWidth = '400px';
   const [width, setWidth] = useState(initialWidth);
   const [buttonIcon, setButtonIcon] = useState<JSX.Element>(<FullscreenIcon />);
@@ -34,7 +33,7 @@ function GraphCard(props: Props) {
         }}
         onClick={() => {
           if (width === initialWidth) {
-            setWidth('calc(100% - 2rem)');
+            setWidth(`calc(${window.innerWidth}px - 13.8rem)`);
             setButtonIcon(<FullscreenExitIcon />);
           } else {
             setWidth(initialWidth);
@@ -56,4 +55,4 @@ function GraphCard(props: Props) {
   );
 }
 
-export default GraphCard;
+export default MetricCard;

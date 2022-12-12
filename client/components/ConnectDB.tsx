@@ -1,27 +1,19 @@
-// postgres://dbhive:teamawesome@dbhive-test.crqqpw0ueush.us-west-2.rds.amazonaws.com:5432/postgres
-
 import * as React from 'react';
 import { useState } from 'react';
 import Input from './Input';
-// import { set, get } from 'idb-keyval';
-// import CryptoJS from 'crypto-js';
-// import AES from 'crypto-js/aes';
-import { UserData } from '../clientTypes';
+import { set } from 'idb-keyval';
+import AES from 'crypto-js/aes';
 
 import { Card, Button, Typography, Divider } from '@mui/material';
 
-type Props = {
-  username: string;
-  setUsername: (eventTargetValue: string) => void;
-  secret: string;
-  setSecret: (eventTargetValue: string) => void;
-  isLoggedIn: boolean;
-  setIsLoggedIn: (eventTargetValue: boolean) => void;
-  userData: UserData;
-  setUserData: (eventTargetValue: UserData) => void;
-};
+import useAppStore from '../store/appStore';
 
-function ConnectDB(props: Props) {
+function ConnectDB() {
+  const username = useAppStore((state) => state.username);
+  const secret = useAppStore((state) => state.secret);
+  const userData = useAppStore((state) => state.userData);
+  const updateUserData = useAppStore((state) => state.updateUserData);
+
   const [nickname, setNickname] = useState('');
   const [uri, setUri] = useState('');
   const [host, setHost] = useState('');
@@ -31,21 +23,25 @@ function ConnectDB(props: Props) {
   const [password, setPassword] = useState('');
 
   function submitHandler(type: string) {
+    const copyUserData = { ...userData };
     if (type === 'uri') {
-      const copyUserData = { ...props.userData };
       copyUserData.dbs.push({
         nickname: nickname,
         uri: uri,
       });
-      props.setUserData(copyUserData);
     } else if (type === 'separate') {
-      const copyUserData = { ...props.userData };
       copyUserData.dbs.push({
         nickname: nickname,
         uri: `postgres://${dBUsername}:${password}@${host}:${port}/${database}`,
       });
-      props.setUserData(copyUserData);
     }
+
+    updateUserData(copyUserData);
+
+    const ciphertext = AES.encrypt(JSON.stringify(userData), secret).toString();
+    set(username, ciphertext).catch((err) => {
+      console.log('IndexedDB: set failed', err);
+    });
 
     setNickname('');
     setUri('');
@@ -66,12 +62,7 @@ function ConnectDB(props: Props) {
         p: '4rem',
       }}
     >
-      <Typography
-        variant="h5"
-        component="div"
-        sx={{ flexGrow: 1, mb: '2rem' }}
-        // color="primary"
-      >
+      <Typography variant="h5" component="div" sx={{ flexGrow: 1, mb: '2rem' }}>
         Connect to new DB
       </Typography>
       <Input
