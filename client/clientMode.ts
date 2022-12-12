@@ -5,7 +5,7 @@ toggleDashboardAuth default = true, use for production
 toggleDashboardAuth = false, deactivates dashboard page authorization 
   allowing navigation to the page without having to be logged in
 */
-const toggleDashboardAuth = false;
+const toggleDashboardAuth = true;
 
 /*
 seedDBs default = [], use for production
@@ -35,19 +35,6 @@ ex.
     ]
 */
 
-const seedDBs: UserData['dbs'] = [
-  {
-    nickname: 'dbTest',
-    uri: 'postgres://dbhive:teamawesome@dbhive-test.crqqpw0ueush.us-west-2.rds.amazonaws.com:5432/postgres',
-  },
-  {
-    nickname: 'dbTest2',
-    uri: 'postgres://n00bs:testallcaps@dbhive.cxjwyi85ug6q.us-east-1.rds.amazonaws.com:5432/postgres',
-  },
-  {
-    nickname: 'subify',
-    uri: 'postgres://avpneekp:5fsMVQDkJ7HCwrlILZCF7UhKklrdJ1OI@heffalump.db.elephantsql.com/avpneekp',
-  },
-];
+const seedDBs: UserData['dbs'] = [];
 
 export { toggleDashboardAuth, seedDBs };

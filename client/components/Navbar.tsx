@@ -20,6 +20,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import TuneIcon from '@mui/icons-material/Tune';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import useAppStore from '../store/appStore';
 
@@ -57,24 +58,27 @@ function Navbar() {
           </Typography>
           {isLoggedIn && (
             <>
-              <Typography
-                variant="h6"
-                component="div"
-                sx={{
-                  ml: 'auto',
-                  mr: '1rem',
-                  opacity: '70%',
-                  fontSize: '1rem',
-                }}
-              >
-                {username}
-              </Typography>
-              <LogoutIcon
-                onClick={() => {
-                  logOutUser();
-                  navigate('/login');
-                }}
-              />
+              <Box sx={{ display: 'flex', ml: 'auto', mr: '1rem' }}>
+                <AccountCircleIcon />
+                <Typography
+                  variant="h6"
+                  component="div"
+                  sx={{
+                    opacity: '70%',
+                    fontSize: '1rem',
+                    ml: '.5rem',
+                    mr: '2rem',
+                  }}
+                >
+                  {username}
+                </Typography>
+                <LogoutIcon
+                  onClick={() => {
+                    logOutUser();
+                    navigate('/login');
+                  }}
+                />
+              </Box>
             </>
           )}
         </Toolbar>
