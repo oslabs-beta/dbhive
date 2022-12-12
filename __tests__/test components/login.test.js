@@ -30,5 +30,9 @@ describe('Login Page', () => {
     //only text input is available by textbox role.
     expect(screen.getByRole('textbox', {name: 'Username:'})).toBeInTheDocument()
   })
+  test('Login header', async()=>{
+    const header = await (screen.getByTestId('login-header'))
+    expect(header).toBeInTheDocument()
+  })
 
 })

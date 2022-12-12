@@ -66,6 +66,7 @@ function Signup() {
         >
           <Typography
             variant="h5"
+            data-testid = 'signup-header'
             component="div"
             sx={{ flexGrow: 1, mb: '2rem' }}
           >
