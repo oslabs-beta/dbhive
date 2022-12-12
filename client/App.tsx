@@ -1,9 +1,3 @@
-// Signup page, submit handler needs to set encrypted username key in IDB. Holds its own state.
-// Login page, on submit, needs to looks in IDB for encrypted username, if succesful set loggedIn state, if not return incorrect message
-// Loggedin and secret state passed to dashboard. Dashboard is conditionally rendered based on loggedin state, if not loggedin redirect to login page.
-// Navbar, should also exclude page navigation buttons based on loggedin state.
-// Logout button, change state of loggedin
-
 import * as React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/Home';

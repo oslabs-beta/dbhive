@@ -176,30 +176,9 @@ function DBTab(props: Props) {
     }
   }
 
-  // useEffect(() => {
-  //   getMetrics(props.dbUri);
-
-  //   // Turn off Interval
-  //   // const fetchInterval = setInterval(() => {
-  //   //   getMetrics(props.dbUri);
-  //   // }, 20000);
-
-  //   // return () => {
-  //   //   clearInterval(fetchInterval);
-  //   // };
-  // }, []);
-
-  // useEffect(() => {
-  //   if (fetchData) {
-  //     formatData(fetchData);
-  //   }
-  // }, [fetchData]);
-
   if (isError) return <div>Request Failed</div>;
   if (isLoading) return <div>Loading...</div>;
 
-  console.log('fetch data', data);
-  // if (fetchData) {
   return (
     <div>
       <Box
@@ -252,23 +231,6 @@ function DBTab(props: Props) {
       </Box>
     </div>
   );
-  // }
-  //  else {
-  //   return (
-  //     <div>
-  //       <Box
-  //         sx={{
-  //           display: 'inline-flex',
-  //           flexWrap: 'wrap',
-  //           pl: '12rem',
-  //           pt: '1rem',
-  //         }}
-  //       >
-  //         status: {connectStatus}
-  //       </Box>
-  //     </div>
-  //   );
-  // }
 }
 
 export default DBTab;

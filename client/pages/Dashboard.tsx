@@ -8,6 +8,8 @@ import { toggleDashboardAuth } from '../clientMode';
 
 import { Box, Card, Tabs, Tab, Typography, Button } from '@mui/material';
 
+import useAppStore from '../store/appStore';
+
 type Props = {
   username: string;
   setUsername: (eventTargetValue: string) => void;
@@ -22,11 +24,13 @@ type Props = {
 function Dashboard(props: Props) {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!props.isLoggedIn && toggleDashboardAuth) navigate('/login');
-  }, []);
+  const isLoggedIn = useAppStore((state) => state.isLoggedIn);
 
   const [activeTab, setActiveTab] = useState(0);
+
+  useEffect(() => {
+    if (!isLoggedIn && toggleDashboardAuth) navigate('/login');
+  }, []);
 
   if (props.userData.dbs[0] === undefined) {
     return (

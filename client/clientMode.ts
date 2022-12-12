@@ -5,7 +5,7 @@ toggleDashboardAuth default = true, use for production
 toggleDashboardAuth = false, deactivates dashboard page authorization 
   allowing navigation to the page without having to be logged in
 */
-export const toggleDashboardAuth = false;
+export const toggleDashboardAuth = true;
 
 /*
 seedDBs default = [], use for production

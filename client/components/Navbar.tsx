@@ -22,6 +22,8 @@ import TuneIcon from '@mui/icons-material/Tune';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
 
+import useAppStore from '../store/appStore';
+
 type Props = {
   username: string;
   setUsername: (eventTargetValue: string) => void;
@@ -36,6 +38,10 @@ type Props = {
 function Navbar(props: Props) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
+  const isLoggedIn = useAppStore((state) => state.isLoggedIn);
+  const username = useAppStore((state) => state.username);
+  const logOutUser = useAppStore((state) => state.logOutUser);
 
   const drawerWidth = '11rem';
   return (
@@ -61,7 +67,7 @@ function Navbar(props: Props) {
           <Typography variant="h5" component="div" color="primary">
             dbHive
           </Typography>
-          {props.isLoggedIn && (
+          {isLoggedIn && (
             <>
               <Typography
                 variant="h6"
@@ -73,17 +79,11 @@ function Navbar(props: Props) {
                   fontSize: '1rem',
                 }}
               >
-                {props.username}
+                {username}
               </Typography>
               <LogoutIcon
                 onClick={() => {
-                  props.setIsLoggedIn(false);
-                  props.setUsername('');
-                  props.setSecret('');
-                  props.setUserData({
-                    decryption: 'isValid',
-                    dbs: [],
-                  });
+                  logOutUser();
                 }}
               />
             </>
