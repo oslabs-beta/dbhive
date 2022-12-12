@@ -26,13 +26,9 @@ describe('Login Page', () => {
     expect(buttons.length).toBe(2)
   })
   //makes sure inputs are available
-  test('Input fields rendered', async() => {
+  test('Username input field to be rendered', async() => {
     //only text input is available by textbox role.
     expect(screen.getByRole('textbox', {name: 'Username:'})).toBeInTheDocument()
-    expect(screen.getByTestId('password-input')).toBeInTheDocument()
   })
-
-
-  //TODO: Move any router tests to different file
 
 })

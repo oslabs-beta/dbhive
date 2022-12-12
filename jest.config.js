@@ -18,7 +18,6 @@ module.exports = {
     './__tests__/jest-setup.js',
     './__tests__/jest-teardown.js',
     './__tests__/supertests.js',
-    './__tests__/test components/signup.test.js',
   ],
   globalSetup: './__tests__/jest-setup.js',
   globalTeardown: './__tests__/jest-teardown.js'

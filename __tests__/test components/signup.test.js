@@ -24,15 +24,10 @@ test('Submit button rendered', async () => {
     expect(buttons.length).toBe(1)
 })
 
-// if username or password is blank
-//TODO: rewrite to check for inputs / labels for username and password
-//delete since it is handled by front end/back end logic
-test('Missing username or password entry returns an error', () => {
-  const button = screen.getByRole('button', {name: 'Submit'});
-  fireEvent.click(button)
-  expect(screen.getByText(/incorrect username or password/i)).toBeInDocument();
 
-  // expect(errorText.length).toBe(2)
+test('  Username input rendered', () => {
+  expect(screen.getByRole('textbox', {name: 'Username:'})).toBeInTheDocument()
+
 })
 
 })
