@@ -2,17 +2,20 @@ import React from 'react';
 import {render, screen, fireEvent} from '@testing-library/react';
 import {BrowserRouter} from 'react-router-dom';
 import Login from '../../client/pages/Login';
-import { describe, it, expect, xdescribe, beforeEach, test} from'@jest/globals';
+import { describe, it, expect, xdescribe, beforeEach, beforeAll, test} from'@jest/globals';
 
 describe('Login Page', () => {
 
-beforeEach(async () => {
-  const loginComp = await render(
-    <BrowserRouter>
-      <Login />
-    </BrowserRouter>
-  );
-});
+  let loginComp;
+  const props = {}
+
+  beforeEach(async () => {
+    const loginComp = await render(
+      <BrowserRouter>
+        <Login {...props}/>
+      </BrowserRouter>
+    );
+  });
   test('Submit button rendered', async() =>{
     const buttons = await (screen.getAllByRole('button', {name: 'Submit'}));
     expect(buttons.length).toBe(1)
@@ -22,15 +25,14 @@ beforeEach(async () => {
     const buttons = await (screen.getAllByRole('button', {name: 'Sign Up'}));
     expect(buttons.length).toBe(2)
   })
-  test('renders dashboard', async() => {
-    const button = screen.getByRole('button', {name: 'Submit'})
-    fireEvent.click(button)
+  //makes sure inputs are available
+  test('Input fields rendered', async() => {
+    //only text input is available by textbox role.
+    expect(screen.getByRole('textbox', {name: 'Username:'})).toBeInTheDocument()
+    expect(screen.getByTestId('password-input')).toBeInTheDocument()
   })
-  // it('Renders dashboard when submit button is clicked', () => {
-  //   const button = (screen.getByRole('button', {name: 'Submit'}));
-  //   fireEvent.click(button)
-  //   expect(window.location.href).toEqual('/dashboard')
-  // })
-  //renders error message when submit is clicked without info (prod mode)
+
+
+  //TODO: Move any router tests to different file
 
 })
