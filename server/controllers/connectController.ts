@@ -33,11 +33,13 @@ export const connectController: ConnectController = {
       return next();
     } catch (error) {
       res.locals.result.validURI = false;
+
       return next({
         log: `Error caught in connectController.createExtension ${error}`,
         status: 400,
         message: `Error has occured in connectController.createExtension. ERROR: ${error}`,
       });
+      return next();
     }
   },
 };

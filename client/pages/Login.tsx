@@ -79,6 +79,7 @@ function Login() {
             value={secretInput}
             error={loginErrorText !== null}
             errorText={loginErrorText}
+            data-testid = 'password-input'
           />
           <Button
             variant="contained"
@@ -88,6 +89,7 @@ function Login() {
             Submit
           </Button>
           <Button
+            data-testid ='official-signup-btn'
             variant="text"
             sx={{ width: '100%' }}
             onClick={() => navigate('/signup')}

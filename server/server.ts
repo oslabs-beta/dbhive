@@ -31,6 +31,15 @@ if (process.env.NODE_ENV === 'production') {
       .sendFile(path.join(__dirname, '../build/index.html'));
   });
 }
+//testing instance - this could connect to a separate db
+if (process.env.NODE_ENV === 'test') {
+  app.use('/build', express.static(path.join(__dirname, '../build')));
+  app.get('/*', (req, res) => {
+    return res
+      .status(200)
+      .sendFile(path.join(__dirname, '../build/index.html'));
+  });
+}
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   const defaultError = {
