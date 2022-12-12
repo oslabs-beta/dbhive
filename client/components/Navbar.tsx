@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { UserData } from '../clientTypes';
 
 import {
   Box,
@@ -24,18 +23,7 @@ import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
 
 import useAppStore from '../store/appStore';
 
-type Props = {
-  username: string;
-  setUsername: (eventTargetValue: string) => void;
-  secret: string;
-  setSecret: (eventTargetValue: string) => void;
-  isLoggedIn: boolean;
-  setIsLoggedIn: (eventTargetValue: boolean) => void;
-  userData: UserData;
-  setUserData: (eventTargetValue: UserData) => void;
-};
-
-function Navbar(props: Props) {
+function Navbar() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
@@ -84,6 +72,7 @@ function Navbar(props: Props) {
               <LogoutIcon
                 onClick={() => {
                   logOutUser();
+                  navigate('/login');
                 }}
               />
             </>
@@ -122,7 +111,6 @@ function Navbar(props: Props) {
               sx={{
                 my: '1.5rem',
                 height: 20,
-                // mx: 'auto',
               }}
               alt="PostgreSQL logo"
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/1280px-Postgresql_elephant.svg.png"
@@ -186,10 +174,6 @@ function Navbar(props: Props) {
           </ListItem>
         </List>
       </Drawer>
-      {/* <button onClick={() => navigate('/')}>Home</button>
-      <button onClick={() => navigate('/login')}>Login</button>
-      <button onClick={() => navigate('/setup')}>Setup</button>
-      <button onClick={() => navigate('/dashboard')}>Dashboard</button> */}
     </nav>
   );
 }

@@ -8,7 +8,7 @@ interface AppState {
   logInUser: (username: string, secret: string, userData: UserData) => void;
   logOutUser: () => void;
   userData: UserData;
-  // updateUserData: () => void;
+  updateUserData: (userData: UserData) => void;
 }
 
 const useAppStore = create<AppState>()((set) => ({
@@ -36,6 +36,10 @@ const useAppStore = create<AppState>()((set) => ({
     decryption: 'isValid',
     dbs: [],
   },
+  updateUserData: (userData) =>
+    set(() => ({
+      userData: userData,
+    })),
 }));
 
 export default useAppStore;

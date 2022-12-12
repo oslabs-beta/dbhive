@@ -3,48 +3,22 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import ConnectDB from '../components/ConnectDB';
-import { UserData } from '../clientTypes';
 
-type Props = {
-  username: string;
-  setUsername: (eventTargetValue: string) => void;
-  secret: string;
-  setSecret: (eventTargetValue: string) => void;
-  isLoggedIn: boolean;
-  setIsLoggedIn: (eventTargetValue: boolean) => void;
-  userData: UserData;
-  setUserData: (eventTargetValue: UserData) => void;
-};
+import useAppStore from '../store/appStore';
 
-function Setup(props: Props) {
+function Setup() {
   const navigate = useNavigate();
 
+  const isLoggedIn = useAppStore((state) => state.isLoggedIn);
+
   useEffect(() => {
-    if (!props.isLoggedIn) navigate('/login');
+    if (!isLoggedIn) navigate('/login');
   }, []);
 
   return (
     <div>
-      <Navbar
-        secret={props.secret}
-        setSecret={props.setSecret}
-        username={props.username}
-        setUsername={props.setUsername}
-        isLoggedIn={props.isLoggedIn}
-        setIsLoggedIn={props.setIsLoggedIn}
-        userData={props.userData}
-        setUserData={props.setUserData}
-      />
-      <ConnectDB
-        secret={props.secret}
-        setSecret={props.setSecret}
-        username={props.username}
-        setUsername={props.setUsername}
-        isLoggedIn={props.isLoggedIn}
-        setIsLoggedIn={props.setIsLoggedIn}
-        userData={props.userData}
-        setUserData={props.setUserData}
-      />
+      <Navbar />
+      <ConnectDB />
     </div>
   );
 }
