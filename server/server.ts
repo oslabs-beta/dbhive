@@ -28,27 +28,19 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// testing instance - this could connect to a separate db
-if (process.env.NODE_ENV === 'test') {
-  app.use('/build', express.static(path.join(__dirname, '../build')));
-  app.get('/*', (req, res) => {
-    return res
-      .status(200)
-      .sendFile(path.join(__dirname, '../build/index.html'));
-  });
-}
-
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   const defaultError = {
     log: 'Express error handler caught unknown middleware error',
     status: 500,
     message: { Error: 'An error occurred' },
   };
-  console.log('Global error handler:', err);
+
   const errorObj = Object.assign({}, defaultError, err);
   return res.status(errorObj.status).json(errorObj.message);
 });
 
-app.listen(port, () => {
-  console.log(`Server started on Port:${port}`);
+const server = app.listen(port, () => {
+  console.log(`Server started on Port: ${port}`);
 });
+
+module.exports = server;
