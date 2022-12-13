@@ -1,13 +1,17 @@
+// import dependencies
 import * as React from 'react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import ConnectDB from '../components/ConnectDB';
 import { set } from 'idb-keyval';
 import AES from 'crypto-js/aes';
 import { Card, Typography, ListItemText, List, Box } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
+// import react components
+import Navbar from '../components/Navbar';
+import ConnectDB from '../components/ConnectDB';
+
+// import utilities
 import useAppStore from '../store/appStore';
 
 function Setup() {
@@ -19,6 +23,7 @@ function Setup() {
   const userData = useAppStore((state) => state.userData);
   const updateUserData = useAppStore((state) => state.updateUserData);
 
+  // check user authorization
   useEffect(() => {
     if (!isLoggedIn) navigate('/login');
   }, []);

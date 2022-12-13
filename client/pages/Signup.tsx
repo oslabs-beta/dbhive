@@ -1,13 +1,17 @@
+// import dependencies
 import * as React from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import Input from '../components/Input';
 import { set, get } from 'idb-keyval';
 import AES from 'crypto-js/aes';
-import { UserData } from '../clientTypes';
-
 import { Card, Button, Typography, Box } from '@mui/material';
+
+// import react components
+import Navbar from '../components/Navbar';
+import Input from '../components/Input';
+
+// import utilities
+import { UserData } from '../clientTypes';
 
 function Signup() {
   const navigate = useNavigate();
@@ -16,9 +20,12 @@ function Signup() {
   const [secretInput, setSecretInput] = useState('');
   const [signupErrorText, setSignupErrorText] = useState<null | string>(null);
 
-  const initialUserData: UserData = { decryption: 'isValid', dbs: [] };
-
   function submitHandler() {
+    /* check to see if the sername is available by searching IndexedDB
+    if available, add user as key to IndexedDB and populate value with an encrypted
+    JSON object using the password as the AES secret
+    */
+    const initialUserData: UserData = { decryption: 'isValid', dbs: [] };
     const ciphertext = AES.encrypt(
       JSON.stringify(initialUserData),
       secretInput
@@ -66,7 +73,7 @@ function Signup() {
         >
           <Typography
             variant="h5"
-            data-testid = 'signup-header'
+            data-testid="signup-header"
             component="div"
             sx={{ flexGrow: 1, mb: '2rem' }}
           >

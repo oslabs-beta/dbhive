@@ -106,7 +106,7 @@ const databaseController: DatabaseController = {
 
       return next();
     } catch (error) {
-      console.log('Error in databaseController.queryTimes: ', error);
+      console.log('ERROR in databaseController.queryTimes: ', error);
       res.locals.result.allTimes = null;
       res.locals.result.selectTimes = null;
       res.locals.result.insertTimes = null;
@@ -129,7 +129,7 @@ const databaseController: DatabaseController = {
       res.locals.result.numOfRows = quantOfRows.rows;
       return next();
     } catch (error) {
-      console.log('Error in databaseController.numOfRows: ', error);
+      console.log('ERROR in databaseController.numOfRows: ', error);
       res.locals.result.numOfRows = null;
       return next();
     }
@@ -170,7 +170,7 @@ const databaseController: DatabaseController = {
       res.locals.result.avgTimeTopUpdateCalls = topUpdateCalls.rows;
       return next();
     } catch (error) {
-      console.log('Error in databaseController.topCalls: ', error);
+      console.log('ERROR in databaseController.topCalls: ', error);
       res.locals.result.averageQueryTime = null;
       res.locals.result.avgTimeTopSelectCalls = null;
       res.locals.result.avgTimeTopInsertCalls = null;
@@ -203,7 +203,7 @@ const databaseController: DatabaseController = {
       //res.locals.result.totalTransactions = (Number(res.locals.result.transactionsCommitted) + Number(res.locals.result.totalTransactions));
       return next();
     } catch (error) {
-      console.log('Error in databaseController.dbStats: ', error);
+      console.log('ERROR in databaseController.dbStats: ', error);
       res.locals.result.dbStats = null;
       res.locals.result.conflicts = null;
       res.locals.result.deadlocks = null;

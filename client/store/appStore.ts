@@ -1,3 +1,4 @@
+// zustand store for global state
 import create from 'zustand';
 import { UserData } from '../clientTypes';
 
