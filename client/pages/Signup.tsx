@@ -21,8 +21,8 @@ function Signup() {
   const [signupErrorText, setSignupErrorText] = useState<null | string>(null);
 
   function submitHandler() {
-    /* check to see if the sername is available by searching IndexedDB
-    if available, add user as key to IndexedDB and populate value with an encrypted
+    /* check to see if the username is available by searching IndexedDB
+    if available, add username as key to IndexedDB and populate value with an encrypted
     JSON object using the password as the AES secret
     */
     const initialUserData: UserData = { decryption: 'isValid', dbs: [] };

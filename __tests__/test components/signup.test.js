@@ -1,8 +1,15 @@
-import React from 'react';
-import {render, screen, fireEvent} from '@testing-library/react';
-import {BrowserRouter} from 'react-router-dom';
+import * as React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 import Signup from '../../client/pages/Signup';
-import { describe, it, expect, xdescribe, beforeEach, test} from'@jest/globals';
+import {
+  describe,
+  it,
+  expect,
+  xdescribe,
+  beforeEach,
+  test,
+} from '@jest/globals';
 
 // does it have the number of buttons
 // does it have onclick function
@@ -16,20 +23,22 @@ describe('Signup Page', () => {
         <Signup />
       </BrowserRouter>
     );
-  })
+  });
   // create a beforeEach here?
 
   test('Submit button rendered', async () => {
-    const buttons = await (screen.getAllByRole('button', {name: 'Submit'}));
-      expect(buttons.length).toBe(1)
-  })
+    const buttons = await screen.getAllByRole('button', { name: 'Submit' });
+    expect(buttons.length).toBe(1);
+  });
 
   test('Username input rendered', () => {
-    expect(screen.getByRole('textbox', {name: 'Username:'})).toBeInTheDocument()
-  })
+    expect(
+      screen.getByRole('textbox', { name: 'Username:' })
+    ).toBeInTheDocument();
+  });
 
-  test('Signup header', async()=>{
-    const header = await (screen.getByTestId('signup-header'))
-    expect(header).toBeInTheDocument()
-  })
-})
+  test('Signup header', async () => {
+    const header = await screen.getByTestId('signup-header');
+    expect(header).toBeInTheDocument();
+  });
+});

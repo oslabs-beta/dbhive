@@ -13,6 +13,7 @@ import ConnectDB from '../components/ConnectDB';
 
 // import utilities
 import useAppStore from '../store/appStore';
+import { UserData } from '../clientTypes';
 
 function Setup() {
   const navigate = useNavigate();
@@ -32,16 +33,17 @@ function Setup() {
     const copyUserData = { ...userData };
     copyUserData.dbs = copyUserData.dbs.filter((db) => db.nickname !== dbName);
     updateUserData(copyUserData);
+    storeDelete(copyUserData);
+  }
 
-    const ciphertext = AES.encrypt(
-      JSON.stringify(copyUserData),
-      secret
-    ).toString();
+  function storeDelete(userData: UserData) {
+    const ciphertext = AES.encrypt(JSON.stringify(userData), secret).toString();
     set(username, ciphertext).catch((err) => {
       console.log('IndexedDB: set failed', err);
     });
   }
 
+  // render a list of databases associated with the user
   const connectedDBs: JSX.Element[] = [];
   userData.dbs.reverse().forEach((db) => {
     connectedDBs.push(
@@ -86,7 +88,11 @@ function Setup() {
   });
 
   return (
-    <div>
+    <Box
+      sx={{
+        pl: '11rem',
+      }}
+    >
       <Navbar />
       <ConnectDB />
       <Card
@@ -95,7 +101,7 @@ function Setup() {
           width: 400,
           mx: 'auto',
           my: '2rem',
-          p: '2rem',
+          p: '4rem',
         }}
       >
         <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
@@ -103,7 +109,7 @@ function Setup() {
         </Typography>
         <List>{connectedDBs}</List>
       </Card>
-    </div>
+    </Box>
   );
 }
 

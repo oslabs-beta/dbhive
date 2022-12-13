@@ -1,8 +1,4 @@
 // import dependencies
-// import react components
-// import utilities
-
-// import dependencies
 import * as React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { QueryClientProvider, QueryClient } from 'react-query';

@@ -1,3 +1,4 @@
+// import dependencies
 import * as React from 'react';
 import {
   Chart,
@@ -10,8 +11,10 @@ import {
   LogarithmicScale,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import CollapseList from './CollapseList';
 import { Box, ListItemText, Typography, Divider } from '@mui/material';
+
+// import react components
+import CollapseList from './CollapseList';
 
 Chart.register(
   CategoryScale,
@@ -42,6 +45,7 @@ function LineGraphType1(props: Props) {
       }
     );
 
+    // used to populate collapsing details list
     detailsProc.push(
       <ListItemText
         sx={{ bgcolor: 'RGB(255, 255, 255, .05)', my: '.2rem', px: '.5rem' }}
@@ -119,6 +123,7 @@ function LineGraphType1(props: Props) {
     );
   }
 
+  // configure ChartJS graph options
   const options = {
     responsive: true,
     plugins: {
@@ -131,7 +136,6 @@ function LineGraphType1(props: Props) {
         min: 0,
         max: 20,
         display: true,
-        // type: 'logarithmic',
         title: {
           display: true,
           text: 'query times [seconds]',
