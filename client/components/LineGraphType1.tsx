@@ -35,7 +35,7 @@ function LineGraphType1(props: Props) {
   const detailsProc: JSX.Element[] = [];
 
   if (props.data) {
-    props.data.all.rows.forEach(
+    props.data.all?.rows?.forEach(
       (element: { query: string; mean_exec_time: number }) => {
         dataProc.labels.push(element.query);
         dataProc.data.push(element.mean_exec_time);
@@ -52,7 +52,7 @@ function LineGraphType1(props: Props) {
         </Typography>
         <Divider />
         <Typography sx={{ flexGrow: 1, my: '.5rem', fontSize: '.8rem' }}>
-          {props.data.mean.rows[0].averagequerytime.toFixed(4)} sec
+          {props.data.mean?.rows?.[0]?.averagequerytime?.toFixed(4)} sec
         </Typography>
       </ListItemText>
     );
@@ -70,7 +70,7 @@ function LineGraphType1(props: Props) {
         </Typography>
         <Divider />
         <Typography sx={{ flexGrow: 1, my: '.5rem', fontSize: '.8rem' }}>
-          {props.data.median.rows[0].median.toFixed(4)} sec
+          {props.data.median?.rows?.[0]?.median?.toFixed(4)} sec
         </Typography>
       </ListItemText>
     );
@@ -99,7 +99,7 @@ function LineGraphType1(props: Props) {
               query {index}: {element.query}
             </Typography>
             <Typography sx={{ flexGrow: 1, fontSize: '.8rem' }}>
-              time: {element.mean_exec_time.toFixed(4)} sec
+              time: {element.mean_exec_time?.toFixed(4)} sec
             </Typography>
           </Box>
         );

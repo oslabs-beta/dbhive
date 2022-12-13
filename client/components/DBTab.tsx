@@ -26,6 +26,8 @@ function DBTab(props: Props) {
     refetchInterval
   );
 
+  console.log(data);
+
   const handleChangeInterval = (event: SelectChangeEvent) => {
     setRefetchInterval(Number(event.target.value));
   };
@@ -99,6 +101,38 @@ function DBTab(props: Props) {
           </MetricCard>
           <MetricCard cardLabel={'Query Times - All Queries Time Intervals'}>
             <PieGraphType1 data={data.allTimes?.all.rows} />
+          </MetricCard>
+          <MetricCard cardLabel={'Query Times - All Select Queries'}>
+            <LineGraphType1 data={data.selectTimes} />
+          </MetricCard>
+          <MetricCard
+            cardLabel={'Query Times - All Select Queries Time Intervals'}
+          >
+            <PieGraphType1 data={data.selectTimes?.all.rows} />
+          </MetricCard>
+          <MetricCard cardLabel={'Query Times - All Insert Queries'}>
+            <LineGraphType1 data={data.insertTimes} />
+          </MetricCard>
+          <MetricCard
+            cardLabel={'Query Times - All Insert Queries Time Intervals'}
+          >
+            <PieGraphType1 data={data.insertTimes?.all.rows} />
+          </MetricCard>
+          <MetricCard cardLabel={'Query Times - All Update Queries'}>
+            <LineGraphType1 data={data.updateTimes} />
+          </MetricCard>
+          <MetricCard
+            cardLabel={'Query Times - All Update Queries Time Intervals'}
+          >
+            <PieGraphType1 data={data.updateTimes?.all.rows} />
+          </MetricCard>
+          <MetricCard cardLabel={'Query Times - All Delete Queries'}>
+            <LineGraphType1 data={data.deleteTimes} />
+          </MetricCard>
+          <MetricCard
+            cardLabel={'Query Times - All Delete Queries Time Intervals'}
+          >
+            <PieGraphType1 data={data.deleteTimes?.all.rows} />
           </MetricCard>
           <MetricCard cardLabel={'Query Times - Top 5 Queries'}>
             <LineGraphType2 data={data.avgTimeTopAllCalls} />

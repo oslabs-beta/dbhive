@@ -42,7 +42,7 @@ const databaseController: DatabaseController = {
 
       const selectQueries: queryData = {
         all: await db.query(
-          "SELECT * FROM pg_stat_statements WHERE query LIKE '%SELECT%';"
+          "SELECT * FROM pg_stat_statements WHERE query LIKE '%SELECT%' ORDER BY mean_exec_time;"
         ),
         median: await db.query(
           "SELECT PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY mean_exec_time) AS median FROM pg_stat_statements WHERE query LIKE '%SELECT%';"
@@ -59,7 +59,7 @@ const databaseController: DatabaseController = {
 
       const insertQueries: queryData = {
         all: await db.query(
-          "SELECT * FROM pg_stat_statements WHERE query LIKE '%INSERT%';"
+          "SELECT * FROM pg_stat_statements WHERE query LIKE '%INSERT%' ORDER BY mean_exec_time;"
         ),
         median: await db.query(
           "SELECT PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY mean_exec_time) AS median FROM pg_stat_statements WHERE query LIKE '%INSERT%';"
@@ -72,12 +72,11 @@ const databaseController: DatabaseController = {
           [slowQueryNumber]
         ),
       };
-
       res.locals.result.insertTimes = insertQueries;
 
       const updateQueries: queryData = {
         all: await db.query(
-          "SELECT * FROM pg_stat_statements WHERE query LIKE '%UPDATE%';"
+          "SELECT * FROM pg_stat_statements WHERE query LIKE '%UPDATE%' ORDER BY mean_exec_time;"
         ),
         median: await db.query(
           "SELECT PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY mean_exec_time) AS median FROM pg_stat_statements WHERE query LIKE '%UPDATE%';"
@@ -90,12 +89,11 @@ const databaseController: DatabaseController = {
           [slowQueryNumber]
         ),
       };
-
       res.locals.result.updateTimes = updateQueries;
 
       const deleteQueries: queryData = {
         all: await db.query(
-          "SELECT * FROM pg_stat_statements WHERE query LIKE '%DELETE%';"
+          "SELECT * FROM pg_stat_statements WHERE query LIKE '%DELETE%' ORDER BY mean_exec_time;"
         ),
         median: await db.query(
           "SELECT PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY mean_exec_time) AS median FROM pg_stat_statements WHERE query LIKE '%DELETE%';"
@@ -150,7 +148,7 @@ const databaseController: DatabaseController = {
     const callsNumber = userProvided || 5;
     try {
       const topAllCalls = await db.query(
-        'SELECT query, mean_exec_time FROM pg_stat_statements ORDER by calls DESC LIMIT $1;',
+        'SELECT query, mean_exec_time FROM pg_stat_statements ORDER BY calls DESC LIMIT $1;',
         [callsNumber]
       );
       const topSelectCalls = await db.query(
@@ -196,7 +194,7 @@ const databaseController: DatabaseController = {
       data.split('5432/').pop().split('/')[0].replace(/\s/g, '');
     try {
       const dbOverview = await db.query(
-        "SELECT * FROM pg_stat_database WHERE datname = '$1';",
+        'SELECT * FROM pg_stat_database WHERE datname = $1;',
         [dataBase]
       );
       res.locals.result.dbStats = dbOverview.rows;
@@ -216,11 +214,12 @@ const databaseController: DatabaseController = {
       return next();
     }
   },
+
   // this controller calculates and returns the cache hit ratio for the database
   cacheHitRatio: async (req, res, next) => {
     const db = res.locals.dbConnection;
     const queryString =
-      'SELECT sum(heap_blks_read) AS heap_read, sum(heap_blks_hit)  AS heap_hit, sum(heap_blks_hit) / (sum(heap_blks_hit) + sum(heap_blks_read)) AS ratio FROM pg_statio_user_tables;';
+      'SELECT sum(heap_blks_read) AS heap_read, sum(heap_blks_hit) AS heap_hit, sum(heap_blks_hit) / (sum(heap_blks_hit) + sum(heap_blks_read)) AS ratio FROM pg_statio_user_tables;';
     try {
       const cacheHitRate = await db.query(queryString);
       res.locals.result.cacheHitRatio = cacheHitRate.rows;
