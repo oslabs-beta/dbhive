@@ -1,4 +1,4 @@
-# Welcome to dbHive!!! 🐝
+# Welcome to dbHive! 🐝
 
 ## Table of Contents
 - [About](#about)
