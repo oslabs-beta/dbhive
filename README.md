@@ -1,3 +1,17 @@
 # Welcome to dbHive!!! 🐝
 
-![image](https://user-images.githubusercontent.com/92418658/205028570-0cdf16cc-75ad-4d53-8262-6e76387d97b9.png)
+## Table of Contents
+
+## About
+dbHive offers a dashboard to visualize the performance of one or more PostgreSQL databases. By providing easily accessible information about the health and activity of a database, dbHive enables developers to make informed decisions that optimize the way they store their data.
+
+## Getting Started
+
+## Features
+
+## Future Enhancements
+
+## Troubleshooting
+
+## Contributing
+
