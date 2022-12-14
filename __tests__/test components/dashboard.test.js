@@ -26,5 +26,4 @@ describe('Dashboard Page', () => {
   test('if no DB has been connected, button prompts connecting one', async () => {
     expect(screen.getByText('Please connect a database')).toBeInTheDocument();
   });
-  //if dbURI = testdb, Tab List length should be 1
 });

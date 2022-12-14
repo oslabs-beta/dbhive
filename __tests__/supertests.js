@@ -6,9 +6,8 @@ import { describe, it, expect, xdescribe, test } from '@jest/globals';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const pg = require('pg');
 
-//TODO: this is hardcoded and will need to be removed
-const dbtest_url =
-  'postgres://avpneekp:5fsMVQDkJ7HCwrlILZCF7UhKklrdJ1OI@heffalump.db.elephantsql.com/avpneekp';
+//Notice: dbtest_url is not a valid url and should be replaced with test db
+const dbtest_url = 'postgres://username:passsord@hostname:5432/databaseName';
 const server = 'http://localhost:3000';
 const pool = new pg.Pool({
   connectionString: dbtest_url,
@@ -48,7 +47,6 @@ describe('Database data retrieval', () => {
     //a valid response would be an object containing lots of data to be rendered
     it('responds with a valid response', () => {
       const body = {
-        //TODO: replace it with client test DB
         uri: dbtest_url,
       };
       return supertest(server)
@@ -94,7 +92,7 @@ describe('Database data retrieval', () => {
     //an invalid key results in a bad request error
     it('responds with an error', () => {
       const body = {
-        uri: 'postgres://xxxx:xxxxx@xxxxx.crqqpw0ueush.us-west-2.rds.amazonaws.com:5432/postgres',
+        uri: 'postgres://xxxx:xxxxx@xxxxx.hostname.com:5432/databasename',
       };
       return supertest(server).post('/api/queryMetrics').send(body).expect(400);
     });

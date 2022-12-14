@@ -11,9 +11,6 @@ import {
   test,
 } from '@jest/globals';
 
-// does it have the number of buttons
-// does it have onclick function
-
 describe('Signup Page', () => {
   let signupComp;
 
@@ -24,7 +21,6 @@ describe('Signup Page', () => {
       </BrowserRouter>
     );
   });
-  // create a beforeEach here?
 
   test('Submit button rendered', async () => {
     const buttons = await screen.getAllByRole('button', { name: 'Submit' });
