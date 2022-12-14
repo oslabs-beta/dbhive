@@ -13,7 +13,7 @@ dbHive offers an interactive dashboard to visualize the performance of one or mo
 
 ## Getting Started
 1. **Fork** and **clone** this [repository](https://github.com/oslabs-beta/dbhive) to your machine.
-2. Navigate the project directory and install dependencies.
+2. Navigate to the project directory and install dependencies.
 ```
 npm install
 ```
@@ -26,7 +26,7 @@ npm start
 
 ## Features
 ### ➮ Query Execution Times
-Get a broad sense of database performance by viewing average query times across the database, as well as averages for specific types of queries (INSERT, UPDATE, SELECT, DELETE). Pinpoint the slowest queries to gain insight for database improvement.
+Get a broad sense of database performance by viewing average query times across the database, as well as averages for specific types of SQL queries. Pinpoint the slowest queries to gain insight for database improvement.
 ### ➮ Most Frequent Queries
 To analyze common and recurring database activity, view charts on the most frequent queries within and across all query types.
 ### ➮ Other Key Stats
@@ -59,10 +59,10 @@ npm run test
 - **Additional Customization:** Give users more power to customize graphs and dashboard arrangement.
 
 ## Troubleshooting
-If certain database metrics are not showing up, it may be due to issues with user permissions related to the database. Admin privileges
+If certain database metrics are not showing up in the dashboard, look into the database user's permissions. User permissions and admin privileges can vary depending on the database hosting service used.
 
 ## Contributing
-Read our contribution guide for more information on how to contribute to dbHive.
+Read our [contribution guide]() for more information on how to contribute to dbHive.
 
 ### Authors
 - Melanie Forbes [@mforbz12](https://github.com/mforbz12) | [LinkedIn](https://www.linkedin.com/in/melanie-forbes-/)
