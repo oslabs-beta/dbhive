@@ -22,10 +22,10 @@ dbHive offers a dashboard to visualize the performance of one or more PostgreSQL
 ### ➮ Delete a database
 
 ## Future Enhancements
-- Search Feature: Add a search bar to the dashboard that allows users to find data by keywords.
-- Expansion to Other Databases: Make dbHive available for other SQL databases.
-- Comparing Schemas: Allow users to compare the performance of alternate database schemas alongside their current schemas.
-- Additional Customization: Give users more power to customize graphs and dashboard arrangement.
+### - Search Feature: Add a search bar to the dashboard that allows users to find data by keywords.
+### - Expansion to Other Databases: Make dbHive available for other SQL databases.
+### - Comparing Schemas: Allow users to compare the performance of alternate database schemas alongside their current schemas.
+### - Additional Customization: Give users more power to customize graphs and dashboard arrangement.
 
 ## Troubleshooting
 
