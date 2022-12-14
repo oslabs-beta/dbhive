@@ -1,0 +1,6 @@
+Instructions:
+
+- Within database, create public schema => CREATE SCHEMA public;
+- Navigate to db-sample-data dir
+- Unzip csv-data and place all csv files inside same dir as .rb and .sql scripts
+- Inside terminal run => psql -h [HOST ADDRESS] -p [PORT] -d [DB NAME] -U [USERNAME] < install.sql

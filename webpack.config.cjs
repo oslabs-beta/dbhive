@@ -17,7 +17,7 @@ module.exports = {
   plugins: [
     new HTMLWebpackPlugin({
       template: './client/index.html',
-      favicon: './client/assets/icons8-honeycombs-windows-11-color-32.png',
+      favicon: './client/assets/icons8-hexagon-office-32.png',
     }),
   ],
   // details for bundle transpiling
@@ -41,7 +41,6 @@ module.exports = {
         use: 'ts-loader',
         exclude: /node_modules/,
       },
-
       {
         // transpile scss or sass
         test: /\.s[ac]ss$/i,
@@ -61,11 +60,6 @@ module.exports = {
           },
         ],
       },
-      // {
-      //   // transpile png
-      //   test: /\.png$/i,
-      //   use: ["url-loader"],
-      // },
     ],
   },
   resolve: {
