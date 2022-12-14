@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Navbar from '../components/Navbar';
-
 import { Box, Card, Typography } from '@mui/material';
 
 function Home() {

@@ -1,12 +1,15 @@
+// import dependencies
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import DBTab from '../components/DBTab';
-import { toggleDashboardAuth } from '../clientMode';
-
 import { Box, Card, Tabs, Tab, Typography, Button } from '@mui/material';
 
+// import react components
+import Navbar from '../components/Navbar';
+import DBTab from '../components/DBTab';
+
+// import utilities
+import { toggleDashboardAuth } from '../clientMode';
 import useAppStore from '../store/appStore';
 
 function Dashboard() {
@@ -17,10 +20,12 @@ function Dashboard() {
 
   const [activeTab, setActiveTab] = useState(0);
 
+  // check user authorization
   useEffect(() => {
     if (!isLoggedIn && toggleDashboardAuth) navigate('/login');
   }, []);
 
+  // conditional rendering for when user has not added any databases
   if (userData.dbs[0] === undefined) {
     return (
       <div>
@@ -58,7 +63,9 @@ function Dashboard() {
         </Card>
       </div>
     );
-  } else {
+  }
+  // default rendering for when user has already added databases
+  else {
     type TabList = JSX.Element[];
     const tabList: TabList = [];
     const tabPanel: TabList = [];

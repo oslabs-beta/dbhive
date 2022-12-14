@@ -1,6 +1,6 @@
+// import dependencies
 import * as React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-
 import {
   Box,
   Drawer,
@@ -15,13 +15,14 @@ import {
   ListItemText,
 } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import InfoIcon from '@mui/icons-material/Info';
 import TuneIcon from '@mui/icons-material/Tune';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
+// import utilities
 import useAppStore from '../store/appStore';
 
 function Navbar() {
@@ -138,7 +139,7 @@ function Navbar() {
           >
             <ListItemButton onClick={() => navigate('/signup')}>
               <ListItemIcon>
-                <ExitToAppIcon />
+                <PersonAddIcon />
               </ListItemIcon>
               <ListItemText primary="Sign Up" />
             </ListItemButton>

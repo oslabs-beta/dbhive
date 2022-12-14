@@ -1,3 +1,4 @@
+// import dependencies
 import * as React from 'react';
 import { useState } from 'react';
 import { Card, Typography, Box } from '@mui/material';
@@ -9,6 +10,7 @@ type Props = {
   children?: JSX.Element | string | number;
 };
 
+// mostly styling wrapper for card contents
 function MetricCard(props: Props) {
   const initialWidth = '400px';
   const [width, setWidth] = useState(initialWidth);

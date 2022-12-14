@@ -1,20 +1,24 @@
+// import dependencies
 import * as React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { QueryClientProvider, QueryClient } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
+// import react components
 import Docs from './pages/Docs';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Setup from './pages/Setup';
+
+// import utilities
+import useAppStore from './store/appStore';
 import { UserData } from './clientTypes';
 import { seedDBs } from './clientMode';
 
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-
-import { QueryClientProvider, QueryClient } from 'react-query';
-import { ReactQueryDevtools } from 'react-query/devtools';
-import useAppStore from './store/appStore';
-
+// custom MUI theme
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
@@ -44,13 +48,12 @@ const darkTheme = createTheme({
 function App() {
   const queryClient = new QueryClient();
 
+  // update user data with seed data if given
   const updateUserData = useAppStore((state) => state.updateUserData);
-
   const initialUserData: UserData = {
     decryption: 'isValid',
     dbs: seedDBs,
   };
-
   updateUserData(initialUserData);
 
   const router = createBrowserRouter([

@@ -1,11 +1,14 @@
+// import dependencies
 import * as React from 'react';
 import { useState } from 'react';
-import Input from './Input';
 import { set } from 'idb-keyval';
 import AES from 'crypto-js/aes';
-
 import { Card, Button, Typography, Divider, Alert } from '@mui/material';
 
+// import react components
+import Input from './Input';
+
+// import utilities
 import useAppStore from '../store/appStore';
 
 function ConnectDB() {
@@ -23,6 +26,8 @@ function ConnectDB() {
   const [dBUsername, setDBUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  // depending on the button clicked, the data submitted either comes from the complete uri string
+  // or the separated out version
   function submitHandler(type: string) {
     const copyUserData = { ...userData };
     if (type === 'uri') {

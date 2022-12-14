@@ -1,3 +1,4 @@
+// import dependencies
 import * as React from 'react';
 import {
   Chart,
@@ -10,8 +11,10 @@ import {
   LogarithmicScale,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import CollapseList from './CollapseList';
 import { Box, ListItemText, Typography, Divider } from '@mui/material';
+
+// import react components
+import CollapseList from './CollapseList';
 
 Chart.register(
   CategoryScale,
@@ -35,13 +38,14 @@ function LineGraphType1(props: Props) {
   const detailsProc: JSX.Element[] = [];
 
   if (props.data) {
-    props.data.all.rows.forEach(
+    props.data.all?.rows?.forEach(
       (element: { query: string; mean_exec_time: number }) => {
         dataProc.labels.push(element.query);
         dataProc.data.push(element.mean_exec_time);
       }
     );
 
+    // used to populate collapsing details list
     detailsProc.push(
       <ListItemText
         sx={{ bgcolor: 'RGB(255, 255, 255, .05)', my: '.2rem', px: '.5rem' }}
@@ -52,7 +56,7 @@ function LineGraphType1(props: Props) {
         </Typography>
         <Divider />
         <Typography sx={{ flexGrow: 1, my: '.5rem', fontSize: '.8rem' }}>
-          {props.data.mean.rows[0].averagequerytime.toFixed(4)} sec
+          {props.data.mean?.rows?.[0]?.averagequerytime?.toFixed(4)} sec
         </Typography>
       </ListItemText>
     );
@@ -70,7 +74,7 @@ function LineGraphType1(props: Props) {
         </Typography>
         <Divider />
         <Typography sx={{ flexGrow: 1, my: '.5rem', fontSize: '.8rem' }}>
-          {props.data.median.rows[0].median.toFixed(4)} sec
+          {props.data.median?.rows?.[0]?.median?.toFixed(4)} sec
         </Typography>
       </ListItemText>
     );
@@ -99,7 +103,7 @@ function LineGraphType1(props: Props) {
               query {index}: {element.query}
             </Typography>
             <Typography sx={{ flexGrow: 1, fontSize: '.8rem' }}>
-              time: {element.mean_exec_time.toFixed(4)} sec
+              time: {element.mean_exec_time?.toFixed(4)} sec
             </Typography>
           </Box>
         );
@@ -119,6 +123,7 @@ function LineGraphType1(props: Props) {
     );
   }
 
+  // configure ChartJS graph options
   const options = {
     responsive: true,
     plugins: {
@@ -131,7 +136,6 @@ function LineGraphType1(props: Props) {
         min: 0,
         max: 20,
         display: true,
-        // type: 'logarithmic',
         title: {
           display: true,
           text: 'query times [seconds]',

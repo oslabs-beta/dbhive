@@ -41,7 +41,6 @@ module.exports = {
         use: 'ts-loader',
         exclude: /node_modules/,
       },
-
       {
         // transpile scss or sass
         test: /\.s[ac]ss$/i,
@@ -61,11 +60,6 @@ module.exports = {
           },
         ],
       },
-      // {
-      //   // transpile png
-      //   test: /\.png$/i,
-      //   use: ["url-loader"],
-      // },
     ],
   },
   resolve: {
