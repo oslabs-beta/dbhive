@@ -53,7 +53,7 @@ Easily access all databases and metrics within one place with the ability to tog
 Use dropdowns to view more details on a given metric. Expand graphs to fill the screen. Adjust the fetch interval, the frequency at which the dashboard is updated with the latest metrics.
 
 ### ➮ Delete a database
-Remove a database when it is no longer in use, keeping your dashboard clean.
+Navigate to the Setup page and remove a database when it is no longer in use, keeping your dashboard clean.
 
 ## Testing
 To conduct tests on the codebase, **fork** and **clone** this [repository](https://github.com/oslabs-beta/dbhive) to your machine, and then execute the command:
