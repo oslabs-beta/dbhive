@@ -59,6 +59,7 @@ npm run test
 - **Additional Customization:** Give users more power to customize graphs and dashboard arrangement.
 
 ## Troubleshooting
+If certain database metrics are not showing up, it may be due to issues with user permissions related to the database. Admin privileges
 
 ## Contributing
 Read our contribution guide for more information on how to contribute to dbHive.
