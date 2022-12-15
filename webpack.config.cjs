@@ -56,7 +56,10 @@ module.exports = {
         test: /\.(jpe?g|png|gif|svg)$/i,
         use: [
           {
-            loader: 'file-loader',
+            loader: 'url-loader',
+            options: {
+              name: '[name].[ext]',
+            },
           },
         ],
       },
