@@ -24,6 +24,8 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 // import utilities
 import useAppStore from '../store/appStore';
+import postgresql_elephant from '../assets/postgresql_elephant.png';
+import yellow_hex from '../assets/yellow_hex.png';
 
 function Navbar() {
   const navigate = useNavigate();
@@ -52,7 +54,7 @@ function Navbar() {
               height: 30,
             }}
             alt="dbHive icon"
-            src="https://cdn-icons-png.flaticon.com/512/541/541384.png"
+            src={yellow_hex}
           />
           <Typography variant="h5" component="div" color="primary">
             dbHive
@@ -106,7 +108,7 @@ function Navbar() {
                 height: 20,
               }}
               alt="dbHive icon"
-              src="https://cdn-icons-png.flaticon.com/512/541/541384.png"
+              src={yellow_hex}
             />
             <Typography variant="h6" component="div" sx={{ mx: '1rem' }}>
               for
@@ -118,7 +120,7 @@ function Navbar() {
                 height: 20,
               }}
               alt="PostgreSQL logo"
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/1280px-Postgresql_elephant.svg.png"
+              src={postgresql_elephant}
             />
           </ListItem>
           <Divider />
