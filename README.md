@@ -33,13 +33,21 @@ npm start
 
 ### Method 2: Containerized
 1. **Fork** and **clone** this [repository](https://github.com/oslabs-beta/dbhive) to your machine.
-2. Navigate to the project directory and enter the following command:
+2. Navigate to the project directory. Either build the image or pull the latest from DockerHub:
+```
+docker build -t dbhive/main-prod .
+```
+or
+```
+docker pull dbhive/main-prod
+```
+3. In the terminal, enter the following command:
 ```
 docker-compose -f docker-compose-prod.yml up
 ```
-3. Navigate to [http://localhost:3000](http://localhost:3000/).
-4. Create an account on the sign up page.
-5. Connect your database and get started!
+4. Navigate to [http://localhost:3000](http://localhost:3000/).
+5. Create an account on the sign up page.
+6. Connect your database and get started!
 
 ## Features
 
@@ -74,8 +82,12 @@ Use dropdowns to view more details on a given metric. Expand graphs to fill the 
 ### ➮ Delete a database
 Navigate to the Setup page and remove a database when it is no longer in use, keeping your dashboard clean.
 
+### ➮ Remove application accounts
+dbHive application accounts can be removed by manually accessing IndexedDB and deleting entries. All data stored on the user is securely encrypted, and no encryption secrets are stored.
+
 ## Troubleshooting
-If certain database metrics are not showing up in the dashboard, look into the database user's permissions. User permissions and admin privileges can vary depending on the database hosting service used.
+If certain database metrics are shown as unavailable in the dashboard, database user permissions may need to be elevated. Necessary user permissions and admin privileges can vary depending on the database hosting service used. 
+For issues with application accounts, it is recommended to remove problematic users. Follow the directions in the "Remove application users" section of this readme.
 
 # Contributing
 
@@ -87,6 +99,9 @@ If you would like to participate in developing new features, the app can be laun
 npm run dev
 ```
 or
+```
+docker build -t dbhive/main-dev -f Dockerfile-dev .
+```
 ```
 docker-compose -f docker-compose-dev-hot.yml up
 ```

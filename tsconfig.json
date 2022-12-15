@@ -14,5 +14,5 @@
     "allowJs": true,
     "lib": ["DOM"]
   },
-  "include": ["client"]
+  "include": ["client", "import-images.d.ts"]
 }
