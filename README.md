@@ -1,4 +1,10 @@
-# Welcome to dbHive! 🐝
+<p align="center">
+<img src="client/assets/dbhive-logo.png" width="600">
+</p>
+
+<h1 align="center">Welcome to dbHive! 🐝</h1>
+<h3 align="center">PostgreSQL Monitoring Tool</h3>
+<br>
 
 ## Table of Contents
 - [About](#about)
