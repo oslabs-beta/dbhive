@@ -1,5 +1,7 @@
+// react-query custom hooks
 import { useQuery } from 'react-query';
 
+// custom hook to fetch metrics from the backend and handle state
 export function useQueryMetrics(key: string[], uri: string, interval: number) {
   const { isLoading, isError, data } = useQuery(
     key,

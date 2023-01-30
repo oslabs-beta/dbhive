@@ -1,3 +1,4 @@
+// import dependencies
 import * as React from 'react';
 import { Box, TextField } from '@mui/material';
 
@@ -11,6 +12,7 @@ type Props = {
   errorText?: string;
 };
 
+// reusable input component to package typical functionalities
 function Input(props: Props) {
   return (
     <div className={props.inputClass}>

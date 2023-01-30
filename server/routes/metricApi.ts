@@ -1,10 +1,11 @@
 import { Router } from 'express';
-import { connectController } from '../controllers/connectController';
+import connectController from '../controllers/connectController';
 import databaseController from '../controllers/databaseController';
 
 const router = Router();
 
-// test route
+// check if database being added is valid
+// WIP
 router.post(
   '/uri',
   connectController.connectDB,
@@ -16,6 +17,8 @@ router.post(
   }
 );
 
+// delivers metrics from database
+// notice: the database controllers will console log, but not return errors so that individual charts can render
 router.post(
   '/queryMetrics',
   connectController.connectDB,
@@ -30,10 +33,12 @@ router.post(
   }
 );
 
-//this should reflect any method that would need to update based on user input
+// this should reflect any method that would need to update based on user input
+// WIP: not currently in use but ready to be connected to front end based on user selection
 router.put(
-  '/querytimes',
+  '/queryMetrics',
   databaseController.numOfRows,
+  databaseController.queryTimes,
   databaseController.topCalls,
   (req, res) => {
     return res.status(200).json(res.locals.result);

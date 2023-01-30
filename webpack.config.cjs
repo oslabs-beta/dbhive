@@ -41,7 +41,6 @@ module.exports = {
         use: 'ts-loader',
         exclude: /node_modules/,
       },
-
       {
         // transpile scss or sass
         test: /\.s[ac]ss$/i,
@@ -57,7 +56,10 @@ module.exports = {
         test: /\.(jpe?g|png|gif|svg)$/i,
         use: [
           {
-            loader: 'file-loader',
+            loader: 'url-loader',
+            options: {
+              name: '[name].[ext]',
+            },
           },
         ],
       },

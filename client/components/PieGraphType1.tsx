@@ -1,3 +1,4 @@
+// import dependencies
 import * as React from 'react';
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
@@ -16,6 +17,7 @@ type Pie = {
 };
 
 function PieGraphType1(props: Props) {
+  // sort data into intervals
   const dataProc: Pie = {
     'time < .1s': 0,
     '.1s > time < .5s': 0,

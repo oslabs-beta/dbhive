@@ -1,6 +1,6 @@
+// import dependencies
 import * as React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-
 import {
   Box,
   Drawer,
@@ -15,14 +15,17 @@ import {
   ListItemText,
 } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import InfoIcon from '@mui/icons-material/Info';
 import TuneIcon from '@mui/icons-material/Tune';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
+// import utilities
 import useAppStore from '../store/appStore';
+import postgresql_elephant from '../assets/postgresql_elephant.png';
+import yellow_hex from '../assets/yellow_hex.png';
 
 function Navbar() {
   const navigate = useNavigate();
@@ -51,7 +54,7 @@ function Navbar() {
               height: 30,
             }}
             alt="dbHive icon"
-            src="https://cdn-icons-png.flaticon.com/512/541/541384.png"
+            src={yellow_hex}
           />
           <Typography variant="h5" component="div" color="primary">
             dbHive
@@ -105,7 +108,7 @@ function Navbar() {
                 height: 20,
               }}
               alt="dbHive icon"
-              src="https://cdn-icons-png.flaticon.com/512/541/541384.png"
+              src={yellow_hex}
             />
             <Typography variant="h6" component="div" sx={{ mx: '1rem' }}>
               for
@@ -117,7 +120,7 @@ function Navbar() {
                 height: 20,
               }}
               alt="PostgreSQL logo"
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/1280px-Postgresql_elephant.svg.png"
+              src={postgresql_elephant}
             />
           </ListItem>
           <Divider />
@@ -138,7 +141,7 @@ function Navbar() {
           >
             <ListItemButton onClick={() => navigate('/signup')}>
               <ListItemIcon>
-                <ExitToAppIcon />
+                <PersonAddIcon />
               </ListItemIcon>
               <ListItemText primary="Sign Up" />
             </ListItemButton>

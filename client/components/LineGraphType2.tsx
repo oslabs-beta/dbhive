@@ -1,3 +1,4 @@
+// import dependencies
 import * as React from 'react';
 import {
   Chart,
@@ -10,8 +11,10 @@ import {
   LogarithmicScale,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import CollapseList from './CollapseList';
 import { Box, ListItemText, Typography } from '@mui/material';
+
+// import react components
+import CollapseList from './CollapseList';
 
 Chart.register(
   CategoryScale,
@@ -74,6 +77,7 @@ function LineGraphType2(props: Props) {
     );
   }
 
+  // configure ChartJS graph options
   const options = {
     responsive: true,
     plugins: {
@@ -86,7 +90,6 @@ function LineGraphType2(props: Props) {
         min: 0,
         max: 5,
         display: true,
-        // type: 'logarithmic',
         title: {
           display: true,
           text: 'query times [seconds]',

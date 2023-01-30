@@ -1,9 +1,6 @@
+// import dependencies
 import * as React from 'react';
 import { useState } from 'react';
-import MetricCard from './MetricCard';
-import LineGraphType1 from './LineGraphType1';
-import LineGraphType2 from './LineGraphType2';
-import PieGraphType1 from './PieGraphType1';
 import {
   Box,
   InputLabel,
@@ -11,6 +8,14 @@ import {
   SelectChangeEvent,
   MenuItem,
 } from '@mui/material';
+
+// import react components
+import MetricCard from './MetricCard';
+import LineGraphType1 from './LineGraphType1';
+import LineGraphType2 from './LineGraphType2';
+import PieGraphType1 from './PieGraphType1';
+
+// import utilities
 import { useQueryMetrics } from '../store/rqHooks';
 
 type Props = {
@@ -20,6 +25,7 @@ type Props = {
 function DBTab(props: Props) {
   const [refetchInterval, setRefetchInterval] = useState(15000);
 
+  // react-query custom hook for fetching db metrics from backend
   const { isLoading, isError, data } = useQueryMetrics(
     ['dbMetrics', props.dbUri],
     props.dbUri,
@@ -30,6 +36,7 @@ function DBTab(props: Props) {
     setRefetchInterval(Number(event.target.value));
   };
 
+  // coniditonal rendering if error received from fetch
   if (isError) {
     return (
       <div>
@@ -46,6 +53,7 @@ function DBTab(props: Props) {
       </div>
     );
   } else if (isLoading) {
+    // coniditonal rendering if fetch has not returned yet
     return (
       <div>
         <Box
@@ -61,6 +69,9 @@ function DBTab(props: Props) {
       </div>
     );
   } else {
+    /* coniditonal rendering if fetch has returned successfully
+  data sent to child components utilizes optional chaining operators to protect
+  from fatal errors when nested properties are being accessed in data returned from fetch */
     return (
       <div>
         <Box
@@ -99,6 +110,38 @@ function DBTab(props: Props) {
           </MetricCard>
           <MetricCard cardLabel={'Query Times - All Queries Time Intervals'}>
             <PieGraphType1 data={data.allTimes?.all.rows} />
+          </MetricCard>
+          <MetricCard cardLabel={'Query Times - All Select Queries'}>
+            <LineGraphType1 data={data.selectTimes} />
+          </MetricCard>
+          <MetricCard
+            cardLabel={'Query Times - All Select Queries Time Intervals'}
+          >
+            <PieGraphType1 data={data.selectTimes?.all.rows} />
+          </MetricCard>
+          <MetricCard cardLabel={'Query Times - All Insert Queries'}>
+            <LineGraphType1 data={data.insertTimes} />
+          </MetricCard>
+          <MetricCard
+            cardLabel={'Query Times - All Insert Queries Time Intervals'}
+          >
+            <PieGraphType1 data={data.insertTimes?.all.rows} />
+          </MetricCard>
+          <MetricCard cardLabel={'Query Times - All Update Queries'}>
+            <LineGraphType1 data={data.updateTimes} />
+          </MetricCard>
+          <MetricCard
+            cardLabel={'Query Times - All Update Queries Time Intervals'}
+          >
+            <PieGraphType1 data={data.updateTimes?.all.rows} />
+          </MetricCard>
+          <MetricCard cardLabel={'Query Times - All Delete Queries'}>
+            <LineGraphType1 data={data.deleteTimes} />
+          </MetricCard>
+          <MetricCard
+            cardLabel={'Query Times - All Delete Queries Time Intervals'}
+          >
+            <PieGraphType1 data={data.deleteTimes?.all.rows} />
           </MetricCard>
           <MetricCard cardLabel={'Query Times - Top 5 Queries'}>
             <LineGraphType2 data={data.avgTimeTopAllCalls} />

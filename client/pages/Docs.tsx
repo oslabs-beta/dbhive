@@ -1,96 +1,189 @@
 import * as React from 'react';
 import Navbar from '../components/Navbar';
+import {
+  Box,
+  Card,
+  Typography,
+  Divider,
+  Stepper,
+  Step,
+  StepLabel,
+  StepContent,
+} from '@mui/material';
+import dbhive_logo_transparent from '../assets/dbhive_logo_transparent.png';
 
-import { Box, Card, Typography } from '@mui/material';
-
-function Home() {
+function Docs() {
   return (
     <>
       <Navbar />
-      <Card
+      <Box
         sx={{
-          textAlign: 'center',
-          ml: '12rem',
-          mr: '1rem',
-          my: '5rem',
-          p: '4rem',
+          pl: '11rem',
         }}
       >
-        <Typography
-          variant="h3"
-          component="div"
+        <Card
+          id="about"
           sx={{
-            flexGrow: 1,
-            mb: '2rem',
-            textShadow: '2px 2px 4px #cbc51a',
-            color: 'rgb(255, 255, 255)',
+            textAlign: 'center',
+            width: 800,
+            mx: 'auto',
+            mt: '5rem',
+            mb: '1rem',
+            py: '4rem',
+            px: '10rem',
           }}
         >
           <Box
-            className="pulse-animation"
             component="img"
             sx={{
-              pt: 1,
-              mr: 1,
-              height: 50,
-              filter:
-                'invert(85%) sepia(25%) saturate(4135%) hue-rotate(1deg) brightness(105%) contrast(106%)',
+              height: 200,
             }}
             alt="dbHive icon"
-            src="https://img.icons8.com/ios-glyphs/512/bumblebee.png"
+            src={dbhive_logo_transparent}
           />
-          Welcome to dbHive
-        </Typography>
-        <Box>
-          <p>
-            DbHive is a database monitoring and analysis tool for PostgreSQL
-            databases.
-          </p>
-          <p>
-            DbHive is highly configurable, capable of monitoring multiple
-            databases, and is committed to the open source community!
-          </p>
-        </Box>
-        {/* <Typography
-          variant="h4"
-          component="div"
+          <Typography
+            variant="h3"
+            component="div"
+            sx={{
+              flexGrow: 1,
+              my: '2rem',
+              textShadow: '2px 2px 4px #cbc51a',
+              color: 'rgb(255, 255, 255)',
+            }}
+          >
+            Welcome to dbHive
+            <Box
+              className="pulse-animation"
+              component="img"
+              sx={{
+                pt: '1rem',
+                ml: '1rem',
+                height: 50,
+                filter:
+                  'invert(85%) sepia(25%) saturate(4135%) hue-rotate(1deg) brightness(105%) contrast(106%)',
+              }}
+              alt="dbHive icon"
+              src="https://img.icons8.com/ios-glyphs/512/bumblebee.png"
+            />
+          </Typography>
+          <Box sx={{ color: 'rgb(255,255,255,.6)' }}>
+            dbHive offers an interactive dashboard to visualize the performance
+            of one or more PostgreSQL databases. By providing easily accessible
+            information about the health and activity of a database, dbHive
+            enables developers to make informed decisions that optimize the way
+            they store their data.
+          </Box>
+        </Card>
+        <Card
           sx={{
-            flexGrow: 1,
-            mt: '4rem',
-            mb: '2rem',
+            textAlign: 'center',
+            width: 800,
+            mx: 'auto',
+            mb: '1rem',
+            px: '4rem',
+            py: '2rem',
           }}
         >
-          DOCS
-        </Typography>
-        <Box sx={{ textAlign: 'left' }}>
-          <p>DbHive currently only supports PostgreSQL databases.</p>
-          <p>Click to Get Started!</p>
-        </Box>
-        <Typography
-          variant="h4"
-          component="div"
+          <Typography
+            variant="h4"
+            component="div"
+            sx={{
+              flexGrow: 1,
+              textShadow: '2px 2px 4px #cbc51a',
+              color: 'rgb(255, 255, 255)',
+            }}
+          >
+            Get Started
+          </Typography>
+          <Divider sx={{ my: '1.5rem' }} />
+          <Stepper orientation="vertical" sx={{ ml: '6rem' }}>
+            <Step active={true}>
+              <StepLabel>
+                <Typography variant="h6">Sign Up</Typography>
+              </StepLabel>
+              <StepContent
+                sx={{ px: '10rem', py: '1rem', color: 'rgb(255,255,255,.6)' }}
+              >
+                <Typography>
+                  Create an account that can be utilized by one or more users.
+                </Typography>
+              </StepContent>
+            </Step>
+            <Step active={true}>
+              <StepLabel>
+                <Typography variant="h6">Login</Typography>
+              </StepLabel>
+              <StepContent
+                sx={{ px: '10rem', py: '1rem', color: 'rgb(255,255,255,.6)' }}
+              >
+                <Typography>
+                  Login with your username and password information.
+                </Typography>
+              </StepContent>
+            </Step>
+            <Step active={true}>
+              <StepLabel>
+                <Typography variant="h6">Connect Databases</Typography>
+              </StepLabel>
+              <StepContent
+                sx={{ px: '10rem', py: '1rem', color: 'rgb(255,255,255,.6)' }}
+              >
+                <Typography>
+                  Connect one or more PostgreSQL databases using either the URI
+                  string or individual credentials.
+                </Typography>
+              </StepContent>
+            </Step>
+            <Step active={true}>
+              <StepLabel>
+                <Typography variant="h6">
+                  Use the Dashboard to monitor your databases!
+                </Typography>
+              </StepLabel>
+              <StepContent
+                sx={{ px: '10rem', py: '1rem', color: 'rgb(255,255,255,.6)' }}
+              >
+                <Typography>
+                  Access query execution times, most frequent queries,
+                  conflicts, deadlocks, rolled back transactions, cache hit
+                  ratio, block hits, and more.
+                </Typography>
+              </StepContent>
+            </Step>
+          </Stepper>
+        </Card>
+        <Card
           sx={{
-            flexGrow: 1,
-            mt: '4rem',
-            mb: '2rem',
+            textAlign: 'center',
+            width: 800,
+            mx: 'auto',
+            mb: '1rem',
+            px: '10rem',
+            py: '2rem',
           }}
         >
-          GET STARTED
-        </Typography>
-        <Typography
-          variant="h4"
-          component="div"
-          sx={{
-            flexGrow: 1,
-            mt: '4rem',
-            mb: '2rem',
-          }}
-        >
-          FAQ
-        </Typography> */}
-      </Card>
+          <Typography
+            variant="h4"
+            component="div"
+            sx={{
+              flexGrow: 1,
+              textShadow: '2px 2px 4px #cbc51a',
+              color: 'rgb(255, 255, 255)',
+            }}
+          >
+            Troubleshooting
+          </Typography>
+          <Divider sx={{ my: '1.5rem' }} />
+          <Typography sx={{ color: 'rgb(255,255,255,.6)' }}>
+            If certain database metrics are not showing up in the dashboard,
+            look into the database user's permissions. User permissions and
+            admin privileges can vary depending on the database hosting service
+            used.
+          </Typography>
+        </Card>
+      </Box>
     </>
   );
 }
 
-export default Home;
+export default Docs;

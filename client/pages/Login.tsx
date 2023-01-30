@@ -1,31 +1,40 @@
+// import dependencies
 import * as React from 'react';
 import { useState } from 'react';
-import Navbar from '../components/Navbar';
-import Input from '../components/Input';
 import { useNavigate } from 'react-router-dom';
 import { get } from 'idb-keyval';
 import CryptoJS from 'crypto-js';
 import AES from 'crypto-js/aes';
-
 import { Card, Button, Typography, Box } from '@mui/material';
+
+// import react components
+import Navbar from '../components/Navbar';
+import Input from '../components/Input';
+
+// import utilities
 import useAppStore from '../store/appStore';
 
 function Login() {
+  const navigate = useNavigate();
+
   const logInUser = useAppStore((state) => state.logInUser);
 
   const [usernameInput, setUsernameInput] = useState('');
   const [secretInput, setSecretInput] = useState('');
   const [loginErrorText, setLoginErrorText] = useState<null | string>(null);
 
-  const navigate = useNavigate();
-
   function submitHandler() {
+    /* authenticate by checking for a username key within IndexedDB
+    if there is a user, use the password as the AES encryption secret, 
+    and look for a verifiable property on the value object
+    */
     get(usernameInput)
       .then((data) => {
         const bytes = AES.decrypt(data, secretInput);
         const decryptResponse = bytes.toString(CryptoJS.enc.Utf8);
         const originalText = JSON.parse(decryptResponse);
         if (originalText.decryption === 'isValid') {
+          // populate global state store with decrypted IDB value, which holds user data
           logInUser(usernameInput, secretInput, originalText);
           setUsernameInput('');
           setSecretInput('');
@@ -59,7 +68,7 @@ function Login() {
         >
           <Typography
             variant="h5"
-            data-testid = 'login-header'
+            data-testid="login-header"
             component="div"
             sx={{ flexGrow: 1, mb: '2rem' }}
           >
