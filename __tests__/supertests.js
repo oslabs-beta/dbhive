@@ -26,7 +26,7 @@ xdescribe('my test', () => {
   })
 })
 
-xdescribe('Connecting a database', () => {
+describe('Connecting a database', () => {
   describe('connecting a URI key', () => {
     it('responds with a true valid URI key value', () =>{
       const body = {

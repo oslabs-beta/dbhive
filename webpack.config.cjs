@@ -61,11 +61,6 @@ module.exports = {
           },
         ],
       },
-      // {
-      //   // transpile png
-      //   test: /\.png$/i,
-      //   use: ["url-loader"],
-      // },
     ],
   },
   resolve: {
