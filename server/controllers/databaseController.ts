@@ -232,4 +232,6 @@ const databaseController: DatabaseController = {
   },
 };
 
+//SELECT sum(numbackends) FROM pg_stat_database;
+
 export default databaseController;
