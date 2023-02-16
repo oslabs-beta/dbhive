@@ -28,6 +28,7 @@ router.post(
   databaseController.topCalls,
   databaseController.dbStats,
   databaseController.cacheHitRatio,
+  databaseController.statActivity,
   (req, res) => {
     return res.status(200).json(res.locals.result);
   }

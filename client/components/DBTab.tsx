@@ -69,6 +69,7 @@ function DBTab(props: Props) {
       </div>
     );
   } else {
+    console.log(data);
     /* coniditonal rendering if fetch has returned successfully
   data sent to child components utilizes optional chaining operators to protect
   from fatal errors when nested properties are being accessed in data returned from fetch */
@@ -164,6 +165,9 @@ function DBTab(props: Props) {
               <br />
               id: {data.dbStats?.[0].datid}
             </>
+          </MetricCard>
+          <MetricCard cardLabel="Active Sessions">
+            {data.activeSessions}
           </MetricCard>
           <MetricCard cardLabel="Conflicts">{data.conflicts}</MetricCard>
           <MetricCard cardLabel="Deadlocks">{data.deadlocks}</MetricCard>
