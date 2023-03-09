@@ -157,28 +157,34 @@ function Navbar() {
               <ListItemText primary="Docs" />
             </ListItemButton>
           </ListItem>
-          <ListItem
-            disablePadding
-            selected={pathname === '/setup/' || pathname === '/setup'}
-          >
-            <ListItemButton onClick={() => navigate('/setup')}>
-              <ListItemIcon>
-                <TuneIcon />
-              </ListItemIcon>
-              <ListItemText primary="Setup" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem
-            disablePadding
-            selected={pathname === '/dashboard/' || pathname === '/dashboard'}
-          >
-            <ListItemButton onClick={() => navigate('/dashboard')}>
-              <ListItemIcon>
-                <MonitorHeartIcon />
-              </ListItemIcon>
-              <ListItemText primary="Dashboard" />
-            </ListItemButton>
-          </ListItem>
+          {isLoggedIn && (
+            <>
+              <ListItem
+                disablePadding
+                selected={pathname === '/setup/' || pathname === '/setup'}
+              >
+                <ListItemButton onClick={() => navigate('/setup')}>
+                  <ListItemIcon>
+                    <TuneIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Setup" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem
+                disablePadding
+                selected={
+                  pathname === '/dashboard/' || pathname === '/dashboard'
+                }
+              >
+                <ListItemButton onClick={() => navigate('/dashboard')}>
+                  <ListItemIcon>
+                    <MonitorHeartIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Dashboard" />
+                </ListItemButton>
+              </ListItem>
+            </>
+          )}
           <Divider />
         </List>
       </Drawer>

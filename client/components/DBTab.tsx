@@ -165,6 +165,9 @@ function DBTab(props: Props) {
               id: {data.dbStats?.[0].datid}
             </>
           </MetricCard>
+          <MetricCard cardLabel="Active Sessions">
+            {data.activeSessions}
+          </MetricCard>
           <MetricCard cardLabel="Conflicts">{data.conflicts}</MetricCard>
           <MetricCard cardLabel="Deadlocks">{data.deadlocks}</MetricCard>
           <MetricCard cardLabel="Rolled Back Transactions">

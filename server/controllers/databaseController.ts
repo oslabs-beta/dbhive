@@ -6,6 +6,7 @@ type DatabaseController = {
   topCalls: RequestHandler;
   dbStats: RequestHandler;
   cacheHitRatio: RequestHandler;
+  statActivity: RequestHandler;
 };
 type queryData = {
   all: any[];
@@ -230,6 +231,30 @@ const databaseController: DatabaseController = {
       return next();
     }
   },
+
+  // this controller interfaces with db_stat_activity
+  statActivity: async (req, res, next) => {
+    const db = res.locals.dbConnection;
+    const data = req.body.uri;
+    // grab database name from req.body string, database assignment contigent upon db setup via uri || manual input
+    const dataBase =
+      data.split('.com/')[1] ||
+      data.split('5432/').pop().split('/')[0].replace(/\s/g, '');
+    try {
+      const dbOverview = await db.query(
+        "SELECT * FROM pg_stat_activity WHERE datname = $1 and state = 'active';",
+        [dataBase]
+      );
+      res.locals.result.activeSessions = dbOverview.rowCount;
+      return next();
+    } catch (error) {
+      console.log('ERROR in databaseController.statActivity: ', error);
+      res.locals.result.activeSessions = null;
+      return next();
+    }
+  },
 };
+
+//SELECT sum(numbackends) FROM pg_stat_database;
 
 export default databaseController;
