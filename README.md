@@ -18,62 +18,11 @@
 
 dbHive offers an interactive dashboard to visualize the performance of one or more PostgreSQL databases. By providing easily accessible information about the health and activity of a database, dbHive enables developers to make informed decisions that optimize the way they store their data.
 
+learn more at https://dbhive.vercel.app/
+
 ## Getting Started
 
-### Method 1: Non-containerized
-
-1. **Fork** and **clone** this [repository](https://github.com/oslabs-beta/dbhive) to your machine.
-2. Navigate to the project directory and install dependencies.
-
-```
-npm install
-```
-
-3. Enter the following command to start up dbHive.
-
-```
-npm start
-```
-
-4. Navigate to [http://localhost:3000](http://localhost:3000/).
-5. Create an account on the sign up page.
-6. Connect your database and get started!
-
-### Method 2: Containerized
-
-1. **Fork** and **clone** this [repository](https://github.com/oslabs-beta/dbhive) to your machine.
-   <<<<<<< HEAD
-2. Navigate to the project directory and enter the following command:
-
-```
-docker-compose -f docker-compose-prod.yml up
-```
-
-3. Navigate to [http://localhost:3000](http://localhost:3000/).
-4. Create an account on the sign up page.
-5. # Connect your database and get started!
-6. Navigate to the project directory. Either build the image or pull the latest from DockerHub:
-
-```
-docker build -t dbhive/main-prod .
-```
-
-or
-
-```
-docker pull dbhive/main-prod
-```
-
-3. In the terminal, enter the following command:
-
-```
-docker-compose -f docker-compose-prod.yml up
-```
-
-4. Navigate to [http://localhost:3000](http://localhost:3000/).
-5. Create an account on the sign up page.
-6. Connect your database and get started!
-   > > > > > > > dev
+### Access the application at https://dbhive.net/
 
 ## Features
 
