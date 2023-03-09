@@ -6,7 +6,7 @@
 <h3 align="center">PostgreSQL Monitoring Tool</h3>
 <br>
 
-## Table of Contents
+# Table of Contents
 
 - [About](#about)
 - [Getting Started](#getting-started)
@@ -14,68 +14,17 @@
 - [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
 
-## About
+# About
 
 dbHive offers an interactive dashboard to visualize the performance of one or more PostgreSQL databases. By providing easily accessible information about the health and activity of a database, dbHive enables developers to make informed decisions that optimize the way they store their data.
 
-## Getting Started
+learn more at https://dbhive.vercel.app/
 
-### Method 1: Non-containerized
+# Getting Started
 
-1. **Fork** and **clone** this [repository](https://github.com/oslabs-beta/dbhive) to your machine.
-2. Navigate to the project directory and install dependencies.
+### Access the application at https://dbhive.net/
 
-```
-npm install
-```
-
-3. Enter the following command to start up dbHive.
-
-```
-npm start
-```
-
-4. Navigate to [http://localhost:3000](http://localhost:3000/).
-5. Create an account on the sign up page.
-6. Connect your database and get started!
-
-### Method 2: Containerized
-
-1. **Fork** and **clone** this [repository](https://github.com/oslabs-beta/dbhive) to your machine.
-   <<<<<<< HEAD
-2. Navigate to the project directory and enter the following command:
-
-```
-docker-compose -f docker-compose-prod.yml up
-```
-
-3. Navigate to [http://localhost:3000](http://localhost:3000/).
-4. Create an account on the sign up page.
-5. # Connect your database and get started!
-6. Navigate to the project directory. Either build the image or pull the latest from DockerHub:
-
-```
-docker build -t dbhive/main-prod .
-```
-
-or
-
-```
-docker pull dbhive/main-prod
-```
-
-3. In the terminal, enter the following command:
-
-```
-docker-compose -f docker-compose-prod.yml up
-```
-
-4. Navigate to [http://localhost:3000](http://localhost:3000/).
-5. Create an account on the sign up page.
-6. Connect your database and get started!
-   > > > > > > > dev
-
-## Features
+# Features
 
 ### ➮ Query Execution Times
 
@@ -120,11 +69,11 @@ Use dropdowns to view more details on a given metric. Expand graphs to fill the 
 
 Navigate to the Setup page and remove a database when it is no longer in use, keeping your dashboard clean.
 
-### ➮ Remove application accounts
+# Privacy and Security
 
-dbHive application accounts can be removed by manually accessing IndexedDB and deleting entries. All data stored on the user is securely encrypted, and no encryption secrets are stored.
+dbHive does not store any user data, most importantly including database connection information, usernames, and passwords. Data is kept encrypted on the client.
 
-## Troubleshooting
+# Troubleshooting
 
 If certain database metrics are shown as unavailable in the dashboard, database user permissions may need to be elevated. Necessary user permissions and admin privileges can vary depending on the database hosting service used.
 For issues with application accounts, it is recommended to remove problematic users. Follow the directions in the "Remove application users" section of this readme.
@@ -149,7 +98,7 @@ and restart the Postgres service.
 
 Read our [contribution guide](https://github.com/oslabs-beta/dbhive/blob/main/CONTRIBUTING.md) for more information on how to contribute to dbHive.
 
-## Development Mode
+### Development Mode
 
 If you would like to participate in developing new features, the app can be launched in development mode:
 
@@ -167,7 +116,7 @@ docker build -t dbhive/main-dev -f Dockerfile-dev .
 docker-compose -f docker-compose-dev-hot.yml up
 ```
 
-## Future Enhancements
+# Future Enhancements
 
 - **Search Feature:** Add a search bar to the dashboard that allows users to find data by keywords.
 - **Expansion to Other Databases:** Make dbHive available for other databases besides PostgreSQL.

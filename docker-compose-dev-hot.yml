@@ -3,7 +3,7 @@ services:
   dev:
     image: dbhive/main-dev
     container_name: main-dev
-    ports: 
+    ports:
       - 8080:8080
     volumes:
       - .:/usr/src/app

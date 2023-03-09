@@ -1,3 +1,9 @@
 db-sample-data
 __tests__
-README.md
+README.md# Elastic Beanstalk Files
+.elasticbeanstalk/*
+.git
+.gitignore# Elastic Beanstalk Files# Elastic Beanstalk Files
+.elasticbeanstalk/*
+.git
+.gitignore
