@@ -1,5 +1,6 @@
 db-sample-data
 __tests__
+node_modules
 README.md# Elastic Beanstalk Files
 .elasticbeanstalk/*
 .git

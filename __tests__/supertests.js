@@ -1,10 +1,10 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const supertest = require('supertest');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 import { describe, it, expect, xdescribe, test } from '@jest/globals';
-
-import * as dotenv from 'dotenv';
-dotenv.config();
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const pg = require('pg');
