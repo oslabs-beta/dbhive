@@ -9,7 +9,7 @@ on:
       - 'bmiller/gha'
 
 env:
-  TEST_TAG: dbhive/main-prod
+  TEST_TAG: dbhive/main-prod:test
   LATEST_TAG: dbhive/main-prod:latest
 
 jobs:
@@ -29,7 +29,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./Dockerfile
+          # file: ./Dockerfile
           load: true
           tags: ${{ env.TEST_TAG }}
       - name: Test
@@ -38,6 +38,6 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./Dockerfile
+          # file: ./Dockerfile
           push: true
           tags: ${{ env.LATEST_TAG }}
