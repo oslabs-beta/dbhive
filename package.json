@@ -42,7 +42,6 @@
     "chart.js": "3.9.1",
     "cross-env": "^7.0.3",
     "crypto-js": "^4.1.1",
-    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "idb-keyval": "^6.2.0",
     "jest-environment-jsdom": "^29.3.1",

@@ -2,11 +2,14 @@ version: '3'
 services:
   test:
     image: dbhive/main-prod
+    environment:
+      - TEST_DB=${TEST_DB}
     container_name: main-test
     ports:
       - 3000:3000
     volumes:
       - .:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
     command: npm run test
 volumes:
   node_modules:

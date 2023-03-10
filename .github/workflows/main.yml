@@ -29,15 +29,15 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          # file: ./Dockerfile
+          file: ./Dockerfile
           load: true
           tags: ${{ env.TEST_TAG }}
       - name: Test
-        run: docker-compose -f docker-compose-test.yml up --exit-code-from test
+        run: TEST_DB=${{ secrets.TEST_DB }} docker-compose -f docker-compose-test.yml up --exit-code-from test
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
           context: .
-          # file: ./Dockerfile
+          file: ./Dockerfile
           push: true
           tags: ${{ env.LATEST_TAG }}
