@@ -14,7 +14,7 @@ env:
   TEST_DB: ${{ secrets.TEST_DB }}
 
 jobs:
-  build:
+  build-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -62,3 +62,30 @@ jobs:
           tags: |
             ${{ env.LATEST_TAG }}
             ${{ steps.login-ecr.outputs.registry }}/dbhive:main-prod
+
+      - name: Get Timestamp
+        uses: gerred/actions/current-time@master
+        id: current-time
+
+      - name: Run String Replace
+        uses: frabert/replace-string-action@master
+        id: format-time
+        with:
+          pattern: '[:\.]+'
+          string: '${{ steps.current-time.outputs.time }}'
+          replace-with: '-'
+          flags: 'g'
+
+      - name: Generate Deployment Package
+        run: zip -r deploy.zip * -x "**node_modules**"
+
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v16
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
+          application_name: dbhive-gha
+          environment_name: dbhive-gha
+          version_label: 'docker-app-${{ steps.format-time.outputs.replaced }}'
+          region: us-west-2
+          deployment_package: deploy.zip
