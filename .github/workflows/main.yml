@@ -26,11 +26,11 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # - name: Login to Docker Hub
-      #   uses: docker/login-action@v2
-      #   with:
-      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
-      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -43,28 +43,22 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      # - name: Build and export to Docker
-      #   uses: docker/build-push-action@v4
-      #   with:
-      #     context: .
-      #     load: true
-      #     tags: ${{ env.TEST_TAG }}
+      - name: Build and export to Docker
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          load: true
+          tags: ${{ env.TEST_TAG }}
 
-      # - name: Test
-      #   run: docker-compose -f docker-compose-test.yml up --exit-code-from test
+      - name: Test
+        run: docker-compose -f docker-compose-test.yml up --exit-code-from test
 
-      # - name: Build and push to DockerHub
-      #   uses: docker/build-push-action@v4
-      #   with:
-      #     context: .
-      #     push: true
-      #     tags: ${{ env.LATEST_TAG }}
-
-      - name: Build, tag, and push image to Amazon ECR
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: dbhive
-          IMAGE_TAG: main-prod
-        run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: Build and push to DockerHub and ECR
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          # platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ${{ env.LATEST_TAG }}
+            ${{ steps.login-ecr.outputs.registry }}/dbhive:main-prod
