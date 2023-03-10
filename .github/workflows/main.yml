@@ -9,7 +9,7 @@ on:
       - 'bmiller/gha'
 
 env:
-  TEST_TAG: dbhive/main-prod:test
+  TEST_TAG: dbhive/main-prod
   LATEST_TAG: dbhive/main-prod:latest
 
 jobs:
