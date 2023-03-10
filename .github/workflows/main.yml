@@ -11,6 +11,7 @@ on:
 env:
   TEST_TAG: dbhive/main-prod:test
   LATEST_TAG: dbhive/main-prod:latest
+  TEST_DB: ${{ secrets.TEST_DB }}
 
 jobs:
   build:
@@ -33,7 +34,7 @@ jobs:
           load: true
           tags: ${{ env.TEST_TAG }}
       - name: Test
-        run: TEST_DB=${{ secrets.TEST_DB }} docker-compose -f docker-compose-test.yml up --exit-code-from test
+        run: docker-compose -f docker-compose-test.yml up --exit-code-from test
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
