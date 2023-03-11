@@ -1,7 +1,8 @@
 {
   "AWSEBDockerrunVersion": "1",
   "Image": {
-    "Name": "dbhive/main-prod"
+    "Name": "096169716422.dkr.ecr.us-west-2.amazonaws.com/dbhive:main-prod",
+    "Update": "true"
   },
   "Ports": [
     {

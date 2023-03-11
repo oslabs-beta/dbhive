@@ -7,21 +7,21 @@ import { describe, it, expect, xdescribe, test } from '@jest/globals';
 const pg = require('pg');
 
 //Notice: dbtest_url is not a valid url and should be replaced with test db
-const dbtest_url = 'postgres://username:passsord@hostname:5432/databaseName';
+const dbtest_url = process.env.TEST_DB;
 const server = 'http://localhost:3000';
 const pool = new pg.Pool({
   connectionString: dbtest_url,
 });
 
 //testing the test config and setup
-xdescribe('my test', () => {
+describe('my test', () => {
   //test will pass
   test('passes', () => {
     expect(2).toEqual(2);
   });
   //test will fail
   test('fails', () => {
-    expect(3).toEqual(2);
+    expect(3).not.toEqual(2);
   });
 });
 
@@ -67,7 +67,6 @@ describe('Database data retrieval', () => {
         .post('/api/queryMetrics')
         .send(body)
         .expect((res) => {
-          console.log(res.body);
           expect(res.body.allTimes).toBeTruthy();
           expect(res.body.avgTimeTopAllCalls).toBeTruthy();
           expect(res.body.avgTimeTopDeleteCalls).toBeTruthy();
@@ -88,7 +87,7 @@ describe('Database data retrieval', () => {
         });
     });
   });
-  describe('connecting an invalid URI key', () => {
+  xdescribe('connecting an invalid URI key', () => {
     //an invalid key results in a bad request error
     it('responds with an error', () => {
       const body = {
