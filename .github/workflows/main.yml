@@ -15,7 +15,7 @@ env:
   TEST_DB: ${{ secrets.TEST_DB }}
 
 jobs:
-  build-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
