@@ -1,12 +1,12 @@
-name: ci-cd-main
+name: ci-cd-dev
 
 on:
   push:
     branches:
-      - 'main'
+      - 'dev'
   pull_request:
     branches:
-      - 'main'
+      - 'dev'
 
 env:
   PIPELINE_ID: ${{ github.run_id }}-${{ github.run_number }}
@@ -77,8 +77,8 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
-          application_name: dbhive-prod2
-          environment_name: dbhive-prod2
+          application_name: dbhive-gha
+          environment_name: dbhive-gha
           version_label: ${{ env.PIPELINE_ID }}
           use_existing_version_if_available: true
           region: us-west-2
