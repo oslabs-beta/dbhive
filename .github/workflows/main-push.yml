@@ -1,0 +1,82 @@
+name: main-push
+
+on:
+  push:
+    branches:
+      - 'main'
+
+env:
+  PIPELINE_ID: ${{ github.run_id }}-${{ github.run_number }}
+  TEST_TAG: dbhive/main-prod:test
+  LATEST_TAG: dbhive/main-prod:latest
+  TEST_DB: ${{ secrets.TEST_DB }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
+          aws-region: us-west-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and export to Docker
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          load: true
+          tags: ${{ env.TEST_TAG }}
+
+      - name: Test
+        run: docker-compose -f docker-compose-test.yml up --exit-code-from test
+
+      - name: Build and push to DockerHub and ECR
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          # platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ${{ env.LATEST_TAG }}
+            ${{ steps.login-ecr.outputs.registry }}/dbhive:main-prod
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: your-github-environment
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Deploy to AWS Elastic BeansTalk
+        uses: einaregilsson/beanstalk-deploy@v20
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
+          application_name: dbhive-prod2
+          environment_name: dbhive-prod2
+          version_label: ${{ env.PIPELINE_ID }}
+          use_existing_version_if_available: true
+          region: us-west-2
+          deployment_package: Dockerrun.aws.json

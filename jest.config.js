@@ -10,7 +10,7 @@ module.exports = {
   setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect'],
   moduleNameMapper: {
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      './__test__/__mocks__/fileMock.ts',
+      '<rootDir>/__tests__/__mocks__/fileMock.ts',
     //if this doesn't work, go to filemock
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },
