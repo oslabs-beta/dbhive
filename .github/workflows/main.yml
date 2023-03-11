@@ -72,9 +72,6 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      # - name: Generate deployment package
-      #   run: zip deploy.zip Dockerrun.aws.json
-
       - name: Deploy to AWS Elastic BeansTalk
         uses: einaregilsson/beanstalk-deploy@v20
         with:

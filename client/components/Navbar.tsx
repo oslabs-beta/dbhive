@@ -57,7 +57,7 @@ function Navbar() {
             src={yellow_hex}
           />
           <Typography variant="h5" component="div" color="primary">
-            dbHive-This-is-a-test
+            dbHive
           </Typography>
           {isLoggedIn && (
             <>
