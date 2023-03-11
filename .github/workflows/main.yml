@@ -9,6 +9,7 @@ on:
       - 'bmiller/gha'
 
 env:
+  PIPELINE_ID: ${{ github.run_id }}-${{ github.run_number }}
   TEST_TAG: dbhive/main-prod:test
   LATEST_TAG: dbhive/main-prod:latest
   TEST_DB: ${{ secrets.TEST_DB }}
@@ -63,29 +64,25 @@ jobs:
             ${{ env.LATEST_TAG }}
             ${{ steps.login-ecr.outputs.registry }}/dbhive:main-prod
 
-      - name: Get Timestamp
-        uses: gerred/actions/current-time@master
-        id: current-time
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: your-github-environment
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
 
-      - name: Run String Replace
-        uses: frabert/replace-string-action@master
-        id: format-time
-        with:
-          pattern: '[:\.]+'
-          string: '${{ steps.current-time.outputs.time }}'
-          replace-with: '-'
-          flags: 'g'
+      - name: Generate deployment package
+        run: zip deploy.zip Dockerrun.aws.json
 
-      - name: Generate Deployment Package
-        run: zip -r deploy.zip * -x "**node_modules**"
-
-      - name: Deploy to EB
-        uses: einaregilsson/beanstalk-deploy@v16
+      - name: Deploy to AWS Elastic BeansTalk
+        uses: einaregilsson/beanstalk-deploy@v20
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
           application_name: dbhive-gha
           environment_name: dbhive-gha
-          version_label: 'docker-app-${{ steps.format-time.outputs.replaced }}'
+          version_label: ${{ env.PIPELINE_ID }}
+          use_existing_version_if_available: true
           region: us-west-2
           deployment_package: deploy.zip
