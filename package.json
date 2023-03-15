@@ -4,7 +4,7 @@
   "description": "postgres performance analysis tool",
   "main": "index.tsx",
   "scripts": {
-    "start": "cross-env NODE_ENV=production ts-node server/server.ts",
+    "start": "cross-env NODE_ENV=production ts-node --transpile-only server/server.ts",
     "build": "cross-env NODE_ENV=production webpack",
     "dev": "concurrently \"cross-env NODE_ENV=development webpack-dev-server --open --hot\" \"cross-env NODE_ENV=development nodemon server/server.ts\"",
     "test": "jest --config jest.config.js --detectOpenHandles"
