@@ -23,7 +23,6 @@ learn more at https://dbhive.vercel.app/
 # Getting Started
 
 ### Access the application at https://dbhive.net/
-! Site is temporarily down, please use http://dbhive-prod2.eba-ubsepbnu.us-west-2.elasticbeanstalk.com
 
 # Features
 
