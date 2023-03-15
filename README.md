@@ -18,11 +18,9 @@
 
 dbHive offers an interactive dashboard to visualize the performance of one or more PostgreSQL databases. By providing easily accessible information about the health and activity of a database, dbHive enables developers to make informed decisions that optimize the way they store their data.
 
-learn more at https://dbhive.vercel.app/
-
 # Getting Started
 
-### Access the application at https://dbhive.net/
+### https://dbhive.net/
 
 # Features
 
