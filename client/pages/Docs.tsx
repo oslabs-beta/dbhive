@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Navbar from '../components/Navbar';
 import {
+  Button,
   Box,
   Card,
   Typography,
@@ -73,6 +74,11 @@ function Docs() {
             enables developers to make informed decisions that optimize the way
             they store their data.
           </Box>
+          <a href="https://dbhive.net">
+            <Button variant="contained" sx={{ mt: '4rem', width: '100%' }}>
+              Learn More
+            </Button>
+          </a>
         </Card>
         <Card
           sx={{

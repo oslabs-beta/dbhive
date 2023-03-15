@@ -1,6 +1,7 @@
 node_modules
 .env
 .DS_Store
+build/*
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
