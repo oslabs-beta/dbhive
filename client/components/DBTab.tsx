@@ -72,6 +72,7 @@ function DBTab(props: Props) {
     /* coniditonal rendering if fetch has returned successfully
   data sent to child components utilizes optional chaining operators to protect
   from fatal errors when nested properties are being accessed in data returned from fetch */
+    console.log('data', data);
     return (
       <div>
         <Box

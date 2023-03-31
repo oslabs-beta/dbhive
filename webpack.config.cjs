@@ -79,7 +79,7 @@ module.exports = {
     },
     // allows backend requests to 8080 to be routed to 3000 automatically
     proxy: {
-      '/api': 'http://localhost:3000',
+      '/graphql': 'http://localhost:3000',
     },
   },
 };
