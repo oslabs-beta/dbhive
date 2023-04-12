@@ -56,7 +56,7 @@ const pgStatDatabaseRow = new GraphQLObjectType({
   name: 'pgStatDatabaseRow',
   description: 'This represents a row from pg_stat_database',
   fields: () => ({
-    dbid: { type: GraphQLInt },
+    datid: { type: GraphQLInt },
     datname: { type: GraphQLString },
     numbackends: { type: GraphQLInt },
     xact_commit: { type: GraphQLInt },

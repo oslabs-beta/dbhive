@@ -14,7 +14,7 @@ export function useQueryMetrics(key: string[], uri: string, interval: number) {
         body: JSON.stringify({
           query: `
           {
-            database(uri: "postgres://postgres:dozier1818@dbhive.ckgii0y0xfut.us-west-2.rds.amazonaws.com/postgres") {
+            database(uri: "${uri}") {
               allQueries{
                 all{
                   query
@@ -75,10 +75,45 @@ export function useQueryMetrics(key: string[], uri: string, interval: number) {
                   mean_exec_time
                 }
               }
+              topAllCalls(limit:5){
+                  query
+                  mean_exec_time
+              }
+              topSelectCalls: topSpecificCalls(criteria:SELECT,limit:5){
+                  query
+                  mean_exec_time
+              }
+              topInsertCalls: topSpecificCalls(criteria:INSERT,limit:5){
+                  query
+                  mean_exec_time
+              }
+              topUpdateCalls: topSpecificCalls(criteria:UPDATE,limit:5){
+                  query
+                  mean_exec_time
+              }
+              topDeleteCalls: topSpecificCalls(criteria:DELETE,limit:5){
+                  query
+                  mean_exec_time
+              }
+              dbStats{
+                datid
+                datname
+                conflicts
+                deadlocks
+                xact_rollback
+                xact_commit
+                blks_read
+                blks_hit
+                blk_read_time
+                blk_write_time
+                checksum_failures
+              }
+              cacheHitRatio{
+                ratio
+              }
               statActivity
             }
-          }
-          
+          }          
           `,
         }),
       });

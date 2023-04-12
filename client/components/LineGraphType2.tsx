@@ -28,22 +28,21 @@ Chart.register(
 
 type Props = {
   title?: string;
-  data?: any;
+  data?: [{ query: string; mean_exec_time: number }];
   xMax?: number;
 };
 
-type Line = { labels: string[]; data: number[] };
-
 function LineGraphType2(props: Props) {
-  const dataProc: Line = { labels: [], data: [] };
   const detailsProc: JSX.Element[] = [];
+  const graphLabels: string[] = [];
+  const graphData: number[] = [];
 
   if (props.data) {
     const details: JSX.Element[] = [];
     props.data.forEach(
       (element: { query: string; mean_exec_time: number }, index: number) => {
-        dataProc.labels.push(element.query);
-        dataProc.data.push(element.mean_exec_time);
+        graphLabels.push(element.query);
+        graphData.push(element.mean_exec_time);
         details.push(
           <Box
             sx={{
@@ -102,11 +101,11 @@ function LineGraphType2(props: Props) {
   };
 
   const data = {
-    labels: dataProc.labels,
+    labels: graphLabels,
     datasets: [
       {
         label: 'queries',
-        data: dataProc.data,
+        data: graphData,
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },
     ],

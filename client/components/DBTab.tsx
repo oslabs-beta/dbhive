@@ -72,7 +72,6 @@ function DBTab(props: Props) {
     /* coniditonal rendering if fetch has returned successfully
   data sent to child components utilizes optional chaining operators to protect
   from fatal errors when nested properties are being accessed in data returned from fetch */
-    console.log('data', data);
     return (
       <div>
         <Box
@@ -147,55 +146,59 @@ function DBTab(props: Props) {
             <PieGraphType1 data={data.deleteQueries?.all} />
           </MetricCard>
           <MetricCard cardLabel={'Query Times - Top 5 Queries'}>
-            <LineGraphType2 data={data.avgTimeTopAllCalls} />
-          </MetricCard>
-          <MetricCard cardLabel={'Query Times - Top Delete Queries'}>
-            <LineGraphType2 data={data.avgTimeTopDeleteCalls} />
-          </MetricCard>
-          <MetricCard cardLabel={'Query Times - Top Insert Queries'}>
-            <LineGraphType2 data={data.avgTimeTopInsertCalls} />
+            <LineGraphType2 data={data.topAllCalls} />
           </MetricCard>
           <MetricCard cardLabel={'Query Times - Top Select Queries'}>
-            <LineGraphType2 data={data.avgTimeTopSelectCalls} />
+            <LineGraphType2 data={data.topSelectCalls} />
+          </MetricCard>
+          <MetricCard cardLabel={'Query Times - Top Insert Queries'}>
+            <LineGraphType2 data={data.topInsertCalls} />
           </MetricCard>
           <MetricCard cardLabel={'Query Times - Top Update Queries'}>
-            <LineGraphType2 data={data.avgTimeTopUpdateCalls} />
+            <LineGraphType2 data={data.topUpdateCalls} />
+          </MetricCard>
+          <MetricCard cardLabel={'Query Times - Top Delete Queries'}>
+            <LineGraphType2 data={data.topDeleteCalls} />
           </MetricCard>
           <MetricCard cardLabel="Database Name">
             <>
-              name: {data.dbStats?.[0].datname}
+              name: {data.dbStats?.datname}
               <br />
-              id: {data.dbStats?.[0].datid}
+              id: {data.dbStats?.datid}
             </>
           </MetricCard>
           <MetricCard cardLabel="Active Sessions">
-            {data.activeSessions}
+            {data.statActivity}
           </MetricCard>
-          <MetricCard cardLabel="Conflicts">{data.conflicts}</MetricCard>
-          <MetricCard cardLabel="Deadlocks">{data.deadlocks}</MetricCard>
+          <MetricCard cardLabel="Conflicts">
+            {data.dbStats?.conflicts}
+          </MetricCard>
+          <MetricCard cardLabel="Deadlocks">
+            {data.dbStats?.deadlocks}
+          </MetricCard>
           <MetricCard cardLabel="Rolled Back Transactions">
-            {data.rolledBackTransactions}
+            {data.dbStats?.xact_rollback}
           </MetricCard>
           <MetricCard cardLabel="Transactions Committed">
-            {data.transactionsCommitted}
+            {data.dbStats?.xact_commit}
           </MetricCard>
           <MetricCard cardLabel="Cache Hit Ratio">
-            {Number(data.cacheHitRatio?.[0].ratio).toFixed(4)}
+            {Number(data.cacheHitRatio?.ratio).toFixed(4)}
           </MetricCard>
           <MetricCard cardLabel="Block Read Time">
-            {data.dbStats?.[0].blk_read_time}
+            {data.dbStats?.blk_read_time}
           </MetricCard>
           <MetricCard cardLabel="Block Write Time">
-            {data.dbStats?.[0].blk_write_time}
+            {data.dbStats?.blk_write_time}
           </MetricCard>
           <MetricCard cardLabel="Block Hits">
-            {data.dbStats?.[0].blks_hit}
+            {data.dbStats?.blks_hit}
           </MetricCard>
           <MetricCard cardLabel="Block Reads">
-            {data.dbStats?.[0].blks_read}
+            {data.dbStats?.blks_read}
           </MetricCard>
           <MetricCard cardLabel="Checksum Failures">
-            {data.dbStats?.[0].checksum_failures}
+            {data.dbStats?.checksum_failures}
           </MetricCard>
         </Box>
       </div>
