@@ -1,4 +1,5 @@
 module.exports = {
+  setupFiles: ['dotenv/config'],
   automock: false,
   //ts jest or jest
   preset: 'ts-jest',

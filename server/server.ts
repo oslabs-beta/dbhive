@@ -1,5 +1,4 @@
 import path from 'path';
-import metricAPI from './routes/metricApi';
 import express, {
   json,
   urlencoded,

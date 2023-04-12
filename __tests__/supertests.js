@@ -26,17 +26,44 @@ describe('my test', () => {
 });
 
 describe('Connecting a database', () => {
-  describe('connecting a URI key', () => {
-    it('responds with a true valid URI key value', () => {
+  describe('connecting with a valid URI key', () => {
+    it('responds without an error property', () => {
       const body = {
-        uri: dbtest_url,
+        query: `
+        {
+          database(uri: "${dbtest_url}") {
+            statActivity
+          }
+        }          
+        `,
       };
       return supertest(server)
-        .post('/api/uri')
+        .post('/graphql')
         .send(body)
         .expect(200)
         .expect((res) => {
-          expect(res.body.result.validURI).toBeTruthy();
+          expect(res.body.errors).not.toBeTruthy();
+        });
+    });
+  });
+
+  describe('connecting with an invalid URI key', () => {
+    it('responds with an error property', () => {
+      const body = {
+        query: `
+        {
+          database(uri: "invalidUri") {
+            statActivity
+          }
+        }          
+        `,
+      };
+      return supertest(server)
+        .post('/graphql')
+        .send(body)
+        .expect(200)
+        .expect((res) => {
+          expect(res.body.errors).toBeTruthy();
         });
     });
   });
@@ -44,56 +71,187 @@ describe('Connecting a database', () => {
 
 describe('Database data retrieval', () => {
   describe('connecting a valid URI key', () => {
-    //a valid response would be an object containing lots of data to be rendered
-    it('responds with a valid response', () => {
-      const body = {
-        uri: dbtest_url,
-      };
-      return supertest(server)
-        .post('/api/queryMetrics')
-        .send(body)
-        .expect(200)
-        .expect('Content-Type', /application\/json/)
-        .expect((res) => {
-          expect(typeof res).toEqual('object');
-        });
-    });
     //the response contains the keys that will be needed to render data
     it('responds with data in the expected keys', () => {
       const body = {
-        uri: dbtest_url,
+        query: `
+        {
+          database(uri: "${dbtest_url}") {
+            allQueries{
+              all{
+                query
+                mean_exec_time
+              }
+              median
+              mean
+              slowestQueries(limit:10){
+                query
+                mean_exec_time
+              }
+            }
+            selectQueries: specificQueries {
+              all(criteria: SELECT){
+                query
+                mean_exec_time
+              }
+              median(criteria: SELECT)
+              mean(criteria: SELECT)
+              slowestQueries(criteria: SELECT, limit: 10) {
+                query
+                mean_exec_time
+              }
+            }
+            insertQueries: specificQueries {
+              all(criteria: INSERT){
+                query
+                mean_exec_time
+              }
+              median(criteria: INSERT)
+              mean(criteria: INSERT)
+              slowestQueries(criteria: INSERT, limit: 10) {
+                query
+                mean_exec_time
+              }
+            }
+            updateQueries: specificQueries {
+              all(criteria: UPDATE){
+                query
+                mean_exec_time
+              }
+              median(criteria: UPDATE)
+              mean(criteria: UPDATE)
+              slowestQueries(criteria: UPDATE, limit: 10) {
+                query
+                mean_exec_time
+              }
+            }
+            deleteQueries: specificQueries {
+              all(criteria: DELETE){
+                query
+                mean_exec_time
+              }
+              median(criteria: DELETE)
+              mean(criteria: DELETE)
+              slowestQueries(criteria: DELETE, limit: 10) {
+                query
+                mean_exec_time
+              }
+            }
+            topAllCalls(limit:5){
+                query
+                mean_exec_time
+            }
+            topSelectCalls: topSpecificCalls(criteria:SELECT,limit:5){
+                query
+                mean_exec_time
+            }
+            topInsertCalls: topSpecificCalls(criteria:INSERT,limit:5){
+                query
+                mean_exec_time
+            }
+            topUpdateCalls: topSpecificCalls(criteria:UPDATE,limit:5){
+                query
+                mean_exec_time
+            }
+            topDeleteCalls: topSpecificCalls(criteria:DELETE,limit:5){
+                query
+                mean_exec_time
+            }
+            dbStats{
+              datid
+              datname
+              conflicts
+              deadlocks
+              xact_rollback
+              xact_commit
+              blks_read
+              blks_hit
+              blk_read_time
+              blk_write_time
+              checksum_failures
+            }
+            cacheHitRatio{
+              ratio
+            }
+            statActivity
+          }
+        }          
+        `,
       };
       return supertest(server)
-        .post('/api/queryMetrics')
+        .post('/graphql')
         .send(body)
+        .expect(200)
         .expect((res) => {
-          expect(res.body.allTimes).toBeTruthy();
-          expect(res.body.avgTimeTopAllCalls).toBeTruthy();
-          expect(res.body.avgTimeTopDeleteCalls).toBeTruthy();
-          expect(res.body.avgTimeTopInsertCalls).toBeTruthy();
-          expect(res.body.avgTimeTopSelectCalls).toBeTruthy();
-          expect(res.body.avgTimeTopUpdateCalls).toBeTruthy();
-          expect(res.body.conflicts).toBeTruthy();
-          expect(res.body.dbStats).toBeTruthy();
-          expect(res.body.deadlocks).toBeTruthy();
-          expect(res.body.deleteTimes).toBeTruthy();
-          expect(res.body.insertTimes).toBeTruthy();
-          expect(res.body.numOfRows).toBeTruthy();
-          expect(res.body.rolledBackTransactions).toBeTruthy();
-          expect(res.body.selectTimes).toBeTruthy();
-          expect(res.body.transactionsCommitted).toBeTruthy();
-          expect(res.body.updateTimes).toBeTruthy();
-          expect(res.body.cacheHitRatio).toBeTruthy();
+          // shape of data
+          expect(res.body.data).toBeDefined();
+          expect(res.body.data.database).toBeDefined();
+          expect(res.body.data.database.allQueries).toBeDefined();
+          expect(res.body.data.database.selectQueries).toBeDefined();
+          expect(res.body.data.database.insertQueries).toBeDefined();
+          expect(res.body.data.database.updateQueries).toBeDefined();
+          expect(res.body.data.database.deleteQueries).toBeDefined();
+          expect(res.body.data.database.topAllCalls).toBeDefined();
+          expect(res.body.data.database.topSelectCalls).toBeDefined();
+          expect(res.body.data.database.topInsertCalls).toBeDefined();
+          expect(res.body.data.database.topUpdateCalls).toBeDefined();
+          expect(res.body.data.database.topDeleteCalls).toBeDefined();
+          expect(res.body.data.database.dbStats).toBeDefined();
+          expect(res.body.data.database.cacheHitRatio).toBeDefined();
+          expect(res.body.data.database.statActivity).toBeDefined();
+        })
+        .expect((res) => {
+          // content of data
+          expect(res.body.data.database.allQueries.all[0].query).toBeDefined();
+          expect(
+            res.body.data.database.allQueries.all[0].mean_exec_time
+          ).toBeDefined();
+          expect(res.body.data.database.allQueries.median).toBeDefined();
+          expect(res.body.data.database.allQueries.mean).toBeDefined();
+          expect(
+            res.body.data.database.allQueries.slowestQueries[0].query
+          ).toBeDefined();
+          expect(
+            res.body.data.database.allQueries.slowestQueries[0].mean_exec_time
+          ).toBeDefined();
+          expect(
+            res.body.data.database.selectQueries.all[0].query
+          ).toBeDefined();
+          expect(
+            res.body.data.database.selectQueries.all[0].mean_exec_time
+          ).toBeDefined();
+          expect(res.body.data.database.selectQueries.median).toBeDefined();
+          expect(res.body.data.database.selectQueries.mean).toBeDefined();
+          expect(
+            res.body.data.database.selectQueries.slowestQueries[0].query
+          ).toBeDefined();
+          expect(
+            res.body.data.database.selectQueries.slowestQueries[0]
+              .mean_exec_time
+          ).toBeDefined();
+          expect(res.body.data.database.topAllCalls[0].query).toBeDefined();
+          expect(
+            res.body.data.database.topAllCalls[0].mean_exec_time
+          ).toBeDefined();
+          expect(res.body.data.database.topSelectCalls[0].query).toBeDefined();
+          expect(
+            res.body.data.database.topSelectCalls[0].mean_exec_time
+          ).toBeDefined();
+          expect(res.body.data.database.dbStats.datid).toBeDefined();
+          expect(res.body.data.database.dbStats.datname).toBeDefined();
+          expect(res.body.data.database.dbStats.conflicts).toBeDefined();
+          expect(res.body.data.database.dbStats.deadlocks).toBeDefined();
+          expect(res.body.data.database.dbStats.xact_rollback).toBeDefined();
+          expect(res.body.data.database.dbStats.xact_commit).toBeDefined();
+          expect(res.body.data.database.dbStats.blks_read).toBeDefined();
+          expect(res.body.data.database.dbStats.blks_hit).toBeDefined();
+          expect(res.body.data.database.dbStats.blk_read_time).toBeDefined();
+          expect(res.body.data.database.dbStats.blk_write_time).toBeDefined();
+          expect(
+            res.body.data.database.dbStats.checksum_failures
+          ).toBeDefined();
+          expect(res.body.data.database.cacheHitRatio.ratio).toBeDefined();
         });
-    });
-  });
-  xdescribe('connecting an invalid URI key', () => {
-    //an invalid key results in a bad request error
-    it('responds with an error', () => {
-      const body = {
-        uri: 'postgres://xxxx:xxxxx@xxxxx.hostname.com:5432/databasename',
-      };
-      return supertest(server).post('/api/queryMetrics').send(body).expect(400);
     });
   });
 });
