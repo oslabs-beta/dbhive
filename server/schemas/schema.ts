@@ -8,7 +8,6 @@ import {
   GraphQLBoolean,
   GraphQLFloat,
   GraphQLEnumType,
-  GraphQLScalarType,
 } from 'graphql';
 
 import { Pool } from 'pg';
@@ -53,6 +52,51 @@ const pgStatStatementsRow = new GraphQLObjectType({
   }),
 });
 
+const pgStatDatabaseRow = new GraphQLObjectType({
+  name: 'pgStatDatabaseRow',
+  description: 'This represents a row from pg_stat_database',
+  fields: () => ({
+    dbid: { type: GraphQLInt },
+    datname: { type: GraphQLString },
+    numbackends: { type: GraphQLInt },
+    xact_commit: { type: GraphQLInt },
+    xact_rollback: { type: GraphQLInt },
+    blks_read: { type: GraphQLInt },
+    blks_hit: { type: GraphQLInt },
+    tup_returned: { type: GraphQLInt },
+    tup_fetched: { type: GraphQLInt },
+    tup_inserted: { type: GraphQLInt },
+    tup_updated: { type: GraphQLInt },
+    tup_deleted: { type: GraphQLInt },
+    conflicts: { type: GraphQLInt },
+    temp_files: { type: GraphQLInt },
+    temp_bytes: { type: GraphQLInt },
+    deadlocks: { type: GraphQLInt },
+    checksum_failures: { type: GraphQLInt },
+    checksum_last_failure: { type: GraphQLString },
+    blk_read_time: { type: GraphQLFloat },
+    blk_write_time: { type: GraphQLFloat },
+    session_time: { type: GraphQLFloat },
+    active_time: { type: GraphQLFloat },
+    idle_in_transaction_time: { type: GraphQLFloat },
+    sessions: { type: GraphQLInt },
+    sessions_abandoned: { type: GraphQLInt },
+    sessions_fatal: { type: GraphQLInt },
+    sessions_killed: { type: GraphQLInt },
+    stats_reset: { type: GraphQLString },
+  }),
+});
+
+const pgStatActivityRow = new GraphQLObjectType({
+  name: 'pgStatActivityRow',
+  description: 'This represents a row from pg_stat_activity',
+  fields: () => ({
+    heap_read: { type: GraphQLInt },
+    heap_hit: { type: GraphQLInt },
+    ratio: { type: GraphQLFloat },
+  }),
+});
+
 const AllQueriesType = new GraphQLObjectType({
   name: 'AllQueries',
   description: 'All query data',
@@ -90,9 +134,13 @@ const AllQueriesType = new GraphQLObjectType({
     slowestQueries: {
       type: new GraphQLList(pgStatStatementsRow),
       description: 'Slowest query data',
+      args: {
+        limit: { type: GraphQLNonNull(GraphQLInt) },
+      },
       resolve: async (obj, args, context) => {
         const data = await context.db.query(
-          'SELECT * FROM pg_stat_statements ORDER BY mean_exec_time DESC LIMIT 10;'
+          'SELECT * FROM pg_stat_statements ORDER BY mean_exec_time DESC LIMIT $1;',
+          [args.limit]
         );
         return data.rows;
       },
@@ -108,11 +156,12 @@ const SpecificQueriesType = new GraphQLObjectType({
       type: new GraphQLList(pgStatStatementsRow),
       description: 'All query data',
       args: {
-        criteria: { type: GraphQLNonNull(SpecificQueryArgumentsType) },
+        criteria: { type: GraphQLNonNull(SpecificArgumentsType) },
       },
       resolve: async (obj, args, context) => {
         const data = await context.db.query(
-          `SELECT * FROM pg_stat_statements WHERE query LIKE '%${args.criteria}%' ORDER BY mean_exec_time;`
+          'SELECT * FROM pg_stat_statements WHERE query LIKE $1 ORDER BY mean_exec_time;',
+          [`%${args.criteria}%`]
         );
         return data.rows;
       },
@@ -121,11 +170,12 @@ const SpecificQueriesType = new GraphQLObjectType({
       type: GraphQLFloat,
       description: 'Median time',
       args: {
-        criteria: { type: GraphQLNonNull(SpecificQueryArgumentsType) },
+        criteria: { type: GraphQLNonNull(SpecificArgumentsType) },
       },
       resolve: async (obj, args, context) => {
         const data = await context.db.query(
-          `SELECT PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY mean_exec_time) AS median FROM pg_stat_statements WHERE query LIKE '%${args.criteria}%';`
+          'SELECT PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY mean_exec_time) AS median FROM pg_stat_statements WHERE query LIKE $1;',
+          [`%${args.criteria}%`]
         );
         return data.rows[0].median;
       },
@@ -134,11 +184,12 @@ const SpecificQueriesType = new GraphQLObjectType({
       type: GraphQLFloat,
       description: 'Average query time',
       args: {
-        criteria: { type: GraphQLNonNull(SpecificQueryArgumentsType) },
+        criteria: { type: GraphQLNonNull(SpecificArgumentsType) },
       },
       resolve: async (obj, args, context) => {
         const data = await context.db.query(
-          `SELECT avg(mean_exec_time) AS averageQueryTime FROM pg_stat_statements WHERE query LIKE '%${args.criteria}%';`
+          'SELECT avg(mean_exec_time) AS averageQueryTime FROM pg_stat_statements WHERE query LIKE $1;',
+          [`%${args.criteria}%`]
         );
         return data.rows[0].averagequerytime;
       },
@@ -147,11 +198,13 @@ const SpecificQueriesType = new GraphQLObjectType({
       type: new GraphQLList(pgStatStatementsRow),
       description: 'Slowest query data',
       args: {
-        criteria: { type: GraphQLNonNull(SpecificQueryArgumentsType) },
+        criteria: { type: GraphQLNonNull(SpecificArgumentsType) },
+        limit: { type: GraphQLNonNull(GraphQLInt) },
       },
       resolve: async (obj, args, context) => {
         const data = await context.db.query(
-          `SELECT query, mean_exec_time FROM pg_stat_statements WHERE query LIKE '%${args.criteria}%' ORDER BY mean_exec_time DESC LIMIT 10;`
+          'SELECT * FROM pg_stat_statements WHERE query LIKE $1 ORDER BY mean_exec_time DESC LIMIT $2;',
+          [`%${args.criteria}%`, args.limit]
         );
         return data.rows;
       },
@@ -159,8 +212,8 @@ const SpecificQueriesType = new GraphQLObjectType({
   }),
 });
 
-const SpecificQueryArgumentsType = new GraphQLEnumType({
-  name: 'SpecificQueryArguments',
+const SpecificArgumentsType = new GraphQLEnumType({
+  name: 'SpecificArgumentsType',
   values: {
     SELECT: { value: 'SELECT' },
     INSERT: { value: 'INSERT' },
@@ -187,6 +240,82 @@ const DatabaseQueryType = new GraphQLObjectType({
         return SpecificQueriesType;
       },
     },
+    numberOfRows: {
+      type: new GraphQLList(pgStatStatementsRow),
+      description:
+        'Returns list of queries that touch a number rows of greater than provided value',
+      args: {
+        limit: { type: GraphQLNonNull(GraphQLInt) },
+      },
+      resolve: async (obj, args, context) => {
+        const data = await context.db.query(
+          'SELECT * FROM pg_stat_statements WHERE rows > $1;',
+          [args.limit]
+        );
+        return data.rows;
+      },
+    },
+    topAllCalls: {
+      type: new GraphQLList(pgStatStatementsRow),
+      description: 'Returns list of top queries',
+      args: {
+        limit: { type: GraphQLNonNull(GraphQLInt) },
+      },
+      resolve: async (obj, args, context) => {
+        const data = await context.db.query(
+          'SELECT * FROM pg_stat_statements ORDER BY calls DESC LIMIT $1;',
+          [args.limit]
+        );
+        return data.rows;
+      },
+    },
+    topSpecificCalls: {
+      type: new GraphQLList(pgStatStatementsRow),
+      description: 'Returns list of top queries',
+      args: {
+        criteria: { type: SpecificArgumentsType },
+        limit: { type: GraphQLNonNull(GraphQLInt) },
+      },
+      resolve: async (obj, args, context) => {
+        const data = await context.db.query(
+          'SELECT * FROM pg_stat_statements WHERE query LIKE $1 ORDER BY calls DESC LIMIT $2;',
+          [`%${args.criteria}%`, args.limit]
+        );
+        return data.rows;
+      },
+    },
+    dbStats: {
+      type: pgStatDatabaseRow,
+      description: 'Returns information from pg_stat_database',
+      resolve: async (obj, args, context) => {
+        const data = await context.db.query(
+          'SELECT * FROM pg_stat_database WHERE datname=$1;',
+          [context.databaseName]
+        );
+        return data.rows[0];
+      },
+    },
+    cacheHitRatio: {
+      type: pgStatActivityRow,
+      description: 'Returns information from pg_stat_activity',
+      resolve: async (obj, args, context) => {
+        const data = await context.db.query(
+          'SELECT sum(heap_blks_read) AS heap_read, sum(heap_blks_hit) AS heap_hit, sum(heap_blks_hit) / (sum(heap_blks_hit) + sum(heap_blks_read)) AS ratio FROM pg_statio_user_tables;'
+        );
+        return data.rows[0];
+      },
+    },
+    statActivity: {
+      type: GraphQLInt,
+      description: 'Returns number of active sessions',
+      resolve: async (obj, args, context) => {
+        const data = await context.db.query(
+          "SELECT * FROM pg_stat_activity WHERE datname = $1 and state = 'active';",
+          [context.databaseName]
+        );
+        return data.rowCount;
+      },
+    },
   }),
 });
 
@@ -200,7 +329,7 @@ const RootQueryType = new GraphQLObjectType({
       args: {
         uri: { type: GraphQLString },
       },
-      resolve: (obj, args, context) => {
+      resolve: async (obj, args, context) => {
         const pool = new Pool({
           connectionString: args.uri,
         });
@@ -210,6 +339,15 @@ const RootQueryType = new GraphQLObjectType({
           },
         };
         context.db = db;
+        const databaseName =
+          args.uri.split('.com/')[1] ||
+          args.uri.split('5432/').pop().split('/')[0].replace(/\s/g, '');
+        context.databaseName = databaseName;
+
+        await context.db.query(
+          'CREATE EXTENSION IF NOT EXISTS pg_stat_statements'
+        );
+
         return DatabaseQueryType;
       },
     },
@@ -224,8 +362,9 @@ const DatabaseMutationType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'Create extensions in users database if not already present',
       resolve: async (obj, args, context) => {
-        const queryString = 'CREATE EXTENSION IF NOT EXISTS pg_stat_statements';
-        const response = await context.db.query(queryString);
+        const response = await context.db.query(
+          'CREATE EXTENSION IF NOT EXISTS pg_stat_statements'
+        );
         if (response) return 'Success';
         else return 'Failed';
       },

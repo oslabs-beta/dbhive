@@ -12,6 +12,7 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { Box, ListItemText, Typography, Divider } from '@mui/material';
+import { AllQueries } from '../clientTypes';
 
 // import react components
 import CollapseList from './CollapseList';
@@ -28,20 +29,19 @@ Chart.register(
 
 type Props = {
   title?: string;
-  data?: any;
+  data?: AllQueries;
 };
 
-type Line = { labels: string[]; data: number[] };
-
 function LineGraphType1(props: Props) {
-  const dataProc: Line = { labels: [], data: [] };
   const detailsProc: JSX.Element[] = [];
+  const graphLabels: string[] = [];
+  const graphData: number[] = [];
 
-  if (props.data) {
-    props.data.all?.rows?.forEach(
+  if (props.data?.all) {
+    props.data.all.forEach(
       (element: { query: string; mean_exec_time: number }) => {
-        dataProc.labels.push(element.query);
-        dataProc.data.push(element.mean_exec_time);
+        graphLabels.push(element.query);
+        graphData.push(element.mean_exec_time);
       }
     );
 
@@ -56,7 +56,7 @@ function LineGraphType1(props: Props) {
         </Typography>
         <Divider />
         <Typography sx={{ flexGrow: 1, my: '.5rem', fontSize: '.8rem' }}>
-          {props.data.mean?.rows?.[0]?.averagequerytime?.toFixed(4)} sec
+          {props.data.mean.toFixed(4)} sec
         </Typography>
       </ListItemText>
     );
@@ -74,7 +74,7 @@ function LineGraphType1(props: Props) {
         </Typography>
         <Divider />
         <Typography sx={{ flexGrow: 1, my: '.5rem', fontSize: '.8rem' }}>
-          {props.data.median?.rows?.[0]?.median?.toFixed(4)} sec
+          {props.data.median.toFixed(4)} sec
         </Typography>
       </ListItemText>
     );
@@ -88,7 +88,7 @@ function LineGraphType1(props: Props) {
         <Divider />
       </Box>
     );
-    props.data.slowestQueries.rows.forEach(
+    props.data.slowestQueries.forEach(
       (element: { query: string; mean_exec_time: number }, index: number) => {
         slowQueries.push(
           <Box
@@ -148,11 +148,11 @@ function LineGraphType1(props: Props) {
   };
 
   const data = {
-    labels: dataProc.labels,
+    labels: graphLabels,
     datasets: [
       {
         label: 'queries',
-        data: dataProc.data,
+        data: graphData,
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },
     ],

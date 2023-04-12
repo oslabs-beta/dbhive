@@ -83,7 +83,9 @@ function DBTab(props: Props) {
             top: '30rem',
           }}
         >
-          <InputLabel id="demo-simple-select-label">Fetch Interval</InputLabel>
+          <InputLabel id="demo-simple-select-label">
+            Polling Interval
+          </InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
@@ -107,42 +109,42 @@ function DBTab(props: Props) {
           }}
         >
           <MetricCard cardLabel={'Query Times - All Queries'}>
-            <LineGraphType1 data={data.allTimes} />
+            <LineGraphType1 data={data.allQueries} />
           </MetricCard>
           <MetricCard cardLabel={'Query Times - All Queries Time Intervals'}>
-            <PieGraphType1 data={data.allTimes?.all.rows} />
+            <PieGraphType1 data={data.allQueries?.all} />
           </MetricCard>
           <MetricCard cardLabel={'Query Times - All Select Queries'}>
-            <LineGraphType1 data={data.selectTimes} />
+            <LineGraphType1 data={data.selectQueries} />
           </MetricCard>
           <MetricCard
             cardLabel={'Query Times - All Select Queries Time Intervals'}
           >
-            <PieGraphType1 data={data.selectTimes?.all.rows} />
+            <PieGraphType1 data={data.selectQueries?.all} />
           </MetricCard>
           <MetricCard cardLabel={'Query Times - All Insert Queries'}>
-            <LineGraphType1 data={data.insertTimes} />
+            <LineGraphType1 data={data.insertQueries} />
           </MetricCard>
           <MetricCard
             cardLabel={'Query Times - All Insert Queries Time Intervals'}
           >
-            <PieGraphType1 data={data.insertTimes?.all.rows} />
+            <PieGraphType1 data={data.insertQueries?.all} />
           </MetricCard>
           <MetricCard cardLabel={'Query Times - All Update Queries'}>
-            <LineGraphType1 data={data.updateTimes} />
+            <LineGraphType1 data={data.updateQueries} />
           </MetricCard>
           <MetricCard
             cardLabel={'Query Times - All Update Queries Time Intervals'}
           >
-            <PieGraphType1 data={data.updateTimes?.all.rows} />
+            <PieGraphType1 data={data.updateQueries?.all} />
           </MetricCard>
           <MetricCard cardLabel={'Query Times - All Delete Queries'}>
-            <LineGraphType1 data={data.deleteTimes} />
+            <LineGraphType1 data={data.deleteQueries} />
           </MetricCard>
           <MetricCard
             cardLabel={'Query Times - All Delete Queries Time Intervals'}
           >
-            <PieGraphType1 data={data.deleteTimes?.all.rows} />
+            <PieGraphType1 data={data.deleteQueries?.all} />
           </MetricCard>
           <MetricCard cardLabel={'Query Times - Top 5 Queries'}>
             <LineGraphType2 data={data.avgTimeTopAllCalls} />

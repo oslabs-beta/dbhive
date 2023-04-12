@@ -6,7 +6,7 @@ import { Pie } from 'react-chartjs-2';
 Chart.register(ArcElement, Tooltip, Legend);
 
 type Props = {
-  data?: any;
+  data?: [{ query: string; mean_exec_time: number }];
 };
 
 type Pie = {

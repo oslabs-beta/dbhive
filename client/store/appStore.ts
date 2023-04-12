@@ -1,5 +1,5 @@
 // zustand store for global state
-import create from 'zustand';
+import { create } from 'zustand';
 import { UserData } from '../clientTypes';
 
 interface AppState {
